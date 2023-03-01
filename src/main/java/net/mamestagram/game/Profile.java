@@ -89,7 +89,7 @@ public class Profile {
 
         /*rank*/
 
-        ps = connection.prepareStatement("SELECT RANK() OVER(ORDER BY pp DESC) ranking WHERE id = ? AND mode = " + mode);
+        ps = connection.prepareStatement("SELECT RANK() OVER(ORDER BY pp DESC) ranking from stats WHERE id = ? AND mode = " + mode);
         ps.setInt(1,userID);
         result = ps.executeQuery();
         while(result.next()) {
@@ -116,9 +116,10 @@ public class Profile {
 
         eb.setAuthor("mamesosu.net " + modeName + " Profile for " + pName, "https://osu.ppy.sh/images/layout/avatar-guest.png","https://osu.ppy.sh/images/layout/avatar-guest.png");
         eb.addField("**Ranking**", "#" + userRank, false);
+        eb.addField("**Accuracy**", UserACC + "%", false);
         eb.addField("**PP**", UserPP + "pp", false);
         eb.addField("**PlayCount**", UserPlayCount + " counts", false);
-        eb.addField("**Ranks**", ":rankX: ``" + SS_Count + "`` :rankS: ``" + S_Count + "`` :rankA: ``" + A_Count + "``", false);
+        eb.addField("**Ranks**", "SS: ``" + SS_Count + "`` S: ``" + S_Count + "`` A: ``" + A_Count + "``", false);
         eb.setColor(Color.GREEN);
 
         return eb;
