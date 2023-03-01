@@ -41,7 +41,7 @@ public class Main {
                 .build();
         jda.updateCommands().queue();
         jda.upsertCommand("help", "Mamestagram Botのヘルプコマンドです").queue();
-        jda.upsertCommand("profile", "mamesosu.netのプロフィールを表示します").addOption(OptionType.INTEGER, "mode", "モードを指定してください").queue();
+        jda.upsertCommand("profile", "mamesosu.netのプロフィールを表示します").addOption(OptionType.INTEGER, "mode", "0:std, 1:taiko, 2:catch, 3:mania, 4:rx").queue();
 
         /*Launch Check*/
 
