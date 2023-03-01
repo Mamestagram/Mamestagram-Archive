@@ -3,6 +3,7 @@ package net.mamestagram;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.mamestagram.command.SlashCommand;
 
@@ -14,15 +15,15 @@ public class Main {
     public static Connection connection;
 
     public static void main(String[] args) {
-        final String TOKEN = "TOKEN";
+        final String TOKEN = "";
 
         /*Database Connect*/
 
         try {
             connection = DriverManager.getConnection(
                     "jdbc:mysql://localhost/private?useSSL=false",
-                    "user",
-                    "password"
+                    "",
+                    ""
             );
             System.out.println("Connection is Successful!");
         } catch (SQLException e) {
@@ -40,6 +41,7 @@ public class Main {
                 .build();
         jda.updateCommands().queue();
         jda.upsertCommand("help", "Mamestagram Botのヘルプコマンドです").queue();
+        jda.upsertCommand("profile", "mamesosu.netのプロフィールを表示します").addOption(OptionType.INTEGER, "mode", "モードを指定してください").queue();
 
         /*Launch Check*/
 

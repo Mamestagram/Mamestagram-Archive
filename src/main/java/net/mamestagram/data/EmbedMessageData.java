@@ -11,8 +11,7 @@ public class EmbedMessageData extends ListenerAdapter {
         eb.setAuthor("Command list for Mamestagram Bot", "https://media.discordapp.net/attachments/944984741826932767/1080466807338573824/MS1B_logo.png", "https://media.discordapp.net/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
         eb.addField("General", "``/help`` - Botのヘルプを表示します\n" +
                         "``/invite`` - Mamestagramの招待リンクを表示します\n" +
-                        "``/setting`` - ボットの設定のヘルプを表示します\n" +
-                        "``/user`` ``<add/edit>`` ``<name>`` - mamesosu.netとアカウントを紐づけます\n",
+                        "``/setting`` - ボットの設定のヘルプを表示します\n",
                 false);
         eb.addField("osu!", "``/profile`` ``<mode>`` - アカウント情報を表示します\n" +
                 "``/ranking`` ``<mode>`` - mamestagramでのランクを表示します\n" +
@@ -22,8 +21,10 @@ public class EmbedMessageData extends ListenerAdapter {
         return eb;
     }
 
-    public static EmbedBuilder errorCommand() { //TODO
+    public static EmbedBuilder notUserFoundMessage(String dName) { //TODO
         EmbedBuilder eb = new EmbedBuilder();
+        eb.addField("**実行エラー**",  "``" + dName + "``というプレイヤーは見つかりませんでした!", false);
+        eb.setColor(Color.RED);
         return eb;
     }
 }
