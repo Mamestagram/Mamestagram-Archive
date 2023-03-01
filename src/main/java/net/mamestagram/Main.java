@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.mamestagram.command.SlashCommand;
 
 import java.sql.*;
 
@@ -33,9 +34,12 @@ public class Main {
 
         jda = JDABuilder.createDefault(TOKEN, GatewayIntent.GUILD_MESSAGES)
                 .setRawEventsEnabled(true)
+                .addEventListeners(new SlashCommand())
                 .setActivity(Activity.playing("mamestagram"))
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .build();
+        jda.updateCommands().queue();
+        jda.upsertCommand("help", "Mamestagram Botのヘルプコマンドです").queue();
 
         /*Launch Check*/
 
