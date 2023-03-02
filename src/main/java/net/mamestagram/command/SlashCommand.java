@@ -25,15 +25,17 @@ public class SlashCommand extends ListenerAdapter {
                     e.replyEmbeds(profileData(e.getMember(), e.getOption("mode").getAsInt()).build()).queue();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
+                } catch (NullPointerException ex) {
+                    e.replyEmbeds(notArgumentMessage().build()).queue();
                 }
                 break;
             case "recent":
                 try {
                     e.replyEmbeds(recentData(e.getMember(),e.getOption("mode").getAsInt()).build()).queue();
-                } catch (SQLException ex) {
+                } catch (SQLException | IOException ex) {
                     throw new RuntimeException(ex);
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
+                } catch (NullPointerException ex) {
+                    e.replyEmbeds(notArgumentMessage().build()).queue();
                 }
         }
     }
