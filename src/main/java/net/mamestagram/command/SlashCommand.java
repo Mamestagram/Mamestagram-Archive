@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import static net.mamestagram.data.EmbedMessageData.*;
 
 import static net.mamestagram.game.Profile.*;
+import static net.mamestagram.game.RecentPlay.*;
 
 public class SlashCommand extends ListenerAdapter {
     @Override
@@ -26,6 +27,14 @@ public class SlashCommand extends ListenerAdapter {
                     throw new RuntimeException(ex);
                 }
                 break;
+            case "recent":
+                try {
+                    e.replyEmbeds(recentData((e.getMember().getNickname()),e.getOption("mode").getAsInt()).build()).queue();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
+                }
         }
     }
 }
