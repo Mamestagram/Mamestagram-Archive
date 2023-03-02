@@ -23,7 +23,7 @@ public class EmbedMessageData extends ListenerAdapter {
 
     public static EmbedBuilder notUserFoundMessage(String dName) { //TODO
         EmbedBuilder eb = new EmbedBuilder();
-        eb.setTitle("``" + dName + "`` というプレイヤーは見つかりませんでした!");
+        eb.setTitle(":x:  ``" + dName + "`` というプレイヤーは見つかりませんでした!");
         eb.setColor(Color.RED);
         return eb;
     }
@@ -31,7 +31,7 @@ public class EmbedMessageData extends ListenerAdapter {
     public static EmbedBuilder notArgumentMessage() {
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("**引数エラー (mode)**");
+        eb.setTitle("**:x:  引数エラー (mode)**");
         eb.setColor(Color.RED);
 
         return eb;

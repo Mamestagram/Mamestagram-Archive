@@ -37,7 +37,7 @@ public class Main {
         jda = JDABuilder.createDefault(TOKEN, GatewayIntent.GUILD_MESSAGES)
                 .setRawEventsEnabled(true)
                 .addEventListeners(new SlashCommand())
-                .setActivity(Activity.playing("mamestagram"))
+                .setActivity(Activity.playing("mamesosu.net"))
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .build();
         jda.updateCommands().queue();
