@@ -41,7 +41,6 @@ public class RecentPlay {
         int userID = 0, userScore = 0, userCombo = 0, n300 = 0, n100 = 0, n50 = 0, miss = 0;
         int[] time = new int[2];
         String userGrade = "";
-        String userName = "";
 
         /*beatmap Data*/
 
@@ -76,11 +75,9 @@ public class RecentPlay {
                 return notUserFoundMessage(dName.getUser().getName());
             } else {
                 userID = result.getInt("id");
-                userName = dName.getUser().getName();
             }
         } else {
             userID = result.getInt("id");
-            userName = dName.getNickname();
         }
 
         /*Get map_md5*/

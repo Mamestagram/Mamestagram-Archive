@@ -15,7 +15,7 @@ public class Profile {
     public static EmbedBuilder profileData(Member pName, int mode) throws SQLException { //引数にはdiscordのnicknameを取得
         double UserACC = 0.00;
         EmbedBuilder eb = new EmbedBuilder();
-        int userRank = 0, userCountryRank = 0, userID = 0, userReplay = 0, userTotalScore = 0, userCombo = 0, UserPP = 0, UserPlayCount = 0, A_Count = 0, S_Count = 0, SS_Count = 0;
+        int userRank = 0, userCountryRank = 0, userID = 0, userReplay = 0, userRankedScore = 0, userTotalScore = 0, userCombo = 0, UserPP = 0, UserPlayCount = 0, A_Count = 0, S_Count = 0, SS_Count = 0;
         String modeName = "", Country = "", userName = "";
         PreparedStatement ps = null;
         ResultSet result = null;
@@ -151,6 +151,13 @@ public class Profile {
 
         /*TotalScore*/
 
+        ps = connection.prepareStatement("select rscore from stats where id = ? AND mode = " + mode);
+        ps.setDouble(1,userID);
+        result = ps.executeQuery();
+        while(result.next()) {
+            userRankedScore = result.getInt("rscore");
+        }
+
         ps = connection.prepareStatement("select tscore from stats where id = ? AND mode = " + mode);
         ps.setDouble(1,userID);
         result = ps.executeQuery();
@@ -195,16 +202,15 @@ public class Profile {
 
         eb.setAuthor("osu! " + modeName + " Profile for " + userName, "https://osu.ppy.sh/images/layout/avatar-guest.png","https://osu.ppy.sh/images/layout/avatar-guest.png");
         eb.setThumbnail("https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
-        eb.addField("**Global Ranking**", "▸ #" + userRank + " (" + Country + ": #" + userCountryRank + ")", false);
-        eb.addField("**Total Score**", "▸ " + userTotalScore, false);
-        eb.addField("**Accuracy**", "▸ "+ UserACC + "%", false);
-        eb.addField("**PP**", "▸ "+ UserPP + "pp", false);
-        eb.addField("**Play Count**", "▸ "+ UserPlayCount + " plays", false);
-        eb.addField("**Maximum Combo**", "▸ " + userCombo + "x", false);
-        eb.addField("**Replays Watch**", "▸ " + userReplay + " views", false);
-        eb.addField("**Grade**", "SS:``" + SS_Count + "`` S:``" + S_Count + "`` A:``" + A_Count + "``", false);
+        eb.addField("**Performance**", "Ranking ▸ **#" + userRank + "** (" + Country + ": **#" + userCountryRank + "**)\n" +
+                "Ranked Score ▸ **" + userRankedScore + "**\n" +
+                "Total Score ▸ **" + userTotalScore + "**\n" +
+                "Accuracy ▸ **" + UserACC + " %**\n" +
+                "Play Count ▸ **" + UserPlayCount + " plays**\n" +
+                "Maximum Combo ▸ **" + userCombo + " combo**", false);
+        eb.addField("**Grade**", "SS: ``" + SS_Count + "`` S: ``" + S_Count + "`` A: ``" + A_Count + "``", false);
         eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
-        eb.setColor(Color.GREEN);
+        eb.setColor(Color.ORANGE);
 
         return eb;
     }
