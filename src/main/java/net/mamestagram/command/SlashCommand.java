@@ -22,14 +22,14 @@ public class SlashCommand extends ListenerAdapter {
                 break;
             case "profile":
                 try {
-                    e.replyEmbeds(profileData(e.getMember().getNickname(), e.getOption("mode").getAsInt()).build()).queue();
+                    e.replyEmbeds(profileData(e.getMember(), e.getOption("mode").getAsInt()).build()).queue();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
                 break;
             case "recent":
                 try {
-                    e.replyEmbeds(recentData((e.getMember().getNickname()),e.getOption("mode").getAsInt()).build()).queue();
+                    e.replyEmbeds(recentData(e.getMember(),e.getOption("mode").getAsInt()).build()).queue();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 } catch (IOException ex) {

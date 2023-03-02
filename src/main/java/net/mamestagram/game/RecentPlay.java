@@ -3,6 +3,7 @@ package net.mamestagram.game;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -31,7 +32,7 @@ public class RecentPlay {
         }
     }
 
-    public static EmbedBuilder recentData(String dName, int mode) throws SQLException, IOException {
+    public static EmbedBuilder recentData(Member dName, int mode) throws SQLException, IOException {
 
         EmbedBuilder eb = new EmbedBuilder();
 
@@ -40,6 +41,7 @@ public class RecentPlay {
         int userID = 0, userScore = 0, userCombo = 0, n300 = 0, n100 = 0, n50 = 0, miss = 0;
         int[] time = new int[2];
         String userGrade = "";
+        String userName = "";
 
         /*beatmap Data*/
 
@@ -62,14 +64,23 @@ public class RecentPlay {
         /*is data exist?*/
 
         ps = connection.prepareStatement("select id from users where name = ?");
-        ps.setString(1, dName);
+        ps.setString(1, dName.getNickname());
 
         result = ps.executeQuery();
 
         if(!result.next()) {
-            return notUserFoundMessage(dName);
+            ps = connection.prepareStatement("select id from users where name = ?");
+            ps.setString(1, dName.getUser().getName());
+            result = ps.executeQuery();
+            if(!result.next()) {
+                return notUserFoundMessage(dName.getUser().getName());
+            } else {
+                userID = result.getInt("id");
+                userName = dName.getUser().getName();
+            }
         } else {
             userID = result.getInt("id");
+            userName = dName.getUser().getName();
         }
 
         /*Get map_md5*/

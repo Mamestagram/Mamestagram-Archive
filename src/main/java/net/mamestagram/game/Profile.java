@@ -1,6 +1,7 @@
 package net.mamestagram.game;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
 
 import java.awt.*;
 import java.sql.PreparedStatement;
@@ -11,25 +12,34 @@ import static net.mamestagram.Main.*;
 import static net.mamestagram.data.EmbedMessageData.*;
 
 public class Profile {
-    public static EmbedBuilder profileData(String pName, int mode) throws SQLException { //引数にはdiscordのnicknameを取得
+    public static EmbedBuilder profileData(Member pName, int mode) throws SQLException { //引数にはdiscordのnicknameを取得
         double UserACC = 0.00;
         EmbedBuilder eb = new EmbedBuilder();
         int userRank = 0, userCountryRank = 0, userID = 0, userReplay = 0, userTotalScore = 0, userCombo = 0, UserPP = 0, UserPlayCount = 0, A_Count = 0, S_Count = 0, SS_Count = 0;
-        String modeName = "", Country = "";
+        String modeName = "", Country = "", userName = "";
         PreparedStatement ps = null;
         ResultSet result = null;
 
         ps = connection.prepareStatement("select * from users where name = ?");
-        ps.setString(1, pName);
+        ps.setString(1, pName.getNickname());
 
         result = ps.executeQuery();
 
         /*data exist?*/
 
         if(!result.next()) {
-            return notUserFoundMessage(pName);
+            ps = connection.prepareStatement("select * from users where name = ?");
+            ps.setString(1, pName.getUser().getName());
+            result = ps.executeQuery();
+            if(!result.next()) {
+                return notUserFoundMessage(pName.getUser().getName());
+            } else {
+                userID = result.getInt("id");
+                userName = pName.getUser().getName();
+            }
         } else {
             userID = result.getInt("id");
+            userName = pName.getUser().getName();
         }
 
         /*playcount*/
@@ -183,7 +193,7 @@ public class Profile {
                 break;
         }
 
-        eb.setAuthor("osu! " + modeName + " Profile for " + pName, "https://osu.ppy.sh/images/layout/avatar-guest.png","https://osu.ppy.sh/images/layout/avatar-guest.png");
+        eb.setAuthor("osu! " + modeName + " Profile for " + userName, "https://osu.ppy.sh/images/layout/avatar-guest.png","https://osu.ppy.sh/images/layout/avatar-guest.png");
         eb.setThumbnail("https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
         eb.addField("**Global Ranking**", "▸ #" + userRank + " (" + Country + ": #" + userCountryRank + ")", false);
         eb.addField("**Total Score**", "▸ " + userTotalScore, false);
