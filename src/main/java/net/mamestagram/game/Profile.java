@@ -6,7 +6,6 @@ import java.awt.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import static net.mamestagram.Main.*;
 import static net.mamestagram.data.EmbedMessageData.*;
@@ -89,7 +88,14 @@ public class Profile {
 
         /*rank*/
 
-        ps = connection.prepareStatement("SELECT RANK() OVER(ORDER BY pp DESC) ranking from stats WHERE id = ? AND mode = " + mode);
+        ps = connection.prepareStatement("select COUNT(*) + 1 AS 'ranking' " +
+                "FROM stats " +
+                "WHERE pp > (" +
+                "SELECT pp " +
+                "FROM stats " +
+                "WHERE id = ? " +
+                "AND mode = " + mode + ") " +
+                "AND mode = " + mode );
         ps.setInt(1,userID);
         result = ps.executeQuery();
         while(result.next()) {

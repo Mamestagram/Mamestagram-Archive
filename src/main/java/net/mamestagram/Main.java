@@ -13,6 +13,7 @@ public class Main {
 
     public static JDA jda;
     public static Connection connection;
+    public static final String osuAPIKey = "OSU_API";
 
     public static void main(String[] args) {
         final String TOKEN = "";

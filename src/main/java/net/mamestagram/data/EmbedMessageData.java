@@ -23,7 +23,8 @@ public class EmbedMessageData extends ListenerAdapter {
 
     public static EmbedBuilder notUserFoundMessage(String dName) { //TODO
         EmbedBuilder eb = new EmbedBuilder();
-        eb.addField("**実行エラー**",  "``" + dName + "``というプレイヤーは見つかりませんでした!", false);
+        eb.setTitle("**実行エラー**");
+        eb.setTitle("``" + dName + "`` というプレイヤーは見つかりませんでした!");
         eb.setColor(Color.RED);
         return eb;
     }
