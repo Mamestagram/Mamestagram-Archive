@@ -14,8 +14,8 @@ public class Profile {
     public static EmbedBuilder profileData(String pName, int mode) throws SQLException { //引数にはdiscordのnicknameを取得
         double UserACC = 0.00;
         EmbedBuilder eb = new EmbedBuilder();
-        int userRank = 0, userID = 0, UserPP = 0, UserPlayCount = 0, A_Count = 0, S_Count = 0, SS_Count = 0;
-        String modeName = "";
+        int userRank = 0, userCountryRank = 0, userID = 0, userReplay = 0, userTotalScore = 0, userCombo = 0, UserPP = 0, UserPlayCount = 0, A_Count = 0, S_Count = 0, SS_Count = 0;
+        String modeName = "", Country = "";
         PreparedStatement ps = null;
         ResultSet result = null;
 
@@ -50,6 +50,24 @@ public class Profile {
             UserPP = result.getInt("pp");
         }
 
+        /*replay*/
+
+        ps = connection.prepareStatement("select replay_views from stats where id = ? and mode = " + mode);
+        ps.setInt(1, userID);
+        result = ps.executeQuery();
+        while(result.next()) {
+            userReplay = result.getInt("replay_views");
+        }
+
+        /*Country*/
+
+        ps = connection.prepareStatement("select country from users where id = ?");
+        ps.setInt(1, userID);
+        result = ps.executeQuery();
+        while(result.next()) {
+            Country = result.getString("country");
+        }
+
         /*ACount*/
 
         ps = connection.prepareStatement("select a_count from stats where id = ? AND mode = " + mode);
@@ -77,6 +95,41 @@ public class Profile {
             SS_Count = result.getInt("xh_count+x_count");
         }
 
+        /*CountryRank*/
+
+        ps = connection.prepareStatement("SELECT COUNT(*) + 1 AS 'cranking' " +
+                        "FROM stats " +
+                        "JOIN users " +
+                        "ON stats.id = users.id " +
+                        "WHERE pp > ( " +
+                        "    SELECT pp " +
+                        "    FROM stats " +
+                        "    WHERE id = ? " +
+                        "    AND mode = " + mode +
+                        "    AND country = ( " +
+                        "        SELECT country " +
+                        "        FROM users " +
+                        "        WHERE id = ? " +
+                        "        AND mode = " + mode +
+                        "    ) " +
+                        ") " +
+                        "AND mode = " + mode);
+        ps.setInt(1, userID);
+        ps.setInt(2, userID);
+        result = ps.executeQuery();
+        while(result.next()) {
+            userCountryRank = result.getInt("cranking");
+        }
+
+        /*max combo*/
+
+        ps = connection.prepareStatement("select max_combo from stats where id = ? and mode = " + mode);
+        ps.setInt(1,userID);
+        result = ps.executeQuery();
+        while(result.next()) {
+            userCombo = result.getInt("max_combo");
+        }
+
         /*ACC*/
 
         ps = connection.prepareStatement("select acc from stats where id = ? AND mode = " + mode);
@@ -85,6 +138,16 @@ public class Profile {
         while(result.next()) {
             UserACC = result.getDouble("acc");
         }
+
+        /*TotalScore*/
+
+        ps = connection.prepareStatement("select tscore from stats where id = ? AND mode = " + mode);
+        ps.setDouble(1,userID);
+        result = ps.executeQuery();
+        while(result.next()) {
+            userTotalScore = result.getInt("tscore");
+        }
+
 
         /*rank*/
 
@@ -120,12 +183,17 @@ public class Profile {
                 break;
         }
 
-        eb.setAuthor("mamesosu.net " + modeName + " Profile for " + pName, "https://osu.ppy.sh/images/layout/avatar-guest.png","https://osu.ppy.sh/images/layout/avatar-guest.png");
-        eb.addField("**Ranking**", "#" + userRank, false);
-        eb.addField("**Accuracy**", UserACC + "%", false);
-        eb.addField("**PP**", UserPP + "pp", false);
-        eb.addField("**PlayCount**", UserPlayCount + " counts", false);
-        eb.addField("**Ranks**", "SS: ``" + SS_Count + "`` S: ``" + S_Count + "`` A: ``" + A_Count + "``", false);
+        eb.setAuthor("osu! " + modeName + " Profile for " + pName, "https://osu.ppy.sh/images/layout/avatar-guest.png","https://osu.ppy.sh/images/layout/avatar-guest.png");
+        eb.setThumbnail("https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
+        eb.addField("**Server Rank**", "▸ #" + userRank + " (" + Country + " #" + userCountryRank + ")", false);
+        eb.addField("**Total Score**", "▸ " + userTotalScore, false);
+        eb.addField("**Accuracy**", "▸ "+ UserACC + "%", false);
+        eb.addField("**PP**", "▸ "+ UserPP + "pp", false);
+        eb.addField("**PlayCount**", "▸ "+ UserPlayCount + " plays", false);
+        eb.addField("**Max Combo**", "▸ " + userCombo + "x", false);
+        eb.addField("**Replay**", "▸ " + userReplay + " views", false);
+        eb.addField("**Grade**", "SS:``" + SS_Count + "`` S:``" + S_Count + "`` A:``" + A_Count + "``", false);
+        eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
         eb.setColor(Color.GREEN);
 
         return eb;
