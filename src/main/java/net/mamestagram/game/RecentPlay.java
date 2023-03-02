@@ -80,7 +80,7 @@ public class RecentPlay {
             }
         } else {
             userID = result.getInt("id");
-            userName = dName.getUser().getName();
+            userName = dName.getNickname();
         }
 
         /*Get map_md5*/

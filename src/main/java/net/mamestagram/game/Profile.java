@@ -39,7 +39,7 @@ public class Profile {
             }
         } else {
             userID = result.getInt("id");
-            userName = pName.getUser().getName();
+            userName = pName.getNickname();
         }
 
         /*playcount*/
