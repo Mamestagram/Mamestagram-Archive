@@ -185,13 +185,13 @@ public class Profile {
 
         eb.setAuthor("osu! " + modeName + " Profile for " + pName, "https://osu.ppy.sh/images/layout/avatar-guest.png","https://osu.ppy.sh/images/layout/avatar-guest.png");
         eb.setThumbnail("https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
-        eb.addField("**Server Rank**", "▸ #" + userRank + " (" + Country + " #" + userCountryRank + ")", false);
+        eb.addField("**Global Ranking**", "▸ #" + userRank + " (" + Country + ": #" + userCountryRank + ")", false);
         eb.addField("**Total Score**", "▸ " + userTotalScore, false);
         eb.addField("**Accuracy**", "▸ "+ UserACC + "%", false);
         eb.addField("**PP**", "▸ "+ UserPP + "pp", false);
-        eb.addField("**PlayCount**", "▸ "+ UserPlayCount + " plays", false);
-        eb.addField("**Max Combo**", "▸ " + userCombo + "x", false);
-        eb.addField("**Replay**", "▸ " + userReplay + " views", false);
+        eb.addField("**Play Count**", "▸ "+ UserPlayCount + " plays", false);
+        eb.addField("**Maximum Combo**", "▸ " + userCombo + "x", false);
+        eb.addField("**Replays Watch**", "▸ " + userReplay + " views", false);
         eb.addField("**Grade**", "SS:``" + SS_Count + "`` S:``" + S_Count + "`` A:``" + A_Count + "``", false);
         eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
         eb.setColor(Color.GREEN);
