@@ -206,8 +206,8 @@ public class RecentPlay {
 
         eb.setAuthor(mapName + " [" + mapDiffName + "] [★" + mapRating + "]", "https://osu.ppy.sh/beatmapsets/" + mapID, "https://osu.ppy.sh/images/layout/avatar-guest.png");
         eb.addField("**Performance**", "Rank: ***" + userGrade + "*** **[" + userPP + "pp]**\n" +
-                "Score: **" + userScore + "** ▸ **" + userACC + "%**\n" +
-                "Combo: **" + userCombo + "x** / " + mapCombo + "x [" + n300 + "/" + n100 + "/" + n50 + "/" + miss + "]", false);
+                "Score: **" + String.format("%,d", userScore) + "** ▸ **" + userACC + "%**\n" +
+                "Combo: **" + String.format("%,d", userCombo) + "x** / " + String.format("%,d", mapCombo) + "x [" + String.format("%,d",n300) + "/" + String.format("%,d",n100) + "/" + String.format("%,d",n50) + "/" + String.format("%,d",miss) + "]", false);
         eb.addField("**Map Detail**", "Name: **" + mapName + "**\n" +
                 "Rating: **★" + mapRating + "**\n" +
                 "Passed Rate: **" + mapPassRate + "%**\n" +
