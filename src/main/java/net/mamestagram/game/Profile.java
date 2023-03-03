@@ -203,7 +203,7 @@ public class Profile {
         eb.setAuthor("osu! " + modeName + " Profile for " + userName, "https://osu.ppy.sh/images/layout/avatar-guest.png","https://osu.ppy.sh/images/layout/avatar-guest.png");
         eb.setThumbnail("https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
         eb.addField("**Performance**", "Ranking ▸ **#" + String.format("%,d",userRank) + "** (" + Country + ": **#" + String.format("%,d",userCountryRank) + "**)\n" +
-                "PP ▸ **" + String.format("%,d", UserPP) + "pp**\n" +
+                "Total PP ▸ **" + String.format("%,d", UserPP) + "pp**\n" +
                 "Ranked Score ▸ **" + String.format("%,d",userRankedScore) + "**\n" +
                 "Total Score ▸ **" + String.format("%,d",userTotalScore) + "**\n" +
                 "Accuracy ▸ **" + UserACC + " %**\n" +
