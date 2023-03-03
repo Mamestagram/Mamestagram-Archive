@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.mamestagram.game.Profile;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.sql.SQLException;
 
@@ -29,7 +30,7 @@ public class SlashCommand extends ListenerAdapter {
                     e.replyEmbeds(notArgumentMessage().build()).queue();
                 }
                 break;
-            case "recent":
+            case "play":
                 try {
                     e.replyEmbeds(recentData(e.getMember(),e.getOption("mode").getAsInt()).build()).queue();
                 } catch (SQLException | IOException ex) {

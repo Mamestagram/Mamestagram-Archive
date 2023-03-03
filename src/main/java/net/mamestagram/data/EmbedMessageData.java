@@ -15,7 +15,7 @@ public class EmbedMessageData extends ListenerAdapter {
                 false);
         eb.addField("osu!", "``/profile`` ``<mode>`` - アカウント情報を表示します\n" +
                 "``/ranking`` ``<mode>`` - mamestagramでのランクを表示します\n" +
-                "``/recent`` ``<mode>`` - mamestagramでのプレイを送信します\n",false);
+                "``/play`` ``<mode>`` - mamestagramでのプレイを送信します\n",false);
         eb.setColor(Color.PINK);
 
         return eb;
@@ -32,6 +32,15 @@ public class EmbedMessageData extends ListenerAdapter {
         EmbedBuilder eb = new EmbedBuilder();
 
         eb.setTitle("**:x:  引数エラー (mode)**");
+        eb.setColor(Color.RED);
+
+        return eb;
+    }
+
+    public static EmbedBuilder notConnectSQLMessage() {
+        EmbedBuilder eb = new EmbedBuilder();
+
+        eb.setTitle("**:x: SQL接続エラー**");
         eb.setColor(Color.RED);
 
         return eb;
