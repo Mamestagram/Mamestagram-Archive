@@ -161,20 +161,20 @@ public class RecentPlay {
 
         /*n300*/
 
-        ps = connection.prepareStatement("select n300+ngeki from scores where userid = ? and mode =" + mode);
+        ps = connection.prepareStatement("select n300 from scores where userid = ? and mode =" + mode);
         ps.setInt(1, userID);
         result = ps.executeQuery();
         while(result.next()) {
-            n300 = result.getInt("n300+ngeki");
+            n300 = result.getInt("n300");
         }
 
         /*n100*/
 
-        ps = connection.prepareStatement("select n100+nkatu from scores where userid = ? and mode =" + mode);
+        ps = connection.prepareStatement("select n100 from scores where userid = ? and mode =" + mode);
         ps.setInt(1, userID);
         result = ps.executeQuery();
         while(result.next()) {
-            n100 = result.getInt("n100+nkatu");
+            n100 = result.getInt("n100");
         }
 
         /*n50*/
