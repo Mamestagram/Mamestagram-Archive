@@ -42,22 +42,24 @@ public class SlashCommand extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent e) {
-        switch (e.getOption("mode").getAsString()) {
-            case "osu":
-                mode = 0;
-                break;
-            case "taiko":
-                mode = 1;
-                break;
-            case "catch":
-                mode = 2;
-                break;
-            case "mania":
-                mode = 3;
-                break;
-            case "relax":
-                mode = 4;
-                break;
+        if(e.getOption("mode") != null) {
+            switch (e.getOption("mode").getAsString()) {
+                case "osu":
+                    mode = 0;
+                    break;
+                case "taiko":
+                    mode = 1;
+                    break;
+                case "catch":
+                    mode = 2;
+                    break;
+                case "mania":
+                    mode = 3;
+                    break;
+                case "relax":
+                    mode = 4;
+                    break;
+            }
         }
 
         switch (e.getName()) {
