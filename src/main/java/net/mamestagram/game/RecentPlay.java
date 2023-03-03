@@ -90,6 +90,7 @@ public class RecentPlay {
         }
 
         /*Load Map Data*/
+        
         url += mapMD5;
         obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
