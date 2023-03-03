@@ -149,7 +149,7 @@ public class Profile {
             UserACC = result.getDouble("acc");
         }
 
-        /*TotalScore*/
+        /*RankedScore*/
 
         ps = connection.prepareStatement("select rscore from stats where id = ? AND mode = " + mode);
         ps.setDouble(1,userID);
@@ -157,6 +157,8 @@ public class Profile {
         while(result.next()) {
             userRankedScore = result.getInt("rscore");
         }
+
+        /*Total Score*/
 
         ps = connection.prepareStatement("select tscore from stats where id = ? AND mode = " + mode);
         ps.setDouble(1,userID);
