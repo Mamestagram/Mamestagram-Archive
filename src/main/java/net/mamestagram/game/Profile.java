@@ -214,7 +214,7 @@ public class Profile {
                 "Replay Views ▸ **" + String.format("%,d", userReplay) + "**", false);
         eb.addField("**Grade**", "SS: ``" + String.format("%,d",SS_Count) + "`` S: ``" + String.format("%,d",S_Count) + "`` A: ``" + String.format("%,d",A_Count) + "``", false);
         eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
-        eb.setColor(Color.ORANGE);
+        eb.setColor(Color.PINK);
 
         return eb;
     }
