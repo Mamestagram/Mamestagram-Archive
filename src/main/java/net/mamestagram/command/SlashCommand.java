@@ -77,7 +77,7 @@ public class SlashCommand extends ListenerAdapter {
                 break;
             case "result":
                 try {
-                    e.replyEmbeds(recentData(e.getMember(),mode).build()).queue();
+                    e.reply("**This is the result of your " + e.getOption("mode").getAsString() + " play!**").setEmbeds(recentData(e.getMember(),mode).build()).queue();
                 } catch (SQLException | IOException ex) {
                     throw new RuntimeException(ex);
                 } catch (NullPointerException ex) {
