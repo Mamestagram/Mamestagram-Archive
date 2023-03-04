@@ -30,7 +30,7 @@ public class SlashCommand extends ListenerAdapter {
                     .map(modes-> new net.dv8tion.jda.api.interactions.commands.Command.Choice(modes,modes))
                     .collect(Collectors.toList());
             e.replyChoices(options).queue();
-        } else if(e.getName().equals("play") && e.getFocusedOption().getName().equals("mode")) {
+        } else if(e.getName().equals("result") && e.getFocusedOption().getName().equals("mode")) {
             List<net.dv8tion.jda.api.interactions.commands.Command.Choice> options = Stream.of(modes)
                     .filter(modes->modes.startsWith(e.getFocusedOption().getValue()))
                     .map(modes-> new net.dv8tion.jda.api.interactions.commands.Command.Choice(modes,modes))
@@ -75,7 +75,7 @@ public class SlashCommand extends ListenerAdapter {
                     e.replyEmbeds(notArgumentMessage().build()).queue();
                 }
                 break;
-            case "play":
+            case "result":
                 try {
                     e.replyEmbeds(recentData(e.getMember(),mode).build()).queue();
                 } catch (SQLException | IOException ex) {

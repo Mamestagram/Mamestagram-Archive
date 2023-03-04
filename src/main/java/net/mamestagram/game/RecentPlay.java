@@ -120,7 +120,7 @@ public class RecentPlay {
         mapLength = root.get(0).get("total_length").asInt(); //need to convert default time
         mapBPM = root.get(0).get("bpm").asInt();
         mapCombo = root.get(0).get("max_combo").asInt();
-        mapName = root.get(0).get("title").asText() + " by " + root.get(0).get("artist").asText();
+        mapName = root.get(0).get("title_unicode").asText() + " by " + root.get(0).get("artist_unicode").asText();
         mapDiffName = root.get(0).get("version").asText(); //**mapName + mapDiffName** = 「mahiro - song_name [Hard]」
         mapCreator = root.get(0).get("creator").asText();
 
@@ -238,6 +238,7 @@ public class RecentPlay {
                 eb.setColor(Color.RED);
                 break;
         }
+        eb.setImage("https://b.ppy.sh/thumb/" + mapID + "l.jpg?");
         eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
 
         return eb;
