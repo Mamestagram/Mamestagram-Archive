@@ -50,6 +50,7 @@ public class Main {
         jda.upsertCommand("help", "Mamestagram Botのヘルプコマンドです").queue();
         jda.upsertCommand("profile", "mamesosu.netのプロフィールを表示します").addOption(OptionType.STRING, "mode", "取得したいモード", true, true).queue();
         jda.upsertCommand("result", "mamesosu.netでの直近プレイを送信します").addOption(OptionType.STRING, "mode", "取得したいモード", true, true).queue();
+        jda.upsertCommand("server", "mamesosu.netへの接続方法を送信します").queue();
 
         /*Scheduler*/
 

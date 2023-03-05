@@ -10,12 +10,11 @@ public class EmbedMessageData extends ListenerAdapter {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setAuthor("Command list for Mamestagram Bot", "https://media.discordapp.net/attachments/944984741826932767/1080466807338573824/MS1B_logo.png", "https://media.discordapp.net/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
         eb.addField("General", "``/help`` - Botのヘルプを表示します\n" +
-                        "``/invite`` - Mamestagramの招待リンクを表示します\n" +
-                        "``/setting`` - ボットの設定のヘルプを表示します\n",
+                        "``/server`` - サーバーへの接続方法の動画を表示します\n",
                 false);
         eb.addField("osu!", "``/profile`` ``<mode>`` - アカウント情報を表示します\n" +
-                "``/ranking`` ``<mode>`` - mamestagramでのランクを表示します\n" +
-                "``/play`` ``<mode>`` - mamestagramでのプレイを送信します\n",false);
+                "~~``/ranking`` ``<mode>`` - mamestagramでのランクを表示します~~ (作成中)\n" +
+                "``/result`` ``<mode>`` - mamestagramでのプレイを送信します\n",false);
         eb.setColor(Color.PINK);
 
         return eb;
@@ -23,26 +22,28 @@ public class EmbedMessageData extends ListenerAdapter {
 
     public static EmbedBuilder notUserFoundMessage(String dName) { //TODO
         EmbedBuilder eb = new EmbedBuilder();
-        eb.setTitle(":x:  ``" + dName + "`` というプレイヤーは見つかりませんでした!");
+        eb.setTitle(":x:  **Can't found player** ``" + dName + "``**.** \n\n**Please use the same nickname as mamesosu.net**");
         eb.setColor(Color.RED);
+        return eb;
+    }
+
+    public static EmbedBuilder connectGuideMessage() {
+        EmbedBuilder eb = new EmbedBuilder();
+        eb.setTitle("**Connection Guide**");
+        eb.addField("URL", "https://youtu.be/CAfovJYSEvw", false);
+        eb.setImage("https://i9.ytimg.com/vi/CAfovJYSEvw/mqdefault.jpg?sqp=CNCkkqAG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGH8gMChaMA8=&rs=AOn4CLDKFS4f-tIu-5JBOCqdWr7P8E1AwQ");
+        eb.setColor(Color.CYAN);
+
         return eb;
     }
 
     public static EmbedBuilder notArgumentMessage() {
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("**:x:  引数エラー (mode)**");
+        eb.setTitle("**:x:  Acquisition error occurred.**");
         eb.setColor(Color.RED);
 
         return eb;
     }
 
-    public static EmbedBuilder notConnectSQLMessage() {
-        EmbedBuilder eb = new EmbedBuilder();
-
-        eb.setTitle("**:x: SQL接続エラー**");
-        eb.setColor(Color.RED);
-
-        return eb;
-    }
 }

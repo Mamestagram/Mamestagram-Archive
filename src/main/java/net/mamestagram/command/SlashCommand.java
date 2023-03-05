@@ -83,6 +83,9 @@ public class SlashCommand extends ListenerAdapter {
                 } catch (NullPointerException ex) {
                     e.replyEmbeds(notArgumentMessage().build()).queue();
                 }
+            case "server":
+                e.replyEmbeds(connectGuideMessage().build()).queue();
+                break;
         }
     }
 }
