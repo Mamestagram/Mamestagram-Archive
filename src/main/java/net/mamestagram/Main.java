@@ -7,7 +7,11 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.mamestagram.command.SlashCommand;
 
+import static net.mamestagram.game.LoginAlert.*;
+
 import java.sql.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Main {
 
@@ -15,7 +19,7 @@ public class Main {
     public static Connection connection;
     public static final String osuAPIKey = "";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLClientInfoException {
         final String TOKEN = "";
 
         /*Database Connect*/
@@ -32,6 +36,8 @@ public class Main {
             e.printStackTrace();
         }
 
+        connection.setClientInfo("mysql-connection-timeout", "300");
+
         /*Discord API*/
 
         jda = JDABuilder.createDefault(TOKEN, GatewayIntent.GUILD_MESSAGES)
@@ -44,6 +50,23 @@ public class Main {
         jda.upsertCommand("help", "Mamestagram Botのヘルプコマンドです").queue();
         jda.upsertCommand("profile", "mamesosu.netのプロフィールを表示します").addOption(OptionType.STRING, "mode", "取得したいモード", true, true).queue();
         jda.upsertCommand("result", "mamesosu.netでの直近プレイを送信します").addOption(OptionType.STRING, "mode", "取得したいモード", true, true).queue();
+
+        /*Scheduler*/
+
+        Timer timer = new Timer();
+
+        TimerTask task = new TimerTask() {
+            @Override
+            public void run() {
+                try {
+                    loginStatusUpdate();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        };
+
+        timer.schedule(task,1000L,5000L);
 
         /*Launch Check*/
 
