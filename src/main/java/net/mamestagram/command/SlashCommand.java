@@ -116,7 +116,7 @@ public class SlashCommand extends ListenerAdapter {
         if(e.getComponentId().equals("next")) {
             rankView = "";
             try {
-                if((Math.round(rowCount / 10)) * 10 > row) {
+                if(((Math.ceil(rowCount / 10)) * 10) > row) {
                     row += 10;
                     e.editMessageEmbeds(rankingViewerMessage(mode, row).build()).queue();
                 } else {
