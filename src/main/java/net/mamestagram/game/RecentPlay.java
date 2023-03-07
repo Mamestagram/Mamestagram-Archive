@@ -31,13 +31,38 @@ public class RecentPlay {
         }
     }
 
+    public static String getMods(int n) {
+        final String[] mods = new String[] {"NF", "EZ", "", "HD", "HR", "SD", "DT", "", "HT", "NC", "FL"};
+        String rMods = "";
+        if(n == 0) {
+            rMods = "NM";
+            return rMods;
+        }
+
+        if(n >= 16416) {
+            rMods = "PF";
+            n -= 16416;
+        }
+        for(int i = 10; n != 0; i--) {
+            if(i != 2 && i != 7 && n >= Math.pow(2,i)) {
+                if(i == 9) {
+                    n -= Math.pow(2,6);
+                }
+                rMods += mods[i];
+                n -= Math.pow(2,i);
+            }
+        }
+
+        return rMods;
+    }
+
     public static EmbedBuilder recentData(Member dName, int mode) throws SQLException, IOException {
 
         EmbedBuilder eb = new EmbedBuilder();
 
         /*User Data*/
         double userACC = 0.0, userPP = 0.0;
-        int userID = 0, userScore = 0, userCombo = 0, n300 = 0, n100 = 0, n50 = 0, miss = 0;
+        int userID = 0, userScore = 0, userMods = 0, userCombo = 0, n300 = 0, n100 = 0, n50 = 0, miss = 0;
         int[] time = new int[2];
         String userGrade = "";
 
@@ -119,7 +144,7 @@ public class RecentPlay {
         mapLength = root.get(0).get("total_length").asInt(); //need to convert default time
         mapBPM = root.get(0).get("bpm").asInt();
         mapCombo = root.get(0).get("max_combo").asInt();
-        mapName = root.get(0).get("title_unicode").asText() + " by " + root.get(0).get("artist_unicode").asText();
+        mapName = root.get(0).get("title").asText() + " by " + root.get(0).get("artist").asText();
         mapDiffName = root.get(0).get("version").asText(); //**mapName + mapDiffName** = 「mahiro - song_name [Hard]」
         mapCreator = root.get(0).get("creator").asText();
 
@@ -130,6 +155,15 @@ public class RecentPlay {
         result = ps.executeQuery();
         while(result.next()) {
             userACC = result.getDouble("acc");
+        }
+
+        /*user mode*/
+
+        ps = connection.prepareStatement("select mods from scores where userid = ? and mode = " + mode);
+        ps.setInt(1,userID);
+        result = ps.executeQuery();
+        while(result.next()) {
+            userMods = result.getInt("mods");
         }
 
         /*user pp*/
@@ -204,12 +238,13 @@ public class RecentPlay {
             userGrade = result.getString("grade");
         }
 
-        eb.setAuthor(mapName + " [" + mapDiffName + "] [★" + mapRating + "]", "https://osu.ppy.sh/beatmapsets/" + mapID, "https://osu.ppy.sh/images/layout/avatar-guest.png");
+        eb.setAuthor(mapName + " +" + getMods(userMods), "https://osu.ppy.sh/beatmapsets/" + mapID, "https://osu.ppy.sh/images/layout/avatar-guest.png");
         eb.addField("**Performance**", "Rank: ***" + userGrade + "*** **[" + userPP + "pp]**\n" +
                 "Score: **" + String.format("%,d", userScore) + "** ▸ **" + userACC + "%**\n" +
                 "Combo: **" + String.format("%,d", userCombo) + "x** / " + String.format("%,d", mapCombo) + "x [" + String.format("%,d",n300) + "/" + String.format("%,d",n100) + "/" + String.format("%,d",n50) + "/" + String.format("%,d",miss) + "]", false);
         eb.addField("**Map Detail**", "Name: **" + mapName + "**\n" +
-                "Rating: **★" + mapRating + "**\n" +
+                "Difficulty: **" + mapDiffName + "**\n" +
+                "Rating: **★" + mapRating + "** for NM\n" +
                 "Passed Rate: **" + mapPassRate + "%**\n" +
                 "AR: **" + mapApproach + "** / CS: **" + mapCircle + "** / OD: **" + mapOverall + "** / BPM: **" + mapBPM + "**\n" +
                 "Length: **" + calcMinSecond(mapLength)[0] + ":" + calcMinSecond(mapLength)[1] +"**\n" +

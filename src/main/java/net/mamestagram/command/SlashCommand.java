@@ -5,7 +5,6 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -24,7 +23,7 @@ public class SlashCommand extends ListenerAdapter {
 
     @Override
     public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent e) {
-        if(e.getName().equals("profile") && e.getFocusedOption().getName().equals("mode")) {
+        if(e.getName().equals("osuprofile") && e.getFocusedOption().getName().equals("mode")) {
             List<Command.Choice> options = Stream.of(modes)
                     .filter(modes->modes.startsWith(e.getFocusedOption().getValue()))
                     .map(modes-> new net.dv8tion.jda.api.interactions.commands.Command.Choice(modes,modes))
@@ -66,7 +65,7 @@ public class SlashCommand extends ListenerAdapter {
             case "help":
                 e.replyEmbeds(helpCommand().build()).setEphemeral(true).queue();
                 break;
-            case "profile":
+            case "osuprofile":
                 try {
                     e.replyEmbeds(profileData(e.getMember(), mode).build()).queue();
                 } catch (SQLException ex) {
@@ -76,13 +75,16 @@ public class SlashCommand extends ListenerAdapter {
                 }
                 break;
             case "result":
-                try {
-                    e.reply("**This is the result of your " + e.getOption("mode").getAsString() + " play!**").setEmbeds(recentData(e.getMember(),mode).build()).queue();
-                } catch (SQLException | IOException ex) {
-                    throw new RuntimeException(ex);
-                } catch (NullPointerException ex) {
-                    e.replyEmbeds(notArgumentMessage().build()).queue();
+                if(!e.isAcknowledged()) {
+                    try {
+                        e.reply("**This is the result of your " + e.getOption("mode").getAsString() + " play!**").setEmbeds(recentData(e.getMember(), mode).build()).queue();
+                    } catch (SQLException | IOException ex) {
+                        throw new RuntimeException(ex);
+                    } catch (NullPointerException ex) {
+                        e.replyEmbeds(notArgumentMessage().build()).queue();
+                    }
                 }
+                break;
             case "server":
                 e.replyEmbeds(connectGuideMessage().build()).queue();
                 break;

@@ -1,11 +1,8 @@
 package net.mamestagram.game;
 
-import club.minnced.discord.webhook.WebhookClientBuilder;
-import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import net.dv8tion.jda.api.EmbedBuilder;
 
 import java.awt.*;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,6 +16,7 @@ public class LoginAlert {
 
     private static int loginID = 0;
     private static int bloginID = 0;
+    private static boolean isFirstLogin = true;
     private static int userID = 0;
     private static String userName;
 
@@ -32,10 +30,10 @@ public class LoginAlert {
         result = ps.executeQuery();
 
         while(result.next()) {
-            loginID = (result.getInt("id"));
+            loginID = (result.getInt("id")); //bloginID= 86, loginID = 87
         }
 
-        if(bloginID != loginID) {
+        if(bloginID != loginID && isFirstLogin == false) {
             var date = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
 
             ps = connection.prepareStatement("select userid from ingame_logins where id = ?");
@@ -59,6 +57,7 @@ public class LoginAlert {
 
             jda.getGuildById(944248031136587796L).getTextChannelById(1081737936401350717L).sendMessageEmbeds(eb.build()).queue();
         } else {
+            isFirstLogin = false;
             return;
         }
 

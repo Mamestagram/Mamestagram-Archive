@@ -48,7 +48,7 @@ public class Main {
                 .build();
         jda.updateCommands().queue();
         jda.upsertCommand("help", "Mamestagram Botのヘルプコマンドです").queue();
-        jda.upsertCommand("profile", "mamesosu.netのプロフィールを表示します").addOption(OptionType.STRING, "mode", "取得したいモード", true, true).queue();
+        jda.upsertCommand("osuprofile", "mamesosu.netのプロフィールを表示します").addOption(OptionType.STRING, "mode", "取得したいモード", true, true).queue();
         jda.upsertCommand("result", "mamesosu.netでの直近プレイを送信します").addOption(OptionType.STRING, "mode", "取得したいモード", true, true).queue();
         jda.upsertCommand("server", "mamesosu.netへの接続方法を送信します").queue();
 
@@ -67,7 +67,7 @@ public class Main {
             }
         };
 
-        timer.schedule(task,1000L,5000L);
+        timer.schedule(task,1000L,2000L);
 
         /*Launch Check*/
 

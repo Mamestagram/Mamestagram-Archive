@@ -10,13 +10,15 @@ import java.sql.SQLException;
 
 import static net.mamestagram.Main.*;
 import static net.mamestagram.data.EmbedMessageData.*;
+import static net.mamestagram.game.RecentPlay.*;
 
 public class Profile {
+
     public static EmbedBuilder profileData(Member pName, int mode) throws SQLException { //引数にはdiscordのnicknameを取得
         double UserACC = 0.00;
-        EmbedBuilder eb = new EmbedBuilder();
         int userRank = 0, userCountryRank = 0, userID = 0, userReplay = 0, userRankedScore = 0, userTotalScore = 0, userCombo = 0, UserPP = 0, UserPlayCount = 0, A_Count = 0, S_Count = 0, SS_Count = 0;
         String modeName = "", Country = "", userName = "";
+        EmbedBuilder eb = new EmbedBuilder();
         PreparedStatement ps = null;
         ResultSet result = null;
 
@@ -204,15 +206,15 @@ public class Profile {
 
         eb.setAuthor("osu! " + modeName + " Profile for " + userName, "https://osu.ppy.sh/images/layout/avatar-guest.png","https://osu.ppy.sh/images/layout/avatar-guest.png");
         eb.setThumbnail("https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
-        eb.addField("**Performance**", "Ranking ▸ **#" + String.format("%,d",userRank) + "** (" + Country + ": **#" + String.format("%,d",userCountryRank) + "**)\n" +
-                "Total PP ▸ **" + String.format("%,d", UserPP) + "pp**\n" +
-                "Ranked Score ▸ **" + String.format("%,d",userRankedScore) + "**\n" +
-                "Total Score ▸ **" + String.format("%,d",userTotalScore) + "**\n" +
-                "Accuracy ▸ **" + UserACC + " %**\n" +
-                "Play Count ▸ **" + String.format("%,d",UserPlayCount) + "**\n" +
-                "Maximum Combo ▸ **" + String.format("%,d",userCombo) + "**\n" +
-                "Replay Views ▸ **" + String.format("%,d", userReplay) + "**", false);
-        eb.addField("**Grade**", "SS: ``" + String.format("%,d",SS_Count) + "`` S: ``" + String.format("%,d",S_Count) + "`` A: ``" + String.format("%,d",A_Count) + "``", false);
+        eb.addField("**Performance**", "Ranking: **#" + String.format("%,d",userRank) + "** (" + Country + ": **#" + String.format("%,d",userCountryRank) + "**)\n" +
+                "Total PP: **" + String.format("%,d", UserPP) + "pp**\n" +
+                "Ranked Score: **" + String.format("%,d",userRankedScore) + "**\n" +
+                "Total Score: **" + String.format("%,d",userTotalScore) + "**\n" +
+                "Accuracy: **" + UserACC + " %**\n" +
+                "Play Count: **" + String.format("%,d",UserPlayCount) + "**\n" +
+                "Maximum Combo: **" + String.format("%,d",userCombo) + "**\n" +
+                "Replay Views: **" + String.format("%,d", userReplay) + "**\n  ", false);
+        eb.addField("**Grade**", "**SS:** ``" + String.format("%,d",SS_Count) + "`` **S:** ``" + String.format("%,d",S_Count) + "`` **A:** ``" + String.format("%,d",A_Count) + "``", false);
         eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
         eb.setColor(Color.PINK);
 
