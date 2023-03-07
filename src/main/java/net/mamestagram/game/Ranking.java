@@ -52,10 +52,10 @@ public class Ranking {
         }
 
         for(int i = row; i < row + 10; i++) {
-            if(i > rowCount) {
+            if(i > rowCount-2) {
                 break;
             }
-            rankView += "#" + (i + 1) + ": " + rName[i] + " (" + rCountry[i] + ")\n" + "Acc: **" + rAcc[i] + "%** [**" + rSS[i] + "/" + rS[i] + "/" + rA[i] + "**]\n\n";
+            rankView += "#" + (i + 1) + ": " + rName[i] + " (" + rCountry[i] + ")\n" + "Acc: **" + rAcc[i] + "%** [**" + rSS[i] + "/" + rS[i] + "/" + rA[i] + "**]▸**" + rPP[i] + "pp**\n\n";
         }
 
         eb.addField("**Ranking**", rankView, false);
