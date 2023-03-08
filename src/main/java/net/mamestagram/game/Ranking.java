@@ -42,6 +42,8 @@ public class Ranking {
         ps.setInt(1, mode);
         result = ps.executeQuery();
 
+        count = 0;
+
         while(result.next()) {
             rCountry[count] = result.getString("country");
             rName[count] = result.getString("name");
