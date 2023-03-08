@@ -56,7 +56,7 @@ public class Ranking {
             count++;
         }
 
-        for(int i = row; i < row + 10; i++) {
+        for(int i = row; i < row + 5; i++) {
             if(i > rowCount-1) {
                 break;
             }

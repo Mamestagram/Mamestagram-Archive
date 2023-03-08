@@ -120,8 +120,13 @@ public class SlashCommand extends ListenerAdapter {
         if(e.getComponentId().equals("next") && e.getMember().getIdLong() == commandSender.getUser().getIdLong()) {
             rankView = "";
             try {
-                row += 10;
-                if(((Math.ceil((double)rowCount / 10)) * 10) > row) {
+                int divRow = rowCount / 5;
+                int modRow = rowCount % 5;
+
+                if(modRow != 0) divRow++;
+
+                row += 5;
+                if(divRow * 5 > row) {
                     e.editMessageEmbeds(rankingViewerMessage((int)mode, (int)row).build()).queue();
                 } else {
                     row = 0;
