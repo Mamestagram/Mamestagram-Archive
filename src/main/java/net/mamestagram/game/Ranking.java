@@ -1,7 +1,6 @@
 package net.mamestagram.game;
 
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
 
 import java.awt.*;
 import java.sql.PreparedStatement;
