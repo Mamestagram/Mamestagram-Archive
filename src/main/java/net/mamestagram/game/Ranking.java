@@ -58,10 +58,10 @@ public class Ranking {
             if(i > rowCount-1) {
                 break;
             }
-            rankView += "#" + (i + 1) + ": " + rName[i] + " (" + rCountry[i] + ")\n" + "Acc: **" + rAcc[i] + "%** [**" + rSS[i] + "/" + rS[i] + "/" + rA[i] + "**]▸**" + rPP[i] + "pp**\n\n";
+            rankView += "#" + (i + 1) + ": **__" + rName[i] + "__** (" + rCountry[i] + ")\n" + "Acc: **" + rAcc[i] + "%**\nPP: **" + rPP[i] + "pp**\nSS: ``" + rSS[i] + "`` / S: ``" + rS[i] + "`` / A: ``" + rA[i] + "``\n\n";
         }
 
-        eb.addField("**Ranking**", rankView, false);
+        eb.addField("**Ranking (mamesosu.net)\n **", rankView, false);
         eb.setColor(Color.CYAN);
 
         return eb;
