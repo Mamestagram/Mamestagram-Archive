@@ -9,12 +9,12 @@ public class EmbedMessageData extends ListenerAdapter {
     public static EmbedBuilder helpCommand() {
         EmbedBuilder eb = new EmbedBuilder();
         eb.setAuthor("Command list for Mamestagram Bot", "https://media.discordapp.net/attachments/944984741826932767/1080466807338573824/MS1B_logo.png", "https://media.discordapp.net/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
-        eb.addField("General", "``/help`` - Botのヘルプを表示します\n" +
-                        "``/server`` - サーバーへの接続方法の動画を表示します\n",
+        eb.addField("General", "``/help`` - Displays help for the bot\n" +
+                        "``/server`` - Displays a video on how to connect to the server\n",
                 false);
-        eb.addField("osu!", "``/profile`` ``<mode>`` - アカウント情報を表示します\n" +
-                "~~``/ranking`` ``<mode>`` - mamestagramでのランクを表示します~~ (作成中)\n" +
-                "``/result`` ``<mode>`` - mamestagramでのプレイを送信します\n",false);
+        eb.addField("osu!", "``/osuprofile`` ``<mode>`` - Displays account information\n" +
+                "``/ranking`` ``<mode>`` - Showing the ranking of mamestagram\n" +
+                "``/result`` ``<mode>`` - Submit your play on mamestagram\n",false);
         eb.setColor(Color.PINK);
 
         return eb;

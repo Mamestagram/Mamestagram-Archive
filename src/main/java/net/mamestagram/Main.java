@@ -47,11 +47,11 @@ public class Main {
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .build();
         jda.updateCommands().queue();
-        jda.upsertCommand("help", "Mamestagram Botのヘルプコマンドです").queue();
-        jda.upsertCommand("osuprofile", "mamesosu.netのプロフィールを表示します").addOption(OptionType.STRING, "mode", "取得したいモード", true, true).queue();
-        jda.upsertCommand("result", "mamesosu.netでの直近プレイを送信します").addOption(OptionType.STRING, "mode", "取得したいモード", true, true).queue();
-        jda.upsertCommand("server", "mamesosu.netへの接続方法を送信します").queue();
-        jda.upsertCommand("ranking", "mamesosu.netのランキングを表示します").addOption(OptionType.STRING, "mode", "取得したいモード", true, true).queue();
+        jda.upsertCommand("help", "Help command for Mamestagram Bot").queue();
+        jda.upsertCommand("osuprofile", "View mamesosu.net's Profile").addOption(OptionType.STRING, "mode", "GameMode", true, true).queue();
+        jda.upsertCommand("result", "Submit your play at mamesosu.net").addOption(OptionType.STRING, "mode", "GameMode", true, true).queue();
+        jda.upsertCommand("server", "Send method of connection to mamesosu.net").queue();
+        jda.upsertCommand("ranking", "View mamesosu.net's ranking").addOption(OptionType.STRING, "mode", "GameMode", true, true).queue();
 
         /*Scheduler*/
 

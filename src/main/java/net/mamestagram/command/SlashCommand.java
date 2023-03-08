@@ -25,7 +25,6 @@ public class SlashCommand extends ListenerAdapter {
 
     private String[] modes = new String[] {"osu", "taiko", "catch", "mania", "relax"};
     private double mode, row = 0;
-    private Member commandSender;
 
     @Override
     public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent e) {
@@ -103,12 +102,11 @@ public class SlashCommand extends ListenerAdapter {
             case "ranking":
                 rankView = "";
                 row = 0;
-                commandSender = e.getMember();
 
                 try {
                     e.reply("**This is the rank of " + e.getOption("mode").getAsString() + "!**").setEmbeds(rankingViewerMessage((int)mode, (int)row).build()).addActionRow(
                             Button.success("next", "Next")
-                    ).queue();
+                    ).setEphemeral(true).queue();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
@@ -117,7 +115,7 @@ public class SlashCommand extends ListenerAdapter {
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent e) {
-        if(e.getComponentId().equals("next") && e.getMember().getIdLong() == commandSender.getUser().getIdLong()) {
+        if(e.getComponentId().equals("next")) {
             rankView = "";
             try {
                 int divRow = rowCount / 5;
