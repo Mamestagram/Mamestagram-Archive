@@ -1,5 +1,6 @@
 package net.mamestagram.command;
 
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -7,6 +8,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
+import java.awt.*;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
@@ -22,7 +24,8 @@ import static net.mamestagram.game.Ranking.*;
 public class SlashCommand extends ListenerAdapter {
 
     private String[] modes = new String[] {"osu", "taiko", "catch", "mania", "relax"};
-    private int mode, row = 0;
+    private double mode, row = 0;
+    private Member commandSender;
 
     @Override
     public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent e) {
@@ -76,7 +79,7 @@ public class SlashCommand extends ListenerAdapter {
                 break;
             case "osuprofile":
                 try {
-                    e.replyEmbeds(profileData(e.getMember(), mode).build()).queue();
+                    e.replyEmbeds(profileData(e.getMember(), (int)mode).build()).queue();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 } catch (NullPointerException ex) {
@@ -86,7 +89,7 @@ public class SlashCommand extends ListenerAdapter {
             case "result":
                 if(!e.isAcknowledged()) {
                     try {
-                        e.reply("**This is the result of your " + e.getOption("mode").getAsString() + " play!**").setEmbeds(recentData(e.getMember(), mode).build()).queue();
+                        e.reply("**This is the result of your " + e.getOption("mode").getAsString() + " play!**").setEmbeds(recentData(e.getMember(), (int)mode).build()).queue();
                     } catch (SQLException | IOException ex) {
                         throw new RuntimeException(ex);
                     } catch (NullPointerException ex) {
@@ -100,9 +103,10 @@ public class SlashCommand extends ListenerAdapter {
             case "ranking":
                 rankView = "";
                 row = 0;
+                commandSender = e.getMember();
 
                 try {
-                    e.reply("**This is the rank of " + e.getOption("mode").getAsString() + "!**").setEmbeds(rankingViewerMessage(mode, row).build()).addActionRow(
+                    e.reply("**This is the rank of " + e.getOption("mode").getAsString() + "!**").setEmbeds(rankingViewerMessage((int)mode, (int)row).build()).addActionRow(
                             Button.success("next", "Next")
                     ).queue();
                 } catch (SQLException ex) {
@@ -113,15 +117,15 @@ public class SlashCommand extends ListenerAdapter {
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent e) {
-        if(e.getComponentId().equals("next")) {
+        if(e.getComponentId().equals("next") && e.getMember().getIdLong() == commandSender.getUser().getIdLong()) {
             rankView = "";
             try {
-                if(((Math.ceil(rowCount / 10)) * 10) > row) {
-                    row += 10;
-                    e.editMessageEmbeds(rankingViewerMessage(mode, row).build()).queue();
+                row += 10;
+                if(((Math.ceil((double)rowCount / 10)) * 10) > row) {
+                    e.editMessageEmbeds(rankingViewerMessage((int)mode, (int)row).build()).queue();
                 } else {
                     row = 0;
-                    e.editMessageEmbeds(rankingViewerMessage(mode, row).build()).queue();
+                    e.editMessageEmbeds(rankingViewerMessage((int)mode, 0).build()).queue();
                 }
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);

@@ -24,10 +24,12 @@ public class Ranking {
         PreparedStatement ps = null;
         ResultSet result = null;
 
-        ps = connection.prepareStatement("select count(country) from users");
+        ps = connection.prepareStatement("SELECT COUNT(*) FROM users join stats on users.id = stats.id where mode = ? and not users.id = 1 and not acc = 0");
+        ps.setInt(1, mode);
         result = ps.executeQuery();
+
         while(result.next()) {
-            rowCount = result.getInt("count(country)");
+            rowCount = result.getInt("COUNT(*)");
         }
 
         ps = connection.prepareStatement("SELECT RANK() OVER(ORDER BY pp DESC) ranking, country, name, acc, plays, pp, xh_count + x_count AS 'SS', sh_count + s_count AS 'S', a_count AS 'A'" +
@@ -35,10 +37,11 @@ public class Ranking {
                 "JOIN stats " +
                 "ON users.id = stats.id " +
                 "WHERE mode = ? " +
-                "AND NOT users.id = 1 " +
-                "ORDER BY pp DESC");
+                "AND NOT users.id = 1 AND NOT acc = 0 " +
+                "ORDER BY pp DESC ");
         ps.setInt(1, mode);
         result = ps.executeQuery();
+
         while(result.next()) {
             rCountry[count] = result.getString("country");
             rName[count] = result.getString("name");
@@ -52,7 +55,7 @@ public class Ranking {
         }
 
         for(int i = row; i < row + 10; i++) {
-            if(i > rowCount-2) {
+            if(i > rowCount-1) {
                 break;
             }
             rankView += "#" + (i + 1) + ": " + rName[i] + " (" + rCountry[i] + ")\n" + "Acc: **" + rAcc[i] + "%** [**" + rSS[i] + "/" + rS[i] + "/" + rA[i] + "**]▸**" + rPP[i] + "pp**\n\n";
