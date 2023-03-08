@@ -10,7 +10,6 @@ import java.sql.SQLException;
 
 import static net.mamestagram.Main.*;
 import static net.mamestagram.data.EmbedMessageData.*;
-import static net.mamestagram.game.RecentPlay.*;
 
 public class Profile {
 
@@ -44,34 +43,7 @@ public class Profile {
             userName = pName.getNickname();
         }
 
-        /*playcount*/
-
-        ps = connection.prepareStatement("select plays from stats where id = ? and mode = " + mode);
-        ps.setInt(1, userID);
-        result = ps.executeQuery();
-        while(result.next()) {
-            UserPlayCount = result.getInt("plays");
-        }
-
-        /*pp*/
-
-        ps = connection.prepareStatement("select pp from stats where id = ? and mode = " + mode);
-        ps.setInt(1, userID);
-        result = ps.executeQuery();
-        while(result.next()) {
-            UserPP = result.getInt("pp");
-        }
-
-        /*replay*/
-
-        ps = connection.prepareStatement("select replay_views from stats where id = ? and mode = " + mode);
-        ps.setInt(1, userID);
-        result = ps.executeQuery();
-        while(result.next()) {
-            userReplay = result.getInt("replay_views");
-        }
-
-        /*Country*/
+        /*country*/
 
         ps = connection.prepareStatement("select country from users where id = ?");
         ps.setInt(1, userID);
@@ -80,31 +52,22 @@ public class Profile {
             Country = result.getString("country");
         }
 
-        /*ACount*/
+        /*get info*/
 
-        ps = connection.prepareStatement("select a_count from stats where id = ? AND mode = " + mode);
+        ps = connection.prepareStatement("select plays, pp, replay_views, a_count, s_count+sh_count, xh_count+x_count, max_combo, acc, rscore, tscore from stats where id = ? and mode = " + mode);
         ps.setInt(1, userID);
         result = ps.executeQuery();
         while(result.next()) {
+            UserPlayCount = result.getInt("plays");
+            UserPP = result.getInt("pp");
+            userReplay = result.getInt("replay_views");
             A_Count = result.getInt("a_count");
-        }
-
-        /*SCount*/
-
-        ps = connection.prepareStatement("select s_count+sh_count from stats where id = ? AND mode = " + mode);
-        ps.setInt(1, userID);
-        result = ps.executeQuery();
-        while(result.next()) {
             S_Count = result.getInt("s_count+sh_count");
-        }
-
-        /*SSCount*/
-
-        ps = connection.prepareStatement("select xh_count+x_count from stats where id = ? AND mode = " + mode);
-        ps.setInt(1, userID);
-        result = ps.executeQuery();
-        while(result.next()) {
             SS_Count = result.getInt("xh_count+x_count");
+            userCombo = result.getInt("max_combo");
+            UserACC = result.getDouble("acc");
+            userRankedScore = result.getInt("rscore");
+            userTotalScore = result.getInt("tscore");
         }
 
         /*CountryRank*/
@@ -132,43 +95,6 @@ public class Profile {
         while(result.next()) {
             userCountryRank = result.getInt("cranking");
         }
-
-        /*max combo*/
-
-        ps = connection.prepareStatement("select max_combo from stats where id = ? and mode = " + mode);
-        ps.setInt(1,userID);
-        result = ps.executeQuery();
-        while(result.next()) {
-            userCombo = result.getInt("max_combo");
-        }
-
-        /*ACC*/
-
-        ps = connection.prepareStatement("select acc from stats where id = ? AND mode = " + mode);
-        ps.setDouble(1,userID);
-        result = ps.executeQuery();
-        while(result.next()) {
-            UserACC = result.getDouble("acc");
-        }
-
-        /*RankedScore*/
-
-        ps = connection.prepareStatement("select rscore from stats where id = ? AND mode = " + mode);
-        ps.setDouble(1,userID);
-        result = ps.executeQuery();
-        while(result.next()) {
-            userRankedScore = result.getInt("rscore");
-        }
-
-        /*Total Score*/
-
-        ps = connection.prepareStatement("select tscore from stats where id = ? AND mode = " + mode);
-        ps.setDouble(1,userID);
-        result = ps.executeQuery();
-        while(result.next()) {
-            userTotalScore = result.getInt("tscore");
-        }
-
 
         /*rank*/
 

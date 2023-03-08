@@ -148,93 +148,21 @@ public class RecentPlay {
         mapDiffName = root.get(0).get("version").asText(); //**mapName + mapDiffName** = 「mahiro - song_name [Hard]」
         mapCreator = root.get(0).get("creator").asText();
 
-        /*user acc*/
+        /*user info*/
 
-        ps = connection.prepareStatement("select acc from scores where userid = ? and mode = " + mode);
+        ps = connection.prepareStatement("select acc, mods, pp, score, max_combo, n300, n100, n50, nmiss,grade from scores where userid = ? and mode = " + mode);
         ps.setInt(1, userID);
         result = ps.executeQuery();
         while(result.next()) {
             userACC = result.getDouble("acc");
-        }
-
-        /*user mode*/
-
-        ps = connection.prepareStatement("select mods from scores where userid = ? and mode = " + mode);
-        ps.setInt(1,userID);
-        result = ps.executeQuery();
-        while(result.next()) {
             userMods = result.getInt("mods");
-        }
-
-        /*user pp*/
-
-        ps = connection.prepareStatement("select pp from scores where userid = ? and mode =" + mode);
-        ps.setInt(1, userID);
-        result = ps.executeQuery();
-        while(result.next()) {
             userPP = result.getDouble("pp");
-        }
-
-        /*user score*/
-
-        ps = connection.prepareStatement("select score from scores where userid = ? and mode =" + mode);
-        ps.setInt(1, userID);
-        result = ps.executeQuery();
-        while(result.next()) {
             userScore = result.getInt("score");
-        }
-
-        /*max_combo*/
-
-        ps = connection.prepareStatement("select max_combo from scores where userid = ? and mode =" + mode);
-        ps.setInt(1, userID);
-        result = ps.executeQuery();
-        while(result.next()) {
             userCombo = result.getInt("max_combo");
-        }
-
-        /*n300*/
-
-        ps = connection.prepareStatement("select n300 from scores where userid = ? and mode =" + mode);
-        ps.setInt(1, userID);
-        result = ps.executeQuery();
-        while(result.next()) {
             n300 = result.getInt("n300");
-        }
-
-        /*n100*/
-
-        ps = connection.prepareStatement("select n100 from scores where userid = ? and mode =" + mode);
-        ps.setInt(1, userID);
-        result = ps.executeQuery();
-        while(result.next()) {
             n100 = result.getInt("n100");
-        }
-
-        /*n50*/
-
-        ps = connection.prepareStatement("select n50 from scores where userid = ? and mode =" + mode);
-        ps.setInt(1, userID);
-        result = ps.executeQuery();
-        while(result.next()) {
             n50 = result.getInt("n50");
-        }
-
-        /*miss*/
-
-        ps = connection.prepareStatement("select nmiss from scores where userid = ? and mode =" + mode);
-        ps.setInt(1, userID);
-        result = ps.executeQuery();
-        while(result.next()) {
             miss = result.getInt("nmiss");
-        }
-
-        /*score grade*/
-
-        ps = connection.prepareStatement("select grade from scores where userid = ? and mode =" + mode);
-        ps.setInt(1, userID);
-        result = ps.executeQuery();
-        while(result.next()) {
             userGrade = result.getString("grade");
         }
 
