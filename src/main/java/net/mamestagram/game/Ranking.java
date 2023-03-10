@@ -11,18 +11,17 @@ import static net.mamestagram.Main.*;
 
 public class Ranking {
 
-    private static int count = 0;
+    private static int count = 0, rowCount;
     private static int[] rPP = new int[20000], rSS = new int[20000], rS = new int[20000], rA = new int[20000], rPlays = new int[20000];
     private static String[] rCountry = new String[20000], rName = new String[20000];
     private static double[] rAcc = new double[20000];
     public static String rankView = "";
-    public static int rowCount;
 
     public static EmbedBuilder rankingViewerMessage(int mode, int row) throws SQLException {
 
         EmbedBuilder eb = new EmbedBuilder();
-        PreparedStatement ps = null;
-        ResultSet result = null;
+        PreparedStatement ps;
+        ResultSet result;
 
         ps = connection.prepareStatement("SELECT COUNT(*) FROM users join stats on users.id = stats.id where mode = ? and not users.id = 1 and not acc = 0");
         ps.setInt(1, mode);
