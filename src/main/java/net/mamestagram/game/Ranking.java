@@ -11,7 +11,8 @@ import static net.mamestagram.Main.*;
 
 public class Ranking {
 
-    private static int count = 0, rowCount;
+    private static int count = 0;
+    public static int  rowCount;
     private static int[] rPP = new int[20000], rSS = new int[20000], rS = new int[20000], rA = new int[20000], rPlays = new int[20000];
     private static String[] rCountry = new String[20000], rName = new String[20000];
     private static double[] rAcc = new double[20000];
