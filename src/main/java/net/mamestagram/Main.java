@@ -20,9 +20,8 @@ public class Main {
     public static final String osuAPIKey = "";
 
     public static void main(String[] args) throws SQLClientInfoException {
-        final String TOKEN = "";
 
-        /*Database Connect*/
+        final String TOKEN = "";
 
         try {
             connection = DriverManager.getConnection(
@@ -38,8 +37,6 @@ public class Main {
 
         connection.setClientInfo("mysql-connection-timeout", "300");
 
-        /*Discord API*/
-
         jda = JDABuilder.createDefault(TOKEN, GatewayIntent.GUILD_MESSAGES)
                 .setRawEventsEnabled(true)
                 .addEventListeners(new SlashCommand())
@@ -52,8 +49,6 @@ public class Main {
         jda.upsertCommand("result", "Submit your play at mamesosu.net").addOption(OptionType.STRING, "mode", "GameMode", true, true).queue();
         jda.upsertCommand("server", "Send method of connection to mamesosu.net").queue();
         jda.upsertCommand("ranking", "View mamesosu.net's ranking").addOption(OptionType.STRING, "mode", "GameMode", true, true).queue();
-
-        /*Scheduler*/
 
         Timer timer = new Timer();
 
@@ -70,9 +65,6 @@ public class Main {
 
         timer.schedule(task,1000L,2000L);
 
-        /*Launch Check*/
-
         System.out.println("ready");
     }
-
 }

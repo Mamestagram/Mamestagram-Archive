@@ -22,10 +22,12 @@ import static net.mamestagram.game.Ranking.*;
 public class SlashCommand extends ListenerAdapter {
 
     private String[] modes = new String[] {"osu", "taiko", "catch", "mania", "relax"};
+
     private double mode, row = 0;
 
     @Override
     public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent e) {
+
         if(e.getName().equals("osuprofile") && e.getFocusedOption().getName().equals("mode")) {
             List<Command.Choice> options = Stream.of(modes)
                     .filter(modes->modes.startsWith(e.getFocusedOption().getValue()))
@@ -50,6 +52,7 @@ public class SlashCommand extends ListenerAdapter {
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent e) {
+
         if(e.getOption("mode") != null) {
             switch (e.getOption("mode").getAsString()) {
                 case "osu":
@@ -100,7 +103,6 @@ public class SlashCommand extends ListenerAdapter {
             case "ranking":
                 rankView = "";
                 row = 0;
-
                 try {
                     e.reply("**This is the rank of " + e.getOption("mode").getAsString() + "!**").setEmbeds(rankingViewerMessage((int)mode, (int)row).build()).addActionRow(
                             Button.success("next", "Next")
@@ -113,6 +115,7 @@ public class SlashCommand extends ListenerAdapter {
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent e) {
+
         if(e.getComponentId().equals("next")) {
             rankView = "";
             try {

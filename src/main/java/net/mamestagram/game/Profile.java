@@ -13,25 +13,26 @@ import static net.mamestagram.data.EmbedMessageData.*;
 
 public class Profile {
 
-    public static EmbedBuilder profileData(Member pName, int mode) throws SQLException { //引数にはdiscordのnicknameを取得
+    public static EmbedBuilder profileData(Member pName, int mode) throws SQLException {
+
         double UserACC = 0.00;
-        int userRank = 0, userCountryRank = 0, userID = 0, userReplay = 0, userRankedScore = 0, userTotalScore = 0, userCombo = 0, UserPP = 0, UserPlayCount = 0, A_Count = 0, S_Count = 0, SS_Count = 0;
-        String modeName = "", Country = "", userName = "";
+        int userRank = 0, userCountryRank = 0, userID, userReplay = 0, userRankedScore = 0, userTotalScore = 0, userCombo = 0, UserPP = 0, UserPlayCount = 0, A_Count = 0, S_Count = 0, SS_Count = 0;
+        String modeName = "", Country = "", userName;
         EmbedBuilder eb = new EmbedBuilder();
-        PreparedStatement ps = null;
-        ResultSet result = null;
+        PreparedStatement ps;
+        ResultSet result;
 
         ps = connection.prepareStatement("select * from users where name = ?");
         ps.setString(1, pName.getNickname());
 
         result = ps.executeQuery();
 
-        /*data exist?*/
-
         if(!result.next()) {
             ps = connection.prepareStatement("select * from users where name = ?");
             ps.setString(1, pName.getUser().getName());
+
             result = ps.executeQuery();
+
             if(!result.next()) {
                 return notUserFoundMessage(pName.getUser().getName());
             } else {
@@ -43,20 +44,20 @@ public class Profile {
             userName = pName.getNickname();
         }
 
-        /*country*/
-
         ps = connection.prepareStatement("select country from users where id = ?");
         ps.setInt(1, userID);
+
         result = ps.executeQuery();
+
         while(result.next()) {
             Country = result.getString("country");
         }
 
-        /*get info*/
-
         ps = connection.prepareStatement("select plays, pp, replay_views, a_count, s_count+sh_count, xh_count+x_count, max_combo, acc, rscore, tscore from stats where id = ? and mode = " + mode);
+
         ps.setInt(1, userID);
         result = ps.executeQuery();
+
         while(result.next()) {
             UserPlayCount = result.getInt("plays");
             UserPP = result.getInt("pp");
@@ -69,8 +70,6 @@ public class Profile {
             userRankedScore = result.getInt("rscore");
             userTotalScore = result.getInt("tscore");
         }
-
-        /*CountryRank*/
 
         ps = connection.prepareStatement("SELECT COUNT(*) + 1 AS 'cranking' " +
                         "FROM stats " +
@@ -89,14 +88,15 @@ public class Profile {
                         "    ) " +
                         ") " +
                         "AND mode = " + mode);
+
         ps.setInt(1, userID);
         ps.setInt(2, userID);
+
         result = ps.executeQuery();
+
         while(result.next()) {
             userCountryRank = result.getInt("cranking");
         }
-
-        /*rank*/
 
         ps = connection.prepareStatement("select COUNT(*) + 1 AS 'ranking' " +
                 "FROM stats " +
@@ -106,8 +106,10 @@ public class Profile {
                 "WHERE id = ? " +
                 "AND mode = " + mode + ") " +
                 "AND mode = " + mode );
+
         ps.setInt(1,userID);
         result = ps.executeQuery();
+
         while(result.next()) {
             userRank = result.getInt("ranking");
         }

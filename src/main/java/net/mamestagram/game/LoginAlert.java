@@ -21,8 +21,10 @@ public class LoginAlert {
     private static String userName;
 
     public static void loginStatusUpdate() throws SQLException {
+
         PreparedStatement ps = null;
         ResultSet result = null;
+        EmbedBuilder eb = new EmbedBuilder();
 
         bloginID = loginID;
 
@@ -34,23 +36,27 @@ public class LoginAlert {
         }
 
         if(bloginID != loginID && isFirstLogin == false) {
+
             var date = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
 
             ps = connection.prepareStatement("select userid from ingame_logins where id = ?");
             ps.setInt(1 ,loginID);
+
             result = ps.executeQuery();
+
             while (result.next()) {
                 userID = result.getInt("userid");
             }
 
             ps = connection.prepareStatement("select name from users where id = ?");
             ps.setInt(1, userID);
+
             result = ps.executeQuery();
+
             while(result.next()) {
                 userName = result.getString("name");
             }
 
-            EmbedBuilder eb = new EmbedBuilder();
             eb.setTitle("**" + userName + " has logged in**");
             eb.setFooter("Login at " + date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
             eb.setColor(Color.GREEN);
@@ -58,7 +64,6 @@ public class LoginAlert {
             jda.getGuildById(944248031136587796L).getTextChannelById(1081737936401350717L).sendMessageEmbeds(eb.build()).queue();
         } else {
             isFirstLogin = false;
-            return;
         }
 
     }

@@ -60,31 +60,21 @@ public class RecentPlay {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        /*User Data*/
         double userACC = 0.0, userPP = 0.0;
-        int userID = 0, userScore = 0, userMods = 0, userCombo = 0, n300 = 0, n100 = 0, n50 = 0, miss = 0;
-        int[] time = new int[2];
+        int userID, userScore = 0, userMods = 0, userCombo = 0, n300 = 0, n100 = 0, n50 = 0, miss = 0;
         String userGrade = "";
 
-        /*beatmap Data*/
-
-        double mapCircle = 0, mapApproach= 0, mapRating= 0, mapPassRate= 0, mapOverall= 0;
+        double mapCircle, mapApproach, mapRating, mapPassRate, mapOverall;
         int mapID, mapRanked, mapLength, mapBPM, mapCombo;
-        String mapName = "", mapDiffName = "", mapCreator = "", mapMD5 = "";
+        String mapName, mapDiffName, mapCreator, mapMD5 = "";
 
-        /*SQL Module Set*/
-
-        PreparedStatement ps = null;
-        ResultSet result = null;
-
-        /*JSON Module Set*/
+        PreparedStatement ps;
+        ResultSet result;
 
         String url = "https://osu.ppy.sh/api/get_beatmaps?k=" + osuAPIKey + "&h=";
         URL obj;
         ObjectMapper mapper = new ObjectMapper();
         JsonNode root;
-
-        /*is data exist?*/
 
         ps = connection.prepareStatement("select id from users where name = ?");
         ps.setString(1, dName.getNickname());
@@ -104,17 +94,15 @@ public class RecentPlay {
             userID = result.getInt("id");
         }
 
-        /*Get map_md5*/
-
         ps = connection.prepareStatement("select map_md5 from scores where userid = ? and mode = " + mode);
         ps.setInt(1, userID);
+
         result = ps.executeQuery();
+
         while(result.next()) {
             mapMD5 = result.getString("map_md5");
         }
 
-        /*Load Map Data*/
-        
         url += mapMD5;
         obj = new URL(url);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -132,8 +120,6 @@ public class RecentPlay {
 
         root = mapper.readTree(response.toString());
 
-        /*Input Got Data*/
-
         mapCircle = root.get(0).get("diff_size").asDouble();
         mapApproach = root.get(0).get("diff_approach").asDouble();
         mapRating = (double)Math.round((root.get(0).get("difficultyrating").asDouble() * 100)) / 100;
@@ -148,11 +134,11 @@ public class RecentPlay {
         mapDiffName = root.get(0).get("version").asText(); //**mapName + mapDiffName** = 「mahiro - song_name [Hard]」
         mapCreator = root.get(0).get("creator").asText();
 
-        /*user info*/
-
         ps = connection.prepareStatement("select acc, mods, pp, score, max_combo, n300, n100, n50, nmiss,grade from scores where userid = ? and mode = " + mode);
         ps.setInt(1, userID);
+
         result = ps.executeQuery();
+
         while(result.next()) {
             userACC = result.getDouble("acc");
             userMods = result.getInt("mods");
@@ -200,6 +186,7 @@ public class RecentPlay {
                 eb.setColor(Color.RED);
                 break;
         }
+
         eb.setImage("https://b.ppy.sh/thumb/" + mapID + "l.jpg?");
         eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
 

@@ -19,12 +19,14 @@ public class Ranking {
     public static int rowCount;
 
     public static EmbedBuilder rankingViewerMessage(int mode, int row) throws SQLException {
+
         EmbedBuilder eb = new EmbedBuilder();
         PreparedStatement ps = null;
         ResultSet result = null;
 
         ps = connection.prepareStatement("SELECT COUNT(*) FROM users join stats on users.id = stats.id where mode = ? and not users.id = 1 and not acc = 0");
         ps.setInt(1, mode);
+
         result = ps.executeQuery();
 
         while(result.next()) {
@@ -38,6 +40,7 @@ public class Ranking {
                 "WHERE mode = ? " +
                 "AND NOT users.id = 1 AND NOT acc = 0 " +
                 "ORDER BY pp DESC ");
+
         ps.setInt(1, mode);
         result = ps.executeQuery();
 
