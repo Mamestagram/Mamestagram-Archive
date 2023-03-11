@@ -31,7 +31,7 @@ public class PatchAnnounce extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
-        if(e.getMessage().getContentRaw().equals("dev-create-form")) {
+        if(e.getMessage().getContentRaw().equals("dev-create-form") && e.getChannel().getIdLong() == 944248031136587800L) {
             e.getMessage().reply("ここに書いた内容はannounceへ通知されます\nご注意ください")
                     .addActionRow(
                             Button.primary("create","Create")
