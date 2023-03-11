@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static net.mamestagram.Main.*;
-import static net.mamestagram.data.EmbedMessageData.*;
+import static net.mamestagram.message.EmbedMessageData.*;
 
 public class Profile {
 

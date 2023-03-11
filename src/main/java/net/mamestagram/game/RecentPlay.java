@@ -17,7 +17,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static net.mamestagram.Main.*;
-import static net.mamestagram.data.EmbedMessageData.*;
+import static net.mamestagram.message.EmbedMessageData.*;
 
 public class RecentPlay {
     private static int[] calcMinSecond(int number) {

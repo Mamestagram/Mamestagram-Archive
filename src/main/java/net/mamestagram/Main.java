@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.mamestagram.command.SlashCommand;
+import net.mamestagram.server.PatchAnnounce;
 
 import static net.mamestagram.game.LoginAlert.*;
 
@@ -40,8 +41,12 @@ public class Main {
         jda = JDABuilder.createDefault(TOKEN, GatewayIntent.GUILD_MESSAGES)
                 .setRawEventsEnabled(true)
                 .addEventListeners(new SlashCommand())
+                .addEventListeners(new PatchAnnounce())
                 .setActivity(Activity.playing("mamesosu.net"))
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
+                .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                .enableIntents(GatewayIntent.GUILD_MESSAGE_REACTIONS)
+                .enableIntents(GatewayIntent.GUILD_EMOJIS_AND_STICKERS)
                 .build();
         jda.updateCommands().queue();
         jda.upsertCommand("help", "Help command for Mamestagram Bot").queue();

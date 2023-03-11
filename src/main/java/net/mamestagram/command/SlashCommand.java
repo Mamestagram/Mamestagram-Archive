@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static net.mamestagram.data.EmbedMessageData.*;
+import static net.mamestagram.message.EmbedMessageData.*;
 
 import static net.mamestagram.game.Profile.*;
 import static net.mamestagram.game.RecentPlay.*;
