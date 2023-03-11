@@ -14,6 +14,7 @@ import java.net.URL;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static net.mamestagram.Main.*;
 import static net.mamestagram.data.EmbedMessageData.*;
@@ -32,25 +33,37 @@ public class RecentPlay {
     }
 
     public static String getMods(int n) {
-        final String[] mods = new String[] {"NF", "EZ", "", "HD", "HR", "SD", "DT", "", "HT", "NC", "FL"};
+
+        ArrayList<String> mod = new ArrayList<String>();
+        final String[] mods = {"NF", "EZ", "", "HD", "HR", "SD", "DT", "", "HT", "NC", "FL", "", "SO", "PF"};
         String rMods = "";
-        if(n == 0) {
-            rMods = "NM";
-            return rMods;
+
+        if (n >= 536870912) {
+            mod.add("v2");
+            n -= 536870912;
         }
 
-        if(n >= 16416) {
-            rMods = "PF";
-            n -= 16416;
-        }
-        for(int i = 10; n != 0; i--) {
-            if(i != 2 && i != 7 && n >= Math.pow(2,i)) {
-                if(i == 9) {
-                    n -= Math.pow(2,6);
+        for (int i = 14; i >= 0; i--) {
+            if (i != 2 && i != 11 && n >= Math.pow(2, i)) {
+                switch (i) {
+                    case 14:
+                        n -= Math.pow(2, 5);
+                        break;
+                    case 9:
+                        n -= Math.pow(2, 6);
+                        break;
+                    case 13:
+                    case 7:
+                        n -= Math.pow(2, i);
+                        continue;
                 }
-                rMods += mods[i];
-                n -= Math.pow(2,i);
+                mod.add(mods[i]);
+                n -= Math.pow(2, i);
             }
+        }
+
+        for (int i = 0; i < mod.size(); i++) {
+            rMods += mod.get(i);
         }
 
         return rMods;
