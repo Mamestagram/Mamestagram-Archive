@@ -54,7 +54,7 @@ public class PatchAnnounce extends ListenerAdapter {
                     .setRequired(true)
                     .build();
 
-            TextInput projectText = TextInput.create("text", "Text", TextInputStyle.SHORT)
+            TextInput projectText = TextInput.create("text", "Text", TextInputStyle.PARAGRAPH)
                     .setPlaceholder("Please Write Update Contents")
                     .setMinLength(1)
                     .setRequired(true)
@@ -74,7 +74,7 @@ public class PatchAnnounce extends ListenerAdapter {
         String version = e.getValue("version").getAsString();
         String text = e.getValue("text").getAsString();
 
-        e.reply("send").queue();
+        e.reply("send").setEphemeral(true).queue();
         jda.getGuildById(guildID).getTextChannelById(toCHID).sendMessageEmbeds(announceBuilder(name,version,text).build()).queue();
     }
 }
