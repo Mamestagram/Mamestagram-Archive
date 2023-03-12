@@ -7,6 +7,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.mamestagram.command.SlashCommand;
 import net.mamestagram.server.PatchAnnounce;
+import net.mamestagram.server.RoleDistribution;
 
 import static net.mamestagram.game.LoginAlert.*;
 
@@ -42,6 +43,7 @@ public class Main {
                 .setRawEventsEnabled(true)
                 .addEventListeners(new SlashCommand())
                 .addEventListeners(new PatchAnnounce())
+                .addEventListeners(new RoleDistribution())
                 .setActivity(Activity.playing("mamesosu.net"))
                 .enableIntents(GatewayIntent.MESSAGE_CONTENT)
                 .enableIntents(GatewayIntent.GUILD_MEMBERS)
