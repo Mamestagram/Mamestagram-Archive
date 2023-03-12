@@ -12,6 +12,9 @@ import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
 
 import java.awt.*;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 import static net.mamestagram.Main.*;
 
@@ -22,9 +25,14 @@ public class PatchAnnounce extends ListenerAdapter {
 
     private static EmbedBuilder announceBuilder(String project, String version, String text) {
         EmbedBuilder eb = new EmbedBuilder();
+        var date = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
 
-        eb.setTitle("***:white_check_mark: Patch [" + project + " #" + version + "]***\n\n**" + text + "**");
-        eb.setColor(Color.GREEN);
+        eb.setTitle(":white_check_mark: Patch Applied");
+        eb.addField("**Project**", "```" + project + "```", false);
+        eb.addField("**Version**", "```" + version + "```", false);
+        eb.addField("**Contents**", "```" + text + "```", false);
+        eb.setFooter("Applied at " + date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
+        eb.setColor(Color.green);
 
         return eb;
     }
