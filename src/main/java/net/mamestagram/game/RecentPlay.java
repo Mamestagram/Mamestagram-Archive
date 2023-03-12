@@ -66,7 +66,12 @@ public class RecentPlay {
             rMods += mod.get(i);
         }
 
-        return rMods;
+        if(rMods != "") {
+            return rMods;
+        } else {
+            return "NM";
+        }
+
     }
 
     public static EmbedBuilder recentData(Member dName, int mode) throws SQLException, IOException {
