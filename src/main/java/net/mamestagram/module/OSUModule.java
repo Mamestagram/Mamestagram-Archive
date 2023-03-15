@@ -15,6 +15,7 @@ import java.util.List;
 import static net.mamestagram.Main.osuAPIKey;
 
 public class OSUModule {
+
     public static List<String> getMinSecond(int number) {
 
         List<String> time = new ArrayList<>();
@@ -134,24 +135,21 @@ public class OSUModule {
 
         String inputLine;
         String jsonURL = "https://osu.ppy.sh/api/get_beatmaps?k=" + osuAPIKey + "&h=" + md5;
-        JsonNode root;
         URL obj = new URL(jsonURL);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
         con.setRequestMethod("GET");
 
         ObjectMapper mapper = new ObjectMapper();
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         StringBuilder response = new StringBuilder();
 
-
         while((inputLine = in.readLine()) != null) {
             response.append(inputLine);
         }
         in.close();
 
-        root = mapper.readTree(response.toString());
-
-        return root;
+        return mapper.readTree(response.toString());
     }
 
     public static Color getMessageColor(String grade) {
