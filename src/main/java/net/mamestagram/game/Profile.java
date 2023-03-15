@@ -26,13 +26,11 @@ public class Profile {
 
         ps = connection.prepareStatement("select * from users where name = ?");
         ps.setString(1, pName.getNickname());
-
         result = ps.executeQuery();
 
         if(!result.next()) {
             ps = connection.prepareStatement("select * from users where name = ?");
             ps.setString(1, pName.getUser().getName());
-
             result = ps.executeQuery();
 
             if(!result.next()) {
@@ -48,7 +46,6 @@ public class Profile {
 
         ps = connection.prepareStatement("select country from users where id = ?");
         ps.setInt(1, userID);
-
         result = ps.executeQuery();
 
         while(result.next()) {
@@ -93,7 +90,6 @@ public class Profile {
 
         ps.setInt(1, userID);
         ps.setInt(2, userID);
-
         result = ps.executeQuery();
 
         while(result.next()) {
