@@ -18,10 +18,11 @@ import static net.mamestagram.message.EmbedMessageData.*;
 import static net.mamestagram.game.Profile.*;
 import static net.mamestagram.game.RecentPlay.*;
 import static net.mamestagram.game.Ranking.*;
+import static net.mamestagram.module.OSUModule.*;
 
 public class SlashCommand extends ListenerAdapter {
 
-    private String[] modes = new String[] {"osu", "taiko", "catch", "mania", "relax"};
+    private final String[] modes = new String[] {"osu", "taiko", "catch", "mania", "relax"};
 
     private double mode, row = 0;
 
@@ -54,62 +55,43 @@ public class SlashCommand extends ListenerAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent e) {
 
         if(e.getOption("mode") != null) {
-            switch (e.getOption("mode").getAsString()) {
-                case "osu":
-                    mode = 0;
-                    break;
-                case "taiko":
-                    mode = 1;
-                    break;
-                case "catch":
-                    mode = 2;
-                    break;
-                case "mania":
-                    mode = 3;
-                    break;
-                case "relax":
-                    mode = 4;
-                    break;
-            }
+            mode = getModeNumber(e.getOption("mode").getAsString());
         }
 
         switch (e.getName()) {
-            case "help":
-                e.replyEmbeds(helpCommand().build()).setEphemeral(true).queue();
-                break;
-            case "osuprofile":
+            case "help" -> e.replyEmbeds(helpCommand().build()).setEphemeral(true).queue();
+            case "osuprofile" -> {
                 try {
-                    e.replyEmbeds(profileData(e.getMember(), (int)mode).build()).queue();
+                    e.replyEmbeds(profileData(e.getMember(), (int) mode).build()).queue();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 } catch (NullPointerException ex) {
                     e.replyEmbeds(notArgumentMessage().build()).queue();
                 }
-                break;
-            case "result":
-                if(!e.isAcknowledged()) {
+            }
+            case "result" -> {
+                if (!e.isAcknowledged()) {
                     try {
-                        e.reply("**This is the result of your " + e.getOption("mode").getAsString() + " play!**").setEmbeds(recentData(e.getMember(), (int)mode).build()).queue();
+                        e.reply("**This is the result of your " + e.getOption("mode").getAsString() + " play!**").setEmbeds(recentData(e.getMember(), (int) mode).build()).queue();
                     } catch (SQLException | IOException ex) {
                         throw new RuntimeException(ex);
                     } catch (NullPointerException ex) {
                         e.replyEmbeds(notArgumentMessage().build()).queue();
                     }
                 }
-                break;
-            case "server":
-                e.replyEmbeds(connectGuideMessage().build()).queue();
-                break;
-            case "ranking":
+            }
+            case "server" -> e.replyEmbeds(connectGuideMessage().build()).queue();
+            case "ranking" -> {
                 rankView = "";
                 row = 0;
                 try {
-                    e.reply("**This is the rank of " + e.getOption("mode").getAsString() + "!**").setEmbeds(rankingViewerMessage((int)mode, (int)row).build()).addActionRow(
+                    e.reply("**This is the rank of " + e.getOption("mode").getAsString() + "!**").setEmbeds(rankingViewerMessage((int) mode, (int) row).build()).addActionRow(
                             Button.success("next", "Next")
                     ).setEphemeral(true).queue();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }
+            }
         }
     }
 
@@ -117,13 +99,15 @@ public class SlashCommand extends ListenerAdapter {
     public void onButtonInteraction(ButtonInteractionEvent e) {
 
         if(e.getComponentId().equals("next")) {
+
             rankView = "";
+
             try {
+
                 int divRow = rowCount / 5;
                 int modRow = rowCount % 5;
 
                 if(modRow != 0) divRow++;
-
                 row += 5;
                 if(divRow * 5 > row) {
                     e.editMessageEmbeds(rankingViewerMessage((int)mode, (int)row).build()).queue();

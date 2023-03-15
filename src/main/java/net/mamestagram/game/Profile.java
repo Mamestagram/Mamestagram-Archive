@@ -9,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static net.mamestagram.Main.*;
+import static net.mamestagram.module.OSUModule.*;
 import static net.mamestagram.message.EmbedMessageData.*;
 
 public class Profile {
@@ -18,9 +19,10 @@ public class Profile {
         double UserACC = 0.00;
         int userRank = 0, userCountryRank = 0, userID, userReplay = 0, userRankedScore = 0, userTotalScore = 0, userCombo = 0, UserPP = 0, UserPlayCount = 0, A_Count = 0, S_Count = 0, SS_Count = 0;
         String modeName = "", Country = "", userName;
-        EmbedBuilder eb = new EmbedBuilder();
         PreparedStatement ps;
         ResultSet result;
+
+        EmbedBuilder eb = new EmbedBuilder();
 
         ps = connection.prepareStatement("select * from users where name = ?");
         ps.setString(1, pName.getNickname());
@@ -114,23 +116,7 @@ public class Profile {
             userRank = result.getInt("ranking");
         }
 
-        switch (mode) {
-            case 0:
-                modeName = "standard";
-                break;
-            case 1:
-                modeName = "taiko";
-                break;
-            case 2:
-                modeName = "catch";
-                break;
-            case 3:
-                modeName = "mania";
-                break;
-            case 4:
-                modeName = "relax";
-                break;
-        }
+        modeName = getModeName(mode);
 
         eb.setAuthor("osu! " + modeName + " Profile for " + userName, "https://osu.ppy.sh/images/layout/avatar-guest.png","https://osu.ppy.sh/images/layout/avatar-guest.png");
         eb.setThumbnail("https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");

@@ -14,50 +14,49 @@ import static net.mamestagram.Main.*;
 
 public class LoginAlert {
 
-    private static int loginID = 0;
-    private static int bloginID = 0;
+    private static int LOGINID = 0;
+    private static int BLOGINID = 0;
     private static boolean isFirstLogin = true;
-    private static int userID = 0;
-    private static String userName;
+    private static int USERID = 0;
+    private static String USERNAME;
 
     public static void loginStatusUpdate() throws SQLException {
 
-        PreparedStatement ps = null;
-        ResultSet result = null;
+        PreparedStatement ps;
+        ResultSet result;
+
         EmbedBuilder eb = new EmbedBuilder();
 
-        bloginID = loginID;
+        BLOGINID = LOGINID;
 
         ps = connection.prepareStatement("select id from ingame_logins order by id desc limit 1");
         result = ps.executeQuery();
 
         while(result.next()) {
-            loginID = (result.getInt("id")); //bloginID= 86, loginID = 87
+            LOGINID = (result.getInt("id")); //bloginID= 86, loginID = 87
         }
 
-        if(bloginID != loginID && isFirstLogin == false) {
+        if(BLOGINID != LOGINID && isFirstLogin == false) {
 
             var date = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
 
             ps = connection.prepareStatement("select userid from ingame_logins where id = ?");
-            ps.setInt(1 ,loginID);
-
+            ps.setInt(1 ,LOGINID);
             result = ps.executeQuery();
 
             while (result.next()) {
-                userID = result.getInt("userid");
+                USERID = result.getInt("userid");
             }
 
             ps = connection.prepareStatement("select name from users where id = ?");
-            ps.setInt(1, userID);
-
+            ps.setInt(1, USERID);
             result = ps.executeQuery();
 
             while(result.next()) {
-                userName = result.getString("name");
+                USERNAME = result.getString("name");
             }
 
-            eb.setTitle("**" + userName + " has logged in**");
+            eb.setTitle("**" + USERNAME + " has logged in**");
             eb.setFooter("Login at " + date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
             eb.setColor(Color.GREEN);
 
