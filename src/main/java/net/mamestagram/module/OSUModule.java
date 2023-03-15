@@ -16,6 +16,7 @@ import static net.mamestagram.Main.osuAPIKey;
 
 public class OSUModule {
     public static List<String> getMinSecond(int number) {
+
         List<String> time = new ArrayList<>(2);
         if(number > 59) {
             time.set(0, String.valueOf(number / 60));
@@ -24,15 +25,14 @@ public class OSUModule {
             } else {
                 time.set(1, String.valueOf(number % 60));
             }
-            return time;
         } else {
             if(number < 10) {
                 time.set(1, "0" + number);
             } else {
                 time.set(1, String.valueOf(number));
             }
-            return time;
         }
+        return time;
     }
 
     public static String getModsName(int n) {
@@ -177,6 +177,4 @@ public class OSUModule {
             }
         }
     }
-
-
 }

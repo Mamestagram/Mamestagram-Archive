@@ -59,7 +59,7 @@ public class Ranking {
         }
 
         for(int i = row; i < row + 5; i++) {
-            if(i > rowCount-1) {
+            if(i > rowCount - 1) {
                 break;
             }
             rankView += "#" + (i + 1) + ": **__" + rName.get(i) + "__** (" + rCountry.get(i) + ")\n" + "Acc: **" + rAcc.get(i) + "%**\nPP: **" + rPP.get(i) + "pp**\nSS: ``" + rSS.get(i) + "`` / S: ``" + rS.get(i) + "`` / A: ``" + rA.get(i) + "``\n\n";

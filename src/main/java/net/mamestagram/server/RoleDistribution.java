@@ -16,11 +16,11 @@ public class RoleDistribution extends ListenerAdapter {
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent e) {
 
+        Guild guild = e.getGuild();
+        Member member = e.getMember();
+        Role role = guild.getRoleById(infoRoleID);
+
         if(e.getChannel().getIdLong() == chID && e.getReaction().getEmoji().equals(Emoji.fromUnicode("U+2705"))) {
-            Guild guild = e.getGuild();
-            Member member = e.getMember();
-            long messageID = e.getMessageIdLong();
-            Role role = guild.getRoleById(infoRoleID);
 
             guild.addRoleToMember(member, role).queue();
         }
