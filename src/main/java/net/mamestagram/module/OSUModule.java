@@ -17,19 +17,19 @@ import static net.mamestagram.Main.osuAPIKey;
 public class OSUModule {
     public static List<String> getMinSecond(int number) {
 
-        List<String> time = new ArrayList<>(2);
+        List<String> time = new ArrayList<>();
         if(number > 59) {
-            time.set(0, String.valueOf(number / 60));
+            time.add(0, String.valueOf(number / 60));
             if(number % 60 < 10) {
-                time.set(1, "0" + number % 60);
+                time.add(1, "0" + number % 60);
             } else {
-                time.set(1, String.valueOf(number % 60));
+                time.add(1, String.valueOf(number % 60));
             }
         } else {
             if(number < 10) {
-                time.set(1, "0" + number);
+                time.add(1, "0" + number);
             } else {
-                time.set(1, String.valueOf(number));
+                time.add(1, String.valueOf(number));
             }
         }
         return time;
@@ -137,12 +137,12 @@ public class OSUModule {
         JsonNode root;
         URL obj = new URL(jsonURL);
         HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+        con.setRequestMethod("GET");
 
         ObjectMapper mapper = new ObjectMapper();
         BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
         StringBuilder response = new StringBuilder();
 
-        con.setRequestMethod("GET");
 
         while((inputLine = in.readLine()) != null) {
             response.append(inputLine);

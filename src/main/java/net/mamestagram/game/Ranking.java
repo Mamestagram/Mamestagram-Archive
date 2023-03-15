@@ -14,9 +14,9 @@ public class Ranking {
 
     private static int count = 0;
     public static int rowCount;
-    private static ArrayList<Integer> rPP = new ArrayList<>(20000), rSS = new ArrayList<>(20000), rS = new ArrayList<>(20000), rA = new ArrayList<>(20000), rPlays = new ArrayList<>(20000);
-    private static ArrayList<String> rCountry = new ArrayList<>(20000), rName = new ArrayList<>(20000);
-    private static ArrayList<Double> rAcc = new ArrayList<>(20000);
+    private static ArrayList<Integer> rPP = new ArrayList<>(), rSS = new ArrayList<>(), rS = new ArrayList<>(), rA = new ArrayList<>(), rPlays = new ArrayList<>();
+    private static ArrayList<String> rCountry = new ArrayList<>(), rName = new ArrayList<>();
+    private static ArrayList<Double> rAcc = new ArrayList<>();
     public static String rankView = "";
 
     public static EmbedBuilder rankingViewerMessage(int mode, int row) throws SQLException {
@@ -47,14 +47,14 @@ public class Ranking {
         count = 0;
 
         while(result.next()) {
-            rCountry.set(count, result.getString("country"));
-            rName.set(count, result.getString("name"));
-            rAcc.set(count, result.getDouble("acc"));
-            rPlays.set(count, result.getInt("plays"));
-            rPP.set(count, result.getInt("pp"));
-            rSS.set(count, result.getInt("SS"));
-            rS.set(count, result.getInt("S"));
-            rA.set(count, result.getInt("A"));
+            rCountry.add(result.getString("country"));
+            rName.add(result.getString("name"));
+            rAcc.add(result.getDouble("acc"));
+            rPlays.add(result.getInt("plays"));
+            rPP.add(result.getInt("pp"));
+            rSS.add(result.getInt("SS"));
+            rS.add(result.getInt("S"));
+            rA.add(result.getInt("A"));
             count++;
         }
 
