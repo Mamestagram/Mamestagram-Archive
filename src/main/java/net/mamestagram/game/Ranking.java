@@ -47,14 +47,14 @@ public class Ranking {
         count = 0;
 
         while(result.next()) {
-            rCountry.add(result.getString("country"));
-            rName.add(result.getString("name"));
-            rAcc.add(result.getDouble("acc"));
-            rPlays.add(result.getInt("plays"));
-            rPP.add(result.getInt("pp"));
-            rSS.add(result.getInt("SS"));
-            rS.add(result.getInt("S"));
-            rA.add(result.getInt("A"));
+            rCountry.add(count, result.getString("country"));
+            rName.add(count, result.getString("name"));
+            rAcc.add(count, result.getDouble("acc"));
+            rPlays.add(count, result.getInt("plays"));
+            rPP.add(count, result.getInt("pp"));
+            rSS.add(count, result.getInt("SS"));
+            rS.add(count, result.getInt("S"));
+            rA.add(count, result.getInt("A"));
             count++;
         }
 
