@@ -89,14 +89,14 @@ public class RecentPlay {
         eb.setAuthor(mapName + " +" + getModsName(userMods), "https://osu.ppy.sh/beatmapsets/" + mapID, "https://osu.ppy.sh/images/layout/avatar-guest.png");
         eb.addField("**Performance**", "Rank: ***" + userGrade + "*** **[" + userPP + "pp]**\n" +
                 "Score: **" + String.format("%,d", userScore) + "** ▸ **" + userACC + "%**\n" +
-                "Combo: **" + String.format("%,d", userCombo) + "x** / " + String.format("%,d", mapCombo) + "x [" + String.format("%,d",n300) + "/" + String.format("%,d",n100) + "/" + String.format("%,d",n50) + "/" + String.format("%,d",miss) + "]", false);
+                "Combo: **" + String.format("%,d", userCombo) + "x** / " + String.format("%,d", mapCombo) + "x [" + String.format("%,d",n300) + "/" + String.format("%,d",n100) + "/" + String.format("%,d",n50) + "/" + String.format("%,d",miss) + "]\n" +
+                "MapRanked: **" + isRanked(mapRanked) + "**", false);
         eb.addField("**Map Detail**", "Name: **" + mapName + "**\n" +
                 "Difficulty: **" + mapDiffName + "**\n" +
                 "Rating: **★" + mapRating + "** for NM\n" +
                 "Passed Rate: **" + mapPassRate + "%**\n" +
                 "AR: **" + mapApproach + "** / CS: **" + mapCircle + "** / OD: **" + mapOverall + "** / BPM: **" + mapBPM + "**\n" +
                 "Length: **" + getMinSecond(mapLength).get(0) + ":" + getMinSecond(mapLength).get(1) +"**\n" +
-                "Ranked?: **" + isRanked(mapRanked) + "**" +
                 "Creator: **" + mapCreator + "**", false);
         eb.setColor(getMessageColor(userGrade));
         eb.setImage("https://b.ppy.sh/thumb/" + mapID + "l.jpg?");
