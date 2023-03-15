@@ -22,7 +22,7 @@ import static net.mamestagram.module.OSUModule.*;
 
 public class SlashCommand extends ListenerAdapter {
 
-    private final String[] modes = new String[] {"osu", "taiko", "catch", "mania", "relax"};
+    private final String[] modes = new String[] {"Standard", "Taiko", "Catch", "Mania", "Relax"};
 
     private double mode, row = 0;
 
@@ -103,7 +103,6 @@ public class SlashCommand extends ListenerAdapter {
             rankView = "";
 
             try {
-
                 int divRow = rowCount / 5;
                 int modRow = rowCount % 5;
 

@@ -98,19 +98,19 @@ public class OSUModule {
 
     public static int getModeNumber(String mode) {
         switch (mode) {
-            case "osu" -> {
+            case "Standard" -> {
                 return  0;
             }
-            case "taiko" -> {
+            case "Taiko" -> {
                 return 1;
             }
-            case "catch" -> {
+            case "Catch" -> {
                 return 2;
             }
-            case "mania" -> {
+            case "Mania" -> {
                 return 3;
             }
-            case "relax" -> {
+            case "Relax" -> {
                 return 4;
             }
             default -> {
