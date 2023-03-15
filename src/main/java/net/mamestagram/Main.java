@@ -14,6 +14,7 @@ import static net.mamestagram.game.LoginAlert.*;
 import java.sql.*;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.CountDownLatch;
 
 public class Main {
 
@@ -71,6 +72,23 @@ public class Main {
         };
 
         timer.schedule(task,1000L,2000L);
+
+        //shutdown process
+
+        CountDownLatch doneSignal = new CountDownLatch(1);
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                doneSignal.countDown();
+            }
+        });
+
+        try {
+            doneSignal.await();
+            jda.shutdown();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
 
         System.out.println("ready");
     }
