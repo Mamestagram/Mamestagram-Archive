@@ -4,14 +4,10 @@ import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInterac
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static net.mamestagram.message.EmbedMessageData.*;
 
@@ -19,6 +15,7 @@ import static net.mamestagram.game.Profile.*;
 import static net.mamestagram.game.RecentPlay.*;
 import static net.mamestagram.game.Ranking.*;
 import static net.mamestagram.module.OSUModule.*;
+import static net.mamestagram.module.CommandModule.*;
 
 public class SlashCommand extends ListenerAdapter {
 
@@ -30,26 +27,13 @@ public class SlashCommand extends ListenerAdapter {
     public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent e) {
 
         if(e.getName().equals("osuprofile") && e.getFocusedOption().getName().equals("mode")) {
-            List<Command.Choice> options = Stream.of(modes)
-                    .filter(modes->modes.startsWith(e.getFocusedOption().getValue()))
-                    .map(modes-> new net.dv8tion.jda.api.interactions.commands.Command.Choice(modes,modes))
-                    .collect(Collectors.toList());
-            e.replyChoices(options).queue();
+            createAutoCompleteInteraction(e, modes);
         } else if(e.getName().equals("result") && e.getFocusedOption().getName().equals("mode")) {
-            List<net.dv8tion.jda.api.interactions.commands.Command.Choice> options = Stream.of(modes)
-                    .filter(modes->modes.startsWith(e.getFocusedOption().getValue()))
-                    .map(modes-> new net.dv8tion.jda.api.interactions.commands.Command.Choice(modes,modes))
-                    .collect(Collectors.toList());
-            e.replyChoices(options).queue();
+            createAutoCompleteInteraction(e, modes);
         } else if(e.getName().equals("ranking") && e.getFocusedOption().getName().equals("mode")) {
-            List<net.dv8tion.jda.api.interactions.commands.Command.Choice> options = Stream.of(modes)
-                    .filter(modes -> modes.startsWith(e.getFocusedOption().getValue()))
-                    .map(modes -> new net.dv8tion.jda.api.interactions.commands.Command.Choice(modes, modes))
-                    .collect(Collectors.toList());
-            e.replyChoices(options).queue();
+            createAutoCompleteInteraction(e, modes);
         }
     }
-
 
     @Override
     public void onSlashCommandInteraction(SlashCommandInteractionEvent e) {

@@ -16,9 +16,9 @@ public class LoginAlert {
 
     private static int LOGINID = 0;
     private static int BLOGINID = 0;
-    private static boolean isFirstLogin = true;
     private static int USERID = 0;
     private static String USERNAME;
+    private static boolean isFirstLogin = true;
 
     public static void loginStatusUpdate() throws SQLException {
 
