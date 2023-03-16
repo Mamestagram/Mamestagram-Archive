@@ -10,8 +10,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
-
 import static net.mamestagram.Main.osuAPIKey;
 
 public class OSUModule {
@@ -41,7 +39,7 @@ public class OSUModule {
 
         ArrayList<String> mod = new ArrayList<>();
         final String[] mods = {"NF", "EZ", "", "HD", "HR", "SD", "DT", "RX", "HT", "NC", "FL", "AP", "SO", "PF"};
-        String rMods = "";
+        StringBuilder rMods = new StringBuilder();
 
         if (n >= 536870912) {
             mod.add("V2");
@@ -64,11 +62,11 @@ public class OSUModule {
         }
 
         for (String s : mod) {
-            rMods += s;
+            rMods.append(s);
         }
 
-        if(!rMods.equals("")) {
-            return rMods;
+        if(!rMods.toString().equals("")) {
+            return rMods.toString();
         } else {
             return "NM";
         }
