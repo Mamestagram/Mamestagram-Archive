@@ -33,22 +33,22 @@ public class Main {
             );
             System.out.println("Connection is Successful!");
         } catch (SQLException e) {
-            System.out.println("Connection is failed! Error log is below.");
+            System.out.println("Connection is failed! Error log is below.\n\n");
             e.printStackTrace();
         }
 
         connection.setClientInfo("mysql-connection-timeout", "300");
 
         jda = JDABuilder.createDefault(TOKEN, GatewayIntent.GUILD_MESSAGES)
+                .enableIntents(GatewayIntent.MESSAGE_CONTENT)
+                .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                .enableIntents(GatewayIntent.GUILD_MESSAGE_REACTIONS)
+                .enableIntents(GatewayIntent.GUILD_EMOJIS_AND_STICKERS)
                 .setRawEventsEnabled(true)
                 .addEventListeners(new SlashCommand())
                 .addEventListeners(new PatchAnnounce())
                 .addEventListeners(new RoleDistribution())
                 .setActivity(Activity.playing("mamesosu.net"))
-                .enableIntents(GatewayIntent.MESSAGE_CONTENT)
-                .enableIntents(GatewayIntent.GUILD_MEMBERS)
-                .enableIntents(GatewayIntent.GUILD_MESSAGE_REACTIONS)
-                .enableIntents(GatewayIntent.GUILD_EMOJIS_AND_STICKERS)
                 .build();
         jda.updateCommands().queue();
         jda.upsertCommand("help", "Help command for Mamestagram Bot").queue();
