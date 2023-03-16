@@ -19,7 +19,7 @@ import static net.mamestagram.module.CommandModule.*;
 
 public class SlashCommand extends ListenerAdapter {
 
-    private final String[] modes = new String[] {"Standard", "Taiko", "Catch", "Mania", "Relax"};
+    private final String[] modes = new String[] {"Standard", "Taiko", "Catch", "Mania", "Relax", "AutoPilot"};
 
     private double mode, row = 0;
 

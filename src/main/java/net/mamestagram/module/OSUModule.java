@@ -39,7 +39,7 @@ public class OSUModule {
     public static String getModsName(int n) {
 
         ArrayList<String> mod = new ArrayList<>();
-        final String[] mods = {"NF", "EZ", "", "HD", "HR", "SD", "DT", "", "HT", "NC", "FL", "", "SO", "PF"};
+        final String[] mods = {"NF", "EZ", "", "HD", "HR", "SD", "DT", "RX", "HT", "NC", "FL", "AP", "SO", "PF"};
         String rMods = "";
 
         if (n >= 536870912) {
@@ -91,6 +91,9 @@ public class OSUModule {
             case 4 -> {
                 return  "Relax";
             }
+            case 8 -> {
+                return "AutoPilot";
+            }
             default -> {
                 return null;
             }
@@ -114,17 +117,20 @@ public class OSUModule {
             case "Relax" -> {
                 return 4;
             }
+            case "AutoPilot" -> {
+                return 8;
+            }
             default -> {
-                return 5; //not happen
+                return 6; //not happen
             }
         }
     }
 
     public static String isRanked(int approved) {
 
-        boolean isRank = approved == 1;
+        boolean isApproved = approved == 1;
 
-        if(isRank) {
+        if(isApproved) {
             return "Yes";
         } else {
             return "No";
