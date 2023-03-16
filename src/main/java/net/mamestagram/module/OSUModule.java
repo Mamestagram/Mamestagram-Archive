@@ -16,21 +16,22 @@ import static net.mamestagram.Main.osuAPIKey;
 
 public class OSUModule {
 
-    public static List<String> getMinSecond(int number) {
+    public static String[] getMinSecond(int number) {
 
-        List<String> time = new ArrayList<>();
+        String[] time = new String[] {"0", "0"};
+
         if(number > 59) {
-            time.add(0, String.valueOf(number / 60));
+            time[0] = (String.valueOf(number / 60));
             if(number % 60 < 10) {
-                time.add(1, "0" + number % 60);
+                time[1] = ("0" + (number % 60));
             } else {
-                time.add(1, String.valueOf(number % 60));
+                time[1] = (String.valueOf(number % 60));
             }
         } else {
             if(number < 10) {
-                time.add(1, "0" + number);
+                time[1] = ("0" + (number));
             } else {
-                time.add(1, String.valueOf(number));
+                time[1] = (String.valueOf(number));
             }
         }
         return time;

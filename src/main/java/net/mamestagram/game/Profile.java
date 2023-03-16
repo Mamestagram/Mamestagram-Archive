@@ -14,7 +14,7 @@ import static net.mamestagram.message.EmbedMessageData.*;
 
 public class Profile {
 
-    public static EmbedBuilder profileData(Member pName, int mode) throws SQLException {
+    public static EmbedBuilder profileData(String sName, Member pName, int mode) throws SQLException {
 
         double UserACC = 0.00;
         int userRank = 0, userCountryRank = 0, userID, userReplay = 0, userRankedScore = 0, userTotalScore = 0, userCombo = 0, UserPP = 0, UserPlayCount = 0, A_Count = 0, S_Count = 0, SS_Count = 0;
@@ -25,23 +25,32 @@ public class Profile {
         EmbedBuilder eb = new EmbedBuilder();
 
         ps = connection.prepareStatement("select * from users where name = ?");
-        ps.setString(1, pName.getNickname());
-        result = ps.executeQuery();
-
-        if(!result.next()) {
-            ps = connection.prepareStatement("select * from users where name = ?");
-            ps.setString(1, pName.getUser().getName());
+        if(sName == null) {
+            ps.setString(1, pName.getNickname());
             result = ps.executeQuery();
-
             if(!result.next()) {
-                return notUserFoundMessage(pName.getUser().getName());
+                ps = connection.prepareStatement("select * from users where name = ?");
+                ps.setString(1, pName.getUser().getName());
+                result = ps.executeQuery();
+                if(!result.next()) {
+                    return notUserFoundMessage(pName.getUser().getName());
+                } else {
+                    userID = result.getInt("id");
+                    userName = pName.getUser().getName();
+                }
             } else {
                 userID = result.getInt("id");
-                userName = pName.getUser().getName();
+                userName = pName.getNickname();
             }
         } else {
-            userID = result.getInt("id");
-            userName = pName.getNickname();
+            ps.setString(1, sName);
+            result = ps.executeQuery();
+            if(!result.next()) {
+                return notUserFoundMessage(sName);
+            } else {
+                userID = result.getInt("id");
+                userName = sName;
+            }
         }
 
         ps = connection.prepareStatement("select country from users where id = ?");

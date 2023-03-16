@@ -52,8 +52,8 @@ public class Main {
                 .build();
         jda.updateCommands().queue();
         jda.upsertCommand("help", "Help command for Mamestagram Bot").queue();
-        jda.upsertCommand("osuprofile", "View mamesosu.net's Profile").addOption(OptionType.STRING, "mode", "GameMode", true, true).queue();
-        jda.upsertCommand("result", "Submit your play at mamesosu.net").addOption(OptionType.STRING, "mode", "GameMode", true, true).queue();
+        jda.upsertCommand("osuprofile", "View mamesosu.net's Profile").addOption(OptionType.STRING, "mode", "Gamemode", true, true).addOption(OptionType.STRING, "name", "Specific user").queue();
+        jda.upsertCommand("result", "Submit your play at mamesosu.net").addOption(OptionType.STRING, "mode", "Gamemode", true, true).addOption(OptionType.STRING, "name", "Specific user").queue();
         jda.upsertCommand("server", "Send method of connection to mamesosu.net").queue();
         jda.upsertCommand("ranking", "View mamesosu.net's ranking").addOption(OptionType.STRING, "mode", "GameMode", true, true).queue();
 

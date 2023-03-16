@@ -15,7 +15,7 @@ import static net.mamestagram.message.EmbedMessageData.*;
 
 public class RecentPlay {
 
-    public static EmbedBuilder recentData(Member dName, int mode) throws SQLException, IOException {
+    public static EmbedBuilder recentData(String sName, Member dName, int mode) throws SQLException, IOException {
 
         double userACC = 0.0, userPP = 0.0, mapCircle, mapApproach, mapRating, mapPassRate, mapOverall;
         int userID, userScore = 0, userMods = 0, userCombo = 0, n300 = 0, n100 = 0, n50 = 0, miss = 0, mapID, mapRanked, mapLength, mapBPM, mapCombo;
@@ -28,21 +28,32 @@ public class RecentPlay {
         EmbedBuilder eb = new EmbedBuilder();
 
         ps = connection.prepareStatement("select id from users where name = ?");
-        ps.setString(1, dName.getNickname());
 
-        result = ps.executeQuery();
-
-        if(!result.next()) {
-            ps = connection.prepareStatement("select id from users where name = ?");
-            ps.setString(1, dName.getUser().getName());
+        if(sName == null) {
+            ps.setString(1, dName.getNickname());
             result = ps.executeQuery();
+
             if(!result.next()) {
-                return notUserFoundMessage(dName.getUser().getName());
+                ps = connection.prepareStatement("select id from users where name = ?");
+                ps.setString(1, dName.getUser().getName());
+                result = ps.executeQuery();
+                if(!result.next()) {
+                    return notUserFoundMessage(dName.getUser().getName());
+                } else {
+                    userID = result.getInt("id");
+                }
             } else {
                 userID = result.getInt("id");
             }
         } else {
-            userID = result.getInt("id");
+            ps.setString(1, sName);
+            result = ps.executeQuery();
+
+            if(!result.next()) {
+                return notUserFoundMessage(sName);
+            } else {
+               userID = result.getInt("id");
+            }
         }
 
         ps = connection.prepareStatement("select map_md5 from scores where userid = ? and mode = " + mode);
@@ -96,7 +107,7 @@ public class RecentPlay {
                 "Rating: **★" + mapRating + "** for NM\n" +
                 "Passed Rate: **" + mapPassRate + "%**\n" +
                 "AR: **" + mapApproach + "** / CS: **" + mapCircle + "** / OD: **" + mapOverall + "** / BPM: **" + mapBPM + "**\n" +
-                "Length: **" + getMinSecond(mapLength).get(0) + ":" + getMinSecond(mapLength).get(1) +"**\n" +
+                "Length: **" + getMinSecond(mapLength)[0] + ":" + getMinSecond(mapLength)[1] +"**\n" +
                 "Creator: **" + mapCreator + "**", false);
         eb.setColor(getMessageColor(userGrade));
         eb.setImage("https://b.ppy.sh/thumb/" + mapID + "l.jpg?");

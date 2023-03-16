@@ -46,7 +46,11 @@ public class SlashCommand extends ListenerAdapter {
             case "help" -> e.replyEmbeds(helpCommand().build()).setEphemeral(true).queue();
             case "osuprofile" -> {
                 try {
-                    e.replyEmbeds(profileData(e.getMember(), (int) mode).build()).queue();
+                    if(e.getOption("name") == null) {
+                        e.replyEmbeds(profileData(null, e.getMember(), (int)(mode)).build()).queue();
+                    } else {
+                        e.replyEmbeds(profileData(e.getOption("name").getAsString(), e.getMember(), (int)(mode)).build()).queue();
+                    }
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 } catch (NullPointerException ex) {
@@ -56,7 +60,11 @@ public class SlashCommand extends ListenerAdapter {
             case "result" -> {
                 if (!e.isAcknowledged()) {
                     try {
-                        e.reply("**This is the result of your " + e.getOption("mode").getAsString() + " play!**").setEmbeds(recentData(e.getMember(), (int) mode).build()).queue();
+                        if(e.getOption("name") == null) {
+                            e.reply("**This is the result of your " + e.getOption("mode").getAsString() + " play!**").setEmbeds(recentData(null, e.getMember(), (int) mode).build()).queue();
+                        } else {
+                            e.reply("**This is the result of " + e.getOption("name").getAsString() + "'s " + e.getOption("mode").getAsString() + " play!**").setEmbeds(recentData(e.getOption("name").getAsString(), e.getMember(), (int)mode).build()).queue();
+                        }
                     } catch (SQLException | IOException ex) {
                         throw new RuntimeException(ex);
                     } catch (NullPointerException ex) {

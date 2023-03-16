@@ -27,7 +27,7 @@ public class EmbedMessageData extends ListenerAdapter {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle(":x:  **Can't found player** ``" + dName + "``**.** \n\n**Please use the same nickname as mamesosu.net**");
+        eb.setTitle(":x:  **Can't found player ``" + dName + "``**.");
         eb.setColor(Color.RED);
 
         return eb;
