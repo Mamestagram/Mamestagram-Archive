@@ -15,7 +15,7 @@ import static net.mamestagram.message.EmbedMessageData.*;
 
 public class RecentPlay {
 
-    public static EmbedBuilder recentData(String sName, Member dName, int mode) throws SQLException, IOException {
+    public static EmbedBuilder getRecentData(String sName, Member dName, int mode) throws SQLException, IOException {
 
         double userACC = 0.0, userPP = 0.0, mapCircle, mapApproach, mapRating, mapPassRate, mapOverall;
         int userID, userScore = 0, userMods = 0, userCombo = 0, n300 = 0, n100 = 0, n50 = 0, miss = 0, mapID, mapRanked, mapLength, mapBPM, mapCombo;

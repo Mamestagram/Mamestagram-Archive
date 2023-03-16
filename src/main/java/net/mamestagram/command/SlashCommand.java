@@ -43,13 +43,13 @@ public class SlashCommand extends ListenerAdapter {
         }
 
         switch (e.getName()) {
-            case "help" -> e.replyEmbeds(helpCommand().build()).setEphemeral(true).queue();
+            case "help" -> e.replyEmbeds(helpCommandMessage().build()).setEphemeral(true).queue();
             case "osuprofile" -> {
                 try {
                     if(e.getOption("name") == null) {
-                        e.replyEmbeds(profileData(null, e.getMember(), (int)(mode)).build()).queue();
+                        e.replyEmbeds(getProfileData(null, e.getMember(), (int)(mode)).build()).queue();
                     } else {
-                        e.replyEmbeds(profileData(e.getOption("name").getAsString(), e.getMember(), (int)(mode)).build()).queue();
+                        e.replyEmbeds(getProfileData(e.getOption("name").getAsString(), e.getMember(), (int)(mode)).build()).queue();
                     }
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
@@ -61,9 +61,9 @@ public class SlashCommand extends ListenerAdapter {
                 if (!e.isAcknowledged()) {
                     try {
                         if(e.getOption("name") == null) {
-                            e.reply("**This is the result of your " + e.getOption("mode").getAsString() + " play!**").setEmbeds(recentData(null, e.getMember(), (int) mode).build()).queue();
+                            e.reply("**This is the result of your " + e.getOption("mode").getAsString() + " play!**").setEmbeds(getRecentData(null, e.getMember(), (int) mode).build()).queue();
                         } else {
-                            e.reply("**This is the result of " + e.getOption("name").getAsString() + "'s " + e.getOption("mode").getAsString() + " play!**").setEmbeds(recentData(e.getOption("name").getAsString(), e.getMember(), (int)mode).build()).queue();
+                            e.reply("**This is the result of " + e.getOption("name").getAsString() + "'s " + e.getOption("mode").getAsString() + " play!**").setEmbeds(getRecentData(e.getOption("name").getAsString(), e.getMember(), (int)mode).build()).queue();
                         }
                     } catch (SQLException | IOException ex) {
                         throw new RuntimeException(ex);
@@ -77,7 +77,7 @@ public class SlashCommand extends ListenerAdapter {
                 rankView = "";
                 row = 0;
                 try {
-                    e.reply("**This is the rank of " + e.getOption("mode").getAsString() + "!**").setEmbeds(rankingViewerMessage((int) mode, (int) row).build()).addActionRow(
+                    e.reply("**This is the rank of " + e.getOption("mode").getAsString() + "!**").setEmbeds(getRankingData((int) mode, (int) row).build()).addActionRow(
                             Button.success("next", "Next")
                     ).setEphemeral(true).queue();
                 } catch (SQLException ex) {
@@ -101,10 +101,10 @@ public class SlashCommand extends ListenerAdapter {
                 if(modRow != 0) divRow++;
                 row += 5;
                 if(divRow * 5 > row) {
-                    e.editMessageEmbeds(rankingViewerMessage((int)mode, (int)row).build()).queue();
+                    e.editMessageEmbeds(getRankingData((int)mode, (int)row).build()).queue();
                 } else {
                     row = 0;
-                    e.editMessageEmbeds(rankingViewerMessage((int)mode, 0).build()).queue();
+                    e.editMessageEmbeds(getRankingData((int)mode, 0).build()).queue();
                 }
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);

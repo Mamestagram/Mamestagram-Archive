@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class EmbedMessageData extends ListenerAdapter {
 
-    public static EmbedBuilder helpCommand() {
+    public static EmbedBuilder helpCommandMessage() {
 
         EmbedBuilder eb = new EmbedBuilder();
 

@@ -9,7 +9,7 @@ import net.mamestagram.command.SlashCommand;
 import net.mamestagram.server.PatchAnnounce;
 import net.mamestagram.server.RoleDistribution;
 
-import static net.mamestagram.game.LoginAlert.*;
+import static net.mamestagram.game.LoginStatus.*;
 
 import java.sql.*;
 import java.util.Timer;
@@ -63,7 +63,7 @@ public class Main {
             @Override
             public void run() {
                 try {
-                    loginStatusUpdate();
+                    getLoginStatus();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }

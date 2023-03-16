@@ -19,7 +19,7 @@ public class Ranking {
     private static ArrayList<Double> rAcc = new ArrayList<>();
     public static String rankView = "";
 
-    public static EmbedBuilder rankingViewerMessage(int mode, int row) throws SQLException {
+    public static EmbedBuilder getRankingData(int mode, int row) throws SQLException {
 
         EmbedBuilder eb = new EmbedBuilder();
         PreparedStatement ps;

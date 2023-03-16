@@ -24,7 +24,7 @@ public class PatchAnnounce extends ListenerAdapter {
     private static final long GUILDID = 944248031136587796L;
     private static final long CHANNELID = 1084068468036472852L;
 
-    private static EmbedBuilder announceBuilder(String project, String version, String jpText, String enText) {
+    private static EmbedBuilder createAnnoucement(String project, String version, String jpText, String enText) {
 
         var date = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
 
@@ -79,6 +79,6 @@ public class PatchAnnounce extends ListenerAdapter {
         String enText = e.getValue("enText").getAsString();
 
         e.reply("send").setEphemeral(true).queue();
-        jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(announceBuilder(name,version,jpText, enText).build()).queue();
+        jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(createAnnoucement(name,version,jpText, enText).build()).queue();
     }
 }

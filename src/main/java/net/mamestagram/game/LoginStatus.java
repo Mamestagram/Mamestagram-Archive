@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 import static net.mamestagram.Main.*;
 
-public class LoginAlert {
+public class LoginStatus {
 
     private static int LOGINID = 0;
     private static int BLOGINID = 0;
@@ -20,7 +20,7 @@ public class LoginAlert {
     private static String USERNAME;
     private static boolean isFirstLogin = true;
 
-    public static void loginStatusUpdate() throws SQLException {
+    public static void getLoginStatus() throws SQLException {
 
         PreparedStatement ps;
         ResultSet result;
