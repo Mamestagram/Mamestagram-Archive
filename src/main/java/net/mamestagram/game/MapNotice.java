@@ -21,8 +21,8 @@ public class MapNotice {
 
     public static EmbedBuilder getMapNotice() throws SQLException, IOException {
 
-        int[] rScore = new int[2147483647], rID = new int[2147483647];
-        int mapRanked, mode = 0, count = 0;
+        ArrayList<Integer> rID = new ArrayList<>();
+        int mapRanked, mode = 0, userID;
         String md5 = "";
 
         PreparedStatement ps;
@@ -33,14 +33,15 @@ public class MapNotice {
 
         BPLAYID = NPLAYID;
 
-        ps = connection.prepareStatement("select id from scores where not grade = 'F' order by score desc limit 1");
+        ps = connection.prepareStatement("select id, userid from scores where not grade = 'F' order by score desc limit 1");
         result = ps.executeQuery();
 
         while(result.next()) {
             NPLAYID = result.getInt("id");
+            userID = result.getInt("userid");
         }
 
-        if(BPLAYID != NPLAYID && isFirstLogin == false) {
+        if(BPLAYID != NPLAYID && !isFirstLogin) {
             ps = connection.prepareStatement("select map_md5, mode from scores where id = ?");
             ps.setInt(1, NPLAYID);
             result = ps.executeQuery();
@@ -53,18 +54,16 @@ public class MapNotice {
             root = getMapData(md5);
             mapRanked = root.get(0).get("approved").asInt();
 
-            ps = connection.prepareStatement("select score, userid  from scores where mode = ? and map_md5 = ? and not grade = 'F' order by score desc");
+            ps = connection.prepareStatement("select userid  from scores where mode = ? and map_md5 = ? and not grade = 'F' order by score desc");
             ps.setInt(1, mode);
             ps.setString(2, md5);
             result = ps.executeQuery();
 
             while(result.next()) {
-                rScore[count] = result.getInt("score");
-                rID[count] = result.getInt("userid");
-                count++;
+                rID.add(result.getInt("userid"));
             }
 
-            //sort algorithm
+
 
         } else {
             isFirstLogin = false;

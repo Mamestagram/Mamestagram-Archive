@@ -180,4 +180,38 @@ public class OSUModule {
             }
         }
     }
+
+    public static int getBeatmapRank(ArrayList<Integer> rID, int userID) {
+
+        int countData = 0;
+
+        for(int i = 0; i < rID.size(); i++) {
+            for(int j = i; j < rID.size(); j++) {
+                if(i != j && rID.get(i) == rID.get(j)) {
+                    rID.set(j, 0);
+                }
+            }
+        }
+
+        for(int i = rID.size() - 1; i >= 0; i--) {
+            try{
+                if(rID.get(i) == 0) {
+                    rID.set(i, rID.get(i - 1));
+                    rID.set(i - 1, 0);
+                }
+            } catch (IndexOutOfBoundsException ex) {
+                break;
+            }
+        }
+
+        for (Integer integer : rID) {
+            if (integer == userID) {
+                break;
+            } else {
+                countData++;
+            }
+        }
+
+        return countData;
+    }
 }
