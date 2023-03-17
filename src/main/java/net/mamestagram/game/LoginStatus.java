@@ -58,7 +58,7 @@ public class LoginStatus {
 
             eb.setTitle("**" + USERNAME + " has logged in**");
             eb.setFooter("Login at " + date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
-            eb.setColor(Color.GREEN);
+            eb.setColor(Color.MAGENTA);
 
             jda.getGuildById(944248031136587796L).getTextChannelById(1081737936401350717L).sendMessageEmbeds(eb.build()).queue();
         } else {
