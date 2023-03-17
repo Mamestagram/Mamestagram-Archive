@@ -106,7 +106,7 @@ public class MapNotice {
                     "Score: **" + String.format("%,d",rScore) + " ▸ " + rACC + "%**\n" +
                     "Combo: **" + String.format("%,d",rCombo) + "x** / " + String.format("%,d",rMaxCombo) + "x [" + String.format("%,d",rCount300) + "/" + String.format("%,d",rCount100) + "/" + String.format("%,d",rCount50) + "/" + String.format("%,d",rCountMiss) + "]\n" +
                     "Difficulty: **" + mapDifficulty + "**", false);
-            eb.setFooter("Play in " + getModeName(rMode) + " mode on mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
+            eb.setFooter("Played in " + getModeName(rMode) + " mode on mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
             eb.setColor(getMessageColor(rRank));
 
             jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(eb.build()).queue();
