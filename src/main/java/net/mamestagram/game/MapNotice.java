@@ -101,12 +101,12 @@ public class MapNotice {
             }
 
             eb.setAuthor(mapName + " by " + mapArtist + " +" + getModsName(rMods), "https://osu.ppy.sh/beatmapsets/" + mapsetID, "https://b.ppy.sh/thumb/" + mapsetID + "l.jpg?");
-            eb.addField("**" + rPlayerName+ "'s Play Record**", "Rank: ***" + rRank + "*** **[" + rPP + "pp]**\n" +
+            eb.addField("**Play Record of " + rPlayerName + "**", "Grade: ***" + rRank + "*** **[" + rPP + "pp]**\n" +
                     "Achieved Rank: **#" + String.format("%,d", getBeatmapRank(rID, userID)) + "**\n" +
                     "Score: **" + String.format("%,d",rScore) + " ▸ " + rACC + "%**\n" +
                     "Combo: **" + String.format("%,d",rCombo) + "x** / " + String.format("%,d",rMaxCombo) + "x [" + String.format("%,d",rCount300) + "/" + String.format("%,d",rCount100) + "/" + String.format("%,d",rCount50) + "/" + String.format("%,d",rCountMiss) + "]\n" +
                     "Difficulty: **" + mapDifficulty + "**", false);
-            eb.setFooter("Played by " + rPlayerName + " on mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
+            eb.setFooter("Play in " + getModeName(rMode) + " mode on mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
             eb.setColor(getMessageColor(rRank));
 
             jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(eb.build()).queue();
