@@ -187,17 +187,17 @@ public class OSUModule {
 
         for(int i = 0; i < rID.size(); i++) {
             for(int j = i; j < rID.size(); j++) {
-                if(i != j && rID.get(i) == rID.get(j)) {
+                if(i != j && rID.get(i) == rID.get(j) && rID.get(j) != 0) {
                     rID.set(j, 0);
                 }
             }
         }
 
-        for(int i = rID.size() - 1; i >= 0; i--) {
+        for(int i = 0; i < rID.size(); i++) {
             try{
                 if(rID.get(i) == 0) {
-                    rID.set(i, rID.get(i - 1));
-                    rID.set(i - 1, 0);
+                    rID.set(i, rID.get(i + 1));
+                    rID.set(i + 1, 0);
                 }
             } catch (IndexOutOfBoundsException ex) {
                 break;

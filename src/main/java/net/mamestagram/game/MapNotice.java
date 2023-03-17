@@ -65,7 +65,7 @@ public class MapNotice {
             mapArtist = root.get(0).get("artist").asText();
             rMaxCombo = root.get(0).get("max_combo").asInt();
 
-            ps = connection.prepareStatement("select userid from scores where mode = ? and map_md5 = ? and not grade = 'F' order by score desc");
+            ps = connection.prepareStatement("select userid, score from scores where mode = ? and map_md5 = ? and not grade = 'F' order by score desc");
             ps.setInt(1, rMode);
             ps.setString(2, md5);
             result = ps.executeQuery();
@@ -102,7 +102,7 @@ public class MapNotice {
 
             eb.setAuthor(mapName + " by " + mapArtist + " +" + getModsName(rMods), "https://osu.ppy.sh/beatmapsets/" + mapsetID, "https://b.ppy.sh/thumb/" + mapsetID + "l.jpg?");
             eb.addField("**" + rPlayerName+ "'s Play Record**", "Rank: ***" + rRank + "*** **[" + rPP + "pp]**\n" +
-                    "Achieved Rank: ***#" + String.format("%,d", getBeatmapRank(rID, userID)) + "***\n" +
+                    "Achieved Rank: **#" + String.format("%,d", getBeatmapRank(rID, userID)) + "**\n" +
                     "Score: **" + String.format("%,d",rScore) + " ▸ " + rACC + "%**\n" +
                     "Combo: **" + String.format("%,d",rCombo) + "x** / " + String.format("%,d",rMaxCombo) + "x [" + String.format("%,d",rCount300) + "/" + String.format("%,d",rCount100) + "/" + String.format("%,d",rCount50) + "/" + String.format("%,d",rCountMiss) + "]\n" +
                     "Difficulty: **" + mapDifficulty + "**", false);
