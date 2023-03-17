@@ -10,7 +10,9 @@ import net.mamestagram.server.PatchAnnounce;
 import net.mamestagram.server.RoleDistribution;
 
 import static net.mamestagram.game.LoginStatus.*;
+import static net.mamestagram.game.MapNotice.*;
 
+import java.io.IOException;
 import java.sql.*;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -64,7 +66,11 @@ public class Main {
             public void run() {
                 try {
                     getLoginStatus();
+                    getMapNotice();
+
                 } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             }
