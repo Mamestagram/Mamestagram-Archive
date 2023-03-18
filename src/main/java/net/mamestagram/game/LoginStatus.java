@@ -6,9 +6,10 @@ import java.awt.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+
+import sun.misc.Signal;
+import sun.misc.SignalHandler;
 
 import static net.mamestagram.Main.*;
 
@@ -56,9 +57,8 @@ public class LoginStatus {
                 USERNAME = result.getString("name");
             }
 
-            eb.setTitle("**" + USERNAME + " has logged in**");
-            eb.setFooter("Login at " + date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
-            eb.setColor(Color.MAGENTA);
+            eb.setAuthor(USERNAME + " has logged in", "https://web.mamesosu.net/profile/id=" + USERID + "/mode=std/special=none", "https://osu.ppy.sh/images/layout/avatar-guest.png");
+            eb.setColor(Color.GREEN);
 
             jda.getGuildById(944248031136587796L).getTextChannelById(1081737936401350717L).sendMessageEmbeds(eb.build()).queue();
         } else {
