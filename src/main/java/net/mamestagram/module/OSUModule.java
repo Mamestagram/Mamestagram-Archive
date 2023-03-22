@@ -78,7 +78,7 @@ public class OSUModule {
             case 3 -> {
                 return  "Mania";
             }
-            case 4 -> {
+            case 4, 5, 6 -> {
                 return  "Relax";
             }
             case 8 -> {
