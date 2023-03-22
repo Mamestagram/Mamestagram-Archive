@@ -38,7 +38,7 @@ public class OSUModule {
     public static String getModsName(int n) {
 
         ArrayList<String> mod = new ArrayList<>();
-        final String[] mods = {"NF", "EZ", "", "HD", "HR", "SD", "DT", "RX", "HT", "NC", "FL", "AP", "SO", "PF"};
+        final String[] mods = {"NF", "EZ", "TS", "HD", "HR", "SD", "DT", "RX", "HT", "NC", "FL", "", "SO", "AP", "PF"};
         StringBuilder rMods = new StringBuilder();
 
         if (n >= 536870912) {
@@ -51,10 +51,6 @@ public class OSUModule {
                 switch (i) {
                     case 14 -> n -= Math.pow(2, 5);
                     case 9 -> n -= Math.pow(2, 6);
-                    case 13, 7 -> {
-                        n -= Math.pow(2, i);
-                        continue;
-                    }
                 }
                 mod.add(mods[i]);
                 n -= Math.pow(2, i);
