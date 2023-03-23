@@ -46,10 +46,10 @@ public class SlashCommand extends ListenerAdapter {
             case "help" -> e.replyEmbeds(helpCommandMessage().build()).setEphemeral(true).queue();
             case "osuprofile" -> {
                 try {
-                    if(e.getOption("name") == null) {
+                    if(e.getOption("user") == null) {
                         e.replyEmbeds(getProfileData(null, e.getMember(), (int)(mode)).build()).queue();
                     } else {
-                        e.replyEmbeds(getProfileData(e.getOption("name").getAsString(), e.getMember(), (int)(mode)).build()).queue();
+                        e.replyEmbeds(getProfileData(e.getOption("user").getAsString(), e.getMember(), (int)(mode)).build()).queue();
                     }
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
@@ -60,10 +60,10 @@ public class SlashCommand extends ListenerAdapter {
             case "result" -> {
                 if (!e.isAcknowledged()) {
                     try {
-                        if(e.getOption("name") == null) {
+                        if(e.getOption("user") == null) {
                             e.reply("**This is the result of your " + e.getOption("mode").getAsString() + " play!**").setEmbeds(getRecentData(null, e.getMember(), (int) mode).build()).queue();
                         } else {
-                            e.reply("**This is the result of " + e.getOption("name").getAsString() + "'s " + e.getOption("mode").getAsString() + " play!**").setEmbeds(getRecentData(e.getOption("name").getAsString(), e.getMember(), (int)mode).build()).queue();
+                            e.reply("**This is the result of " + e.getOption("user").getAsString() + "'s " + e.getOption("mode").getAsString() + " play!**").setEmbeds(getRecentData(e.getOption("user").getAsString(), e.getMember(), (int)mode).build()).queue();
                         }
                     } catch (SQLException | IOException ex) {
                         throw new RuntimeException(ex);

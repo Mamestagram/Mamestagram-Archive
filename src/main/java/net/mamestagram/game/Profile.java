@@ -127,7 +127,7 @@ public class Profile {
 
         modeName = getModeName(mode);
 
-        eb.setAuthor("osu! " + modeName + " Profile for " + userName, "https://osu.ppy.sh/images/layout/avatar-guest.png","https://osu.ppy.sh/images/layout/avatar-guest.png");
+        eb.setAuthor("osu! " + modeName + " Profile for " + userName, "https://web.mamesosu.net/profile/id=" + userID + "/mode=std/special=none","https://osu.ppy.sh/images/layout/avatar-guest.png");
         eb.setThumbnail("https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
         eb.addField("**Performance**", "Ranking: **#" + String.format("%,d",userRank) + "** (" + Country + ": **#" + String.format("%,d",userCountryRank) + "**)\n" +
                 "Total PP: **" + String.format("%,d", UserPP) + "pp**\n" +
