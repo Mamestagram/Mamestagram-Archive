@@ -18,7 +18,7 @@ public class RecentPlay {
     public static EmbedBuilder getRecentData(String sName, Member dName, int mode) throws SQLException, IOException {
 
         double userACC = 0.0, userPP = 0.0, mapCircle, mapApproach, mapRating, mapPassRate, mapOverall;
-        int userID, userScore = 0, userMods = 0, userCombo = 0, n300 = 0, n100 = 0, n50 = 0, miss = 0, mapID, mapRanked, mapLength, mapBPM, mapCombo;
+        int userID, userScore = 0, userMods = 0, userCombo = 0, n300 = 0, n100 = 0, n50 = 0, miss = 0, mapsetID, mapID, mapRanked, mapLength, mapBPM, mapCombo;
         String userGrade = "", mapName, mapDiffName, mapCreator, mapMD5 = "";
 
         PreparedStatement ps;
@@ -71,7 +71,8 @@ public class RecentPlay {
         mapRating = (double)Math.round((root.get(0).get("difficultyrating").asDouble() * 100)) / 100;
         mapPassRate = Math.round((((root.get(0).get("passcount").asDouble() / root.get(0).get("playcount").asDouble()) * 100) * 100) / 100);
         mapOverall = root.get(0).get("diff_overall").asDouble();
-        mapID = root.get(0).get("beatmapset_id").asInt();
+        mapsetID = root.get(0).get("beatmapset_id").asInt();
+        mapID = root.get(0).get("beatmap_id").asInt();
         mapRanked = root.get(0).get("approved").asInt();
         mapLength = root.get(0).get("total_length").asInt(); //need to convert default time
         mapBPM = root.get(0).get("bpm").asInt();
@@ -97,7 +98,7 @@ public class RecentPlay {
             userGrade = result.getString("grade");
         }
 
-        eb.setAuthor(mapName + " +" + getModsName(userMods), "https://osu.ppy.sh/beatmapsets/" + mapID, "https://osu.ppy.sh/images/layout/avatar-guest.png");
+        eb.setAuthor(mapName + " +" + getModsName(userMods), getWebsiteLink(mode, mapsetID, mapID), "https://osu.ppy.sh/images/layout/avatar-guest.png");
         eb.addField("**Performance**", "Rank: ***" + userGrade + "*** **[" + userPP + "pp]**\n" +
                 "Score: **" + String.format("%,d", userScore) + "** ▸ **" + userACC + "%**\n" +
                 "Combo: **" + String.format("%,d", userCombo) + "x** / " + String.format("%,d", mapCombo) + "x [" + String.format("%,d",n300) + "/" + String.format("%,d",n100) + "/" + String.format("%,d",n50) + "/" + String.format("%,d",miss) + "]\n" +

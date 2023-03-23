@@ -172,6 +172,28 @@ public class OSUModule {
         }
     }
 
+    public static String getWebsiteLink(int mode, int mapsetID, int mapID) {
+
+        String browserLink = "https://osu.ppy.sh/beatmapsets/" + mapsetID + "#";
+
+        switch (mode) {
+            case 0, 4 -> {
+                browserLink += "osu/";
+            }
+            case 1, 5 -> {
+                browserLink += "taiko/";
+            }
+            case 2, 6 -> {
+                browserLink += "fruits/";
+            }
+            case 3 -> {
+                browserLink += "mania/";
+            }
+        }
+
+        return browserLink += mapID;
+    }
+
     public static int getBeatmapRank(ArrayList<Integer> rID, int userID) {
 
         int countData = 0;

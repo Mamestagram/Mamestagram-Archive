@@ -26,7 +26,7 @@ public class MapNotice {
         final long CHANNELID = 1081737936401350717L; //beta
 
         ArrayList<Integer> rID = new ArrayList<>();
-        int mapsetID, rMode = 0, userID = 0, rScore = 0, rMods = 0, rCombo = 0, rMaxCombo = 0, rCount300 = 0, rCount100 = 0, rCount50 = 0, rCountMiss = 0;
+        int mapsetID, mapID, rMode = 0, userID = 0, rScore = 0, rMods = 0, rCombo = 0, rMaxCombo = 0, rCount300 = 0, rCount100 = 0, rCount50 = 0, rCountMiss = 0;
         double rPP = 0.0, rACC = 0.0;
         String md5 = "", rPlayerName = "" ,rRank = "", mapDifficulty = "", mapName = "", mapArtist = "";
 
@@ -60,6 +60,7 @@ public class MapNotice {
             root = getMapData(md5);
 
             mapsetID = root.get(0).get("beatmapset_id").asInt();
+            mapID = root.get(0).get("beatmap_id").asInt();
             mapDifficulty = root.get(0).get("version").asText();
             mapName = root.get(0).get("title").asText();
             mapArtist = root.get(0).get("artist").asText();
@@ -100,7 +101,7 @@ public class MapNotice {
                 rPlayerName = result.getString("name");
             }
 
-            eb.setAuthor(mapName + " by " + mapArtist + " +" + getModsName(rMods), "https://osu.ppy.sh/beatmapsets/" + mapsetID, "https://b.ppy.sh/thumb/" + mapsetID + "l.jpg?");
+            eb.setAuthor(mapName + " by " + mapArtist + " +" + getModsName(rMods), getWebsiteLink(rMode, mapsetID, mapID), "https://b.ppy.sh/thumb/" + mapsetID + "l.jpg?");
             eb.addField("**Play Record of " + rPlayerName + "**", "Grade: ***" + rRank + "*** **[" + rPP + "pp]**\n" +
                     "Achieved Rank: **#" + String.format("%,d", getBeatmapRank(rID, userID)) + "**\n" +
                     "Score: **" + String.format("%,d",rScore) + " ▸ " + rACC + "%**\n" +
