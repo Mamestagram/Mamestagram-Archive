@@ -55,6 +55,8 @@ public class SlashCommand extends ListenerAdapter {
                     throw new RuntimeException(ex);
                 } catch (NullPointerException ex) {
                     e.replyEmbeds(notArgumentMessage().build()).queue();
+                } catch (IOException ex) {
+                    throw new RuntimeException(ex);
                 }
             }
             case "result" -> {

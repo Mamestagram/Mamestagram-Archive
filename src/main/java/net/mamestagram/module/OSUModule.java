@@ -9,7 +9,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import static net.mamestagram.Main.connection;
 import static net.mamestagram.Main.osuAPIKey;
 
 public class OSUModule {
@@ -226,5 +231,129 @@ public class OSUModule {
         }
 
         return countData + 1;
+    }
+
+    public static double roundNumber(double num, int n) {
+        return Math.round(num * Math.pow(10, n)) / Math.pow(10, n);
+    }
+
+    public static int getUserRank(int userid, int mode) throws SQLException {
+
+        PreparedStatement ps;
+        ResultSet result;
+        ArrayList<Integer> mapID = new ArrayList<>();
+        ArrayList<String> mapMD5 = new ArrayList<>();
+        int mapCount = 0, count = 0;
+        int rankCount = 0;
+
+        ps = connection.prepareStatement("select id, map_md5 from scores where userid = " + userid + " and not grade = 'F' and mode = " + mode);
+        result = ps.executeQuery();
+
+        while(result.next()) {
+            mapID.add(result.getInt("id"));
+            mapMD5.add(result.getString("map_md5"));
+        }
+
+        ps = connection.prepareStatement("select COUNT(*) from scores");
+        result = ps.executeQuery();
+
+        if (result.next()) {
+            mapCount = result.getInt("COUNT(*)");
+        }
+
+        for(int i = 1; i <= mapCount; i++) {
+
+            ArrayList<Integer> id = new ArrayList<>();
+
+            try {
+                if (i == mapID.get(count)) {
+                    ps = connection.prepareStatement("select userid from scores where map_md5 = ? and not grade = 'F' and mode = ? order by score desc");
+                    ps.setString(1, mapMD5.get(count));
+                    ps.setInt(2, mode);
+                    result = ps.executeQuery();
+
+                    while (result.next()) {
+                        id.add(result.getInt("userid"));
+                    }
+
+                    if (getBeatmapRank(id, userid) == 1) {
+                        rankCount++;
+                    }
+                    count++;
+                }
+            } catch (IndexOutOfBoundsException e) {
+                break;
+            }
+        }
+
+        System.out.println("[Profile Log] GetUser - OK");
+        return rankCount;
+    }
+
+    public static double getAveragePP(int userID, int mode) throws SQLException {
+
+        PreparedStatement ps;
+        ResultSet result;
+        ArrayList<Double> TotalPP = new ArrayList<>();
+        double resultPP = 0.0;
+
+        ps = connection.prepareStatement("select pp from scores where userid = ? and mode = ? and not grade = 'F' order by score desc");
+        ps.setInt(1, userID);
+        ps.setInt(2, mode);
+        result = ps.executeQuery();
+
+        while(result.next()) {
+            TotalPP.add(result.getDouble("pp"));
+        }
+
+        for(double score : TotalPP) {
+            resultPP += score;
+        }
+
+        System.out.println("[Profile Log] GetPP - OK");
+
+        if(TotalPP.size() != 0) {
+            return resultPP / (TotalPP.size());
+        } else {
+            return 0;
+        }
+    }
+
+    public static double getAverageStarRate(int userID, int mode) throws SQLException {
+
+        int dataCount = 0;
+        double totalStarRate = 0.0;
+        PreparedStatement ps;
+        ResultSet result;
+        JsonNode root;
+        ArrayList<String> mapMD5 = new ArrayList<>();
+
+        ps = connection.prepareStatement("select id, map_md5 from scores where userid = ? and mode = " + mode);
+        ps.setInt(1, userID);
+        result = ps.executeQuery();
+
+        while(result.next()) {
+            mapMD5.add(result.getString("map_md5"));
+            dataCount++;
+        }
+
+        for(int i = 0; i < dataCount; i++) {
+            ps = connection.prepareStatement("select diff from maps where md5 = ? and mode = ?");
+            ps.setString(1, mapMD5.get(i));
+            ps.setInt(2, mode);
+            result = ps.executeQuery();
+
+            if(result.next()) {
+                totalStarRate += result.getDouble("diff");
+            }
+        }
+
+        System.out.println("[Profile Log] GetAverage - OK");
+
+        if(dataCount != 0) {
+            return totalStarRate / (dataCount);
+        } else {
+            return 0.0;
+        }
     }
 }
