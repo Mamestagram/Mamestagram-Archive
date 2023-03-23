@@ -10,8 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static net.mamestagram.Main.*;
-import static net.mamestagram.module.OSUModule.*;
 import static net.mamestagram.message.EmbedMessageData.*;
+import static net.mamestagram.module.OSUModule.*;
 
 public class Profile {
 
@@ -131,9 +131,8 @@ public class Profile {
         eb.addField("**Performance of " + userName + "**" , "Player: **" + userName + "**\n" +
                 "Rank: **#" + String.format("%,d",userRank) + "** (" + userCountry + ": **#" + String.format("%,d",userCountryRank) + "**)\n" +
                 "Weighted PP: **" + String.format("%,d",userWeightedPP) + "pp**\n" +
-                "#1 Count: **" + String.format("%,d",user1stRank) + "**\n" +
-                "Average PP: **" + roundNumber(userAveragePP, 2) + "pp**\n" +
-                "Average Rate: **" + roundNumber(userAverageRate, 2) + "**", false);
+                "Average: **" + roundNumber(userAveragePP, 2) + "pp ▸ [★" + roundNumber(userAverageRate, 2) + "]**\n" +
+                "Map #1: **" + String.format("%,d",user1stRank) + "**", false);
         eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
         eb.setColor(Color.CYAN);
 
