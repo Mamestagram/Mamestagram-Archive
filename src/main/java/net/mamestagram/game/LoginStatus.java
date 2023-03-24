@@ -15,55 +15,51 @@ import static net.mamestagram.Main.*;
 
 public class LoginStatus {
 
-    private static int LOGINID = 0;
-    private static int BLOGINID = 0;
-    private static int USERID = 0;
-    private static String USERNAME;
+    private static int currentLoginID = 0;
+    private static int userID = 0;
+    private static String userName;
     private static boolean isFirstLogin = true;
 
     public static void getLoginStatus() throws SQLException {
 
-        PreparedStatement ps;
-        ResultSet result;
+        PreparedStatement preparedStatement;
+        ResultSet resultSet;
 
-        EmbedBuilder eb = new EmbedBuilder();
+        EmbedBuilder embedBuilder = new EmbedBuilder();
 
-        BLOGINID = LOGINID;
+        int previousLoginID = currentLoginID;
 
-        ps = connection.prepareStatement("select id from ingame_logins order by id desc limit 1");
-        result = ps.executeQuery();
+        preparedStatement = connection.prepareStatement("SELECT id FROM ingame_logins ORDER BY id DESC LIMIT 1");
+        resultSet = preparedStatement.executeQuery();
 
-        while(result.next()) {
-            LOGINID = (result.getInt("id")); //bloginID= 86, loginID = 87
+        while (resultSet.next()) {
+            currentLoginID = resultSet.getInt("id");
         }
 
-        if(BLOGINID != LOGINID && isFirstLogin == false) {
+        if (previousLoginID != currentLoginID && !isFirstLogin) {
 
-            var date = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm");
+            preparedStatement = connection.prepareStatement("SELECT userid FROM ingame_logins WHERE id = ?");
+            preparedStatement.setInt(1, currentLoginID);
+            resultSet = preparedStatement.executeQuery();
 
-            ps = connection.prepareStatement("select userid from ingame_logins where id = ?");
-            ps.setInt(1 ,LOGINID);
-            result = ps.executeQuery();
-
-            while (result.next()) {
-                USERID = result.getInt("userid");
+            while (resultSet.next()) {
+                userID = resultSet.getInt("userid");
             }
 
-            ps = connection.prepareStatement("select name from users where id = ?");
-            ps.setInt(1, USERID);
-            result = ps.executeQuery();
+            preparedStatement = connection.prepareStatement("SELECT name FROM users WHERE id = ?");
+            preparedStatement.setInt(1, userID);
+            resultSet = preparedStatement.executeQuery();
 
-            while(result.next()) {
-                USERNAME = result.getString("name");
+            while (resultSet.next()) {
+                userName = resultSet.getString("name");
             }
 
-            eb.setAuthor(USERNAME + " has logged in", "https://web.mamesosu.net/profile/id=" + USERID + "/mode=std/special=none", "https://osu.ppy.sh/images/layout/avatar-guest.png");
-            eb.setColor(Color.GREEN);
+            embedBuilder.setAuthor(userName + " has logged in", "https://web.mamesosu.net/profile/id=" + userID + "/mode=std/special=none", "https://osu.ppy.sh/images/layout/avatar-guest.png");
+            embedBuilder.setColor(Color.GREEN);
 
-            jda.getGuildById(944248031136587796L).getTextChannelById(1081737936401350717L).sendMessageEmbeds(eb.build()).queue();
+            jda.getGuildById(944248031136587796L).getTextChannelById(1081737936401350717L).sendMessageEmbeds(embedBuilder.build()).queue();
         } else {
             isFirstLogin = false;
         }
-
     }
 }
