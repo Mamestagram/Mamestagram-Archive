@@ -182,7 +182,7 @@ public class OSUModule {
         String browserLink = "https://osu.ppy.sh/beatmapsets/" + mapsetID + "#";
 
         switch (mode) {
-            case 0, 4 -> {
+            case 0, 4, 8 -> {
                 browserLink += "osu/";
             }
             case 1, 5 -> {
@@ -328,13 +328,18 @@ public class OSUModule {
         JsonNode root;
         ArrayList<String> mapMD5 = new ArrayList<>();
 
-        ps = connection.prepareStatement("select id, map_md5 from scores where userid = ? and mode = " + mode);
+        ps = connection.prepareStatement("select id, map_md5 from scores where userid = ? and mode = " + mode + " and not grade = 'F'");
         ps.setInt(1, userID);
         result = ps.executeQuery();
 
         while(result.next()) {
             mapMD5.add(result.getString("map_md5"));
             dataCount++;
+        }
+
+        switch (mode) {
+            case 4 -> mode = 0;
+            case 8 -> mode = 0;
         }
 
         for(int i = 0; i < dataCount; i++) {
@@ -344,7 +349,9 @@ public class OSUModule {
             result = ps.executeQuery();
 
             if(result.next()) {
-                totalStarRate += result.getDouble("diff");
+                if(result.getDouble("diff") <= 13.0) {
+                    totalStarRate += result.getDouble("diff");
+                }
             }
         }
 

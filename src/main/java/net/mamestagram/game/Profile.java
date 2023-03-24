@@ -128,10 +128,12 @@ public class Profile {
         userAverageRate = getAverageStarRate(userID, mode);
 
         eb.setAuthor("osu! " + getModeName(mode) + " Profile for " + userName, "https://web.mamesosu.net/profile/id=" + userID + "/mode=std/special=none", "https://osu.ppy.sh/images/layout/avatar-guest.png");
-        eb.addField("**Performance of " + userName + "**" , "Player: **" + userName + "**\n" +
+        eb.setThumbnail("https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
+        eb.addField("**Performance" + "**" , "Player: **" + userName + "**\n" +
                 "Rank: **#" + String.format("%,d",userRank) + "** (" + userCountry + ": **#" + String.format("%,d",userCountryRank) + "**)\n" +
-                "Weighted PP: **" + String.format("%,d",userWeightedPP) + "pp**\n" +
-                "Average: **" + roundNumber(userAveragePP, 2) + "pp ▸ [★" + roundNumber(userAverageRate, 2) + "]**\n" +
+                "Weighted PP: **" + String.format("%,d",userWeightedPP) + "pp**", false);
+        eb.addField("**Play Analysis**", "Average PP: **" + roundNumber(userAveragePP, 2) + "**\n" +
+        "Average Rate: **" + roundNumber(userAverageRate, 2) + "**\n" +
                 "Map #1: **" + String.format("%,d",user1stRank) + "**", false);
         eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
         eb.setColor(Color.CYAN);
