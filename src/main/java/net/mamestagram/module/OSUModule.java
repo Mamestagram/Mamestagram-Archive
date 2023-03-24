@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static net.mamestagram.Main.connection;
 import static net.mamestagram.Main.osuAPIKey;
@@ -201,33 +202,37 @@ public class OSUModule {
 
     public static int getBeatmapRank(ArrayList<Integer> rID, int userID) {
 
+
         int countData = 0;
 
-        for(int i = 0; i < rID.size(); i++) {
-            for(int j = i; j < rID.size(); j++) {
-                if(i != j && rID.get(i) == rID.get(j) && rID.get(j) != 0) {
+        for (int i = 0; i < rID.size(); i++) {
+            for (int j = i + 1; j < rID.size(); j++) {
+                if (rID.get(i).equals(rID.get(j)) && !rID.get(j).equals(0)) {
                     rID.set(j, 0);
                 }
             }
         }
 
-        for(int i = 0; i < rID.size(); i++) {
-            try{
-                if(rID.get(i) == 0) {
-                    rID.set(i, rID.get(i + 1));
-                    rID.set(i + 1, 0);
+        for (int i = 0; i < rID.size() - 1; i++) {
+            if (rID.get(i).equals(0)) {
+                for (int j = i + 1; j < rID.size(); j++) {
+                    if (!rID.get(j).equals(0)) {
+                        Collections.swap(rID, i, j);
+                        break;
+                    }
                 }
-            } catch (IndexOutOfBoundsException ex) {
+            }
+        }
+
+        for (int i = 0; i < rID.size(); i++) {
+            if (rID.get(i).equals(userID)) {
+                countData = i;
                 break;
             }
         }
 
-        for (Integer integer : rID) {
-            if (integer == userID) {
-                break;
-            } else {
-                countData++;
-            }
+        for (int i : rID) {
+            System.out.println(i);
         }
 
         return countData + 1;
