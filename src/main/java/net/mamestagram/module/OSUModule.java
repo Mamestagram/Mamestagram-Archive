@@ -231,10 +231,6 @@ public class OSUModule {
             }
         }
 
-        for (int i : rID) {
-            System.out.println(i);
-        }
-
         return countData + 1;
     }
 
