@@ -6,10 +6,6 @@ import java.awt.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.format.DateTimeFormatter;
-
-import sun.misc.Signal;
-import sun.misc.SignalHandler;
 
 import static net.mamestagram.Main.*;
 

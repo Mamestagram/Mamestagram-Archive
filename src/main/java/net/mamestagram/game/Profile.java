@@ -59,15 +59,42 @@ public class Profile {
             }
         }
 
-        ps = connection.prepareStatement("select country from users where id = ?");
+        eb.setAuthor("osu! " + getModeName(mode) + " Profile for " + userName, "https://web.mamesosu.net/profile/id=" + userID + "/mode=std/special=none", "https://osu.ppy.sh/images/layout/avatar-guest.png");
+        eb.setThumbnail("https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
+        eb.addField("**Performance" + "**" , "Player: **" + userName + "**\n" +
+                "Rank: **#" + String.format("%,d",getGlobalRank(mode, userID)) + "** (" + getUserCountry(userID) + ": **#" + String.format("%,d",getCountryRank(mode, userID)) + "**)\n" +
+                "Weighted PP: **" + String.format("%,d",getWeightedPP(mode, userID)) + "pp**", false);
+        eb.addField("**Play Analysis**", "Average PP: **" + roundNumber(getAveragePP(userID, mode), 2) + "**\n" +
+        "Average Rate: **" + roundNumber(getAverageStarRate(userID, mode), 2) + "**\n" +
+                "Map #1: **" + String.format("%,d",getUserRank(userID, mode)) + "**", false);
+        eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
+        eb.setColor(Color.CYAN);
+
+        return eb;
+    }
+
+    private static String getUserCountry(int userID) throws SQLException {
+
+        PreparedStatement ps;
+        ResultSet result;
+        String query = ("select country from users where id = ?");
+
+        ps = connection.prepareStatement(query);
         ps.setInt(1, userID);
         result = ps.executeQuery();
 
-        while(result.next()) {
-            userCountry = result.getString("country");
+        if(result.next()) {
+            return result.getString("country");
+        } else {
+            return null;
         }
+    }
 
-        ps = connection.prepareStatement("SELECT COUNT(*) + 1 AS 'cranking' " +
+    private static int getCountryRank(int playMode, int userID) throws SQLException {
+
+        PreparedStatement ps;
+        ResultSet result;
+        String query = ("SELECT COUNT(*) + 1 AS 'cranking' " +
                 "FROM stats " +
                 "JOIN users " +
                 "ON stats.id = users.id " +
@@ -85,19 +112,28 @@ public class Profile {
                 ") " +
                 "AND mode = ?");
 
+        ps = connection.prepareStatement(query);
+
         ps.setInt(1, userID);
-        ps.setInt(2, mode);
+        ps.setInt(2, playMode);
         ps.setInt(3, userID);
-        ps.setInt(4, mode);
-        ps.setInt(5, mode);
+        ps.setInt(4, playMode);
+        ps.setInt(5, playMode);
 
         result = ps.executeQuery();
 
         if(result.next()) {
-            userCountryRank = result.getInt("cranking");
+            return result.getInt("cranking");
+        } else {
+            return 0;
         }
+    }
 
-        ps = connection.prepareStatement("SELECT COUNT(*) + 1 AS 'ranking' " +
+    private static int getGlobalRank(int playMode, int userID) throws SQLException {
+
+        PreparedStatement ps;
+        ResultSet result;
+        String query = ("SELECT COUNT(*) + 1 AS 'ranking' " +
                 "FROM stats " +
                 "WHERE pp > (" +
                 "SELECT pp " +
@@ -106,38 +142,35 @@ public class Profile {
                 "AND mode = ? ) " +
                 "AND mode = ?");
 
+        ps = connection.prepareStatement(query);
+
         ps.setInt(1, userID);
-        ps.setInt(2, mode);
-        ps.setInt(3, mode);
+        ps.setInt(2, playMode);
+        ps.setInt(3, playMode);
 
         result = ps.executeQuery();
 
         if(result.next()) {
-            userRank = result.getInt("ranking");
+            return result.getInt("ranking");
+        } else {
+            return 0;
         }
+    }
 
-        ps = connection.prepareStatement("select pp from stats where id = " + userID + " and mode = " + mode);
+    private static int getWeightedPP(int playMode, int userID) throws SQLException {
+
+        PreparedStatement ps;
+        ResultSet result;
+        String query = ("select pp from stats where id = " + userID + " and mode = " + playMode);
+
+        ps = connection.prepareStatement(query);
+
         result = ps.executeQuery();
 
         if(result.next()) {
-            userWeightedPP = result.getInt("pp");
+            return result.getInt("pp");
+        } else {
+            return 0;
         }
-
-        user1stRank = getUserRank(userID, mode);
-        userAveragePP = getAveragePP(userID, mode);
-        userAverageRate = getAverageStarRate(userID, mode);
-
-        eb.setAuthor("osu! " + getModeName(mode) + " Profile for " + userName, "https://web.mamesosu.net/profile/id=" + userID + "/mode=std/special=none", "https://osu.ppy.sh/images/layout/avatar-guest.png");
-        eb.setThumbnail("https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
-        eb.addField("**Performance" + "**" , "Player: **" + userName + "**\n" +
-                "Rank: **#" + String.format("%,d",userRank) + "** (" + userCountry + ": **#" + String.format("%,d",userCountryRank) + "**)\n" +
-                "Weighted PP: **" + String.format("%,d",userWeightedPP) + "pp**", false);
-        eb.addField("**Play Analysis**", "Average PP: **" + roundNumber(userAveragePP, 2) + "**\n" +
-        "Average Rate: **" + roundNumber(userAverageRate, 2) + "**\n" +
-                "Map #1: **" + String.format("%,d",user1stRank) + "**", false);
-        eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
-        eb.setColor(Color.CYAN);
-
-        return eb;
     }
 }
