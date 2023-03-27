@@ -11,6 +11,8 @@ import static net.mamestagram.Main.*;
 
 public class LoginStatus {
 
+    private static final long GUILDID = 944248031136587796L;
+    private static final long CHANNELID = 1081737936401350717L;
     private static int currentLoginID = 0;
     private static int userID = 0;
     private static String userName;
@@ -53,7 +55,7 @@ public class LoginStatus {
             embedBuilder.setAuthor(userName + " has logged in", "https://web.mamesosu.net/profile/id=" + userID + "/mode=std/special=none", "https://osu.ppy.sh/images/layout/avatar-guest.png");
             embedBuilder.setColor(Color.GREEN);
 
-            jda.getGuildById(944248031136587796L).getTextChannelById(1081737936401350717L).sendMessageEmbeds(embedBuilder.build()).queue();
+            jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(embedBuilder.build()).queue();
         } else {
             isFirstLogin = false;
         }

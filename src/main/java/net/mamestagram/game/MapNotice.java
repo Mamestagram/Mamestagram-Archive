@@ -2,6 +2,7 @@ package net.mamestagram.game;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
@@ -55,7 +56,9 @@ public class MapNotice {
             eb.setFooter("Played in " + getModeName(rMode) + " mode on mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
             eb.setColor(getMessageColor(getGradeString(rMode, userID)));
 
-            jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(eb.build()).queue();
+            jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(eb.build()).addActionRow(
+                    Button.link(getWebsiteLink(rMode, getBeatmapInt(md5).get(0), getBeatmapInt(md5).get(1)), "Go to Map Page!")
+            ).queue();
         } else {
             isFirstLogin = false;
         }
