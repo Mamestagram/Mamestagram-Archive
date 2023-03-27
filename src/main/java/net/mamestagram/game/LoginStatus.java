@@ -1,6 +1,7 @@
 package net.mamestagram.game;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.awt.*;
 import java.sql.PreparedStatement;
@@ -52,10 +53,12 @@ public class LoginStatus {
                 userName = resultSet.getString("name");
             }
 
-            embedBuilder.setAuthor(userName + " has logged in", "https://web.mamesosu.net/profile/id=" + userID + "/mode=std/special=none", "https://osu.ppy.sh/images/layout/avatar-guest.png");
+            embedBuilder.setTitle("**" + userName + " has logged in**");
             embedBuilder.setColor(Color.GREEN);
 
-            jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(embedBuilder.build()).queue();
+            jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(embedBuilder.build()).addActionRow(
+                    Button.link("https://web.mamesosu.net/profile/id=" + userID + "/mode=std/special=none", "Go to Profile!")
+            ).queue();
         } else {
             isFirstLogin = false;
         }
