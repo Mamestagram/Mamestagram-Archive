@@ -36,13 +36,14 @@ public class MapNotice {
         userID = getIDData().get(1);
 
         if(BPLAYID != NPLAYID && !isFirstLogin) {
-            ps = connection.prepareStatement("select map_md5, mode from scores where id = ?");
+            ps = connection.prepareStatement("select map_md5, mode, mods from scores where id = ?");
             ps.setInt(1, NPLAYID);
             result = ps.executeQuery();
 
             while (result.next()) {
                 md5 = result.getString("map_md5");
                 rMode = result.getInt("mode");
+                rMods = result.getInt("mods");
             }
 
             eb.setAuthor(getBeatmapDataString(md5).get(0) + " by " + getBeatmapDataString(md5).get(1) + " +" + getModsName(rMods), getWebsiteLink(rMode, getBeatmapInt(md5).get(0), getBeatmapInt(md5).get(1)), "https://b.ppy.sh/thumb/" + getBeatmapInt(md5).get(0) + "l.jpg?");
