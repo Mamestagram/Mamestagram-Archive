@@ -21,47 +21,48 @@ public class MapNotice {
 
     public static void getMapNotice() throws SQLException, IOException {
 
-        final long GUILDID = 944248031136587796L;
-        final long CHANNELID = 1081737936401350717L;
+            final long GUILDID = 944248031136587796L;
+            final long CHANNELID = 1081737936401350717L;
 
-        int rMode = 0, userID, rMods = 0;
-        String md5 = "";
-        PreparedStatement ps;
-        ResultSet result;
+            int rMode = 0, userID, rMods = 0;
+            String md5 = "";
+            PreparedStatement ps;
+            ResultSet result;
 
-        EmbedBuilder eb = new EmbedBuilder();
+            EmbedBuilder eb = new EmbedBuilder();
 
-        BPLAYID = NPLAYID;
+            BPLAYID = NPLAYID;
 
-        NPLAYID = getIDData().get(0);
-        userID = getIDData().get(1);
+            NPLAYID = getIDData().get(0);
+            userID = getIDData().get(1);
 
-        if(BPLAYID != NPLAYID && !isFirstLogin) {
-            ps = connection.prepareStatement("select map_md5, mode, mods from scores where id = ?");
-            ps.setInt(1, NPLAYID);
-            result = ps.executeQuery();
+            if (BPLAYID != NPLAYID && !isFirstLogin) {
+                ps = connection.prepareStatement("select map_md5, mode, mods from scores where id = ?");
+                ps.setInt(1, NPLAYID);
+                result = ps.executeQuery();
 
-            while (result.next()) {
-                md5 = result.getString("map_md5");
-                rMode = result.getInt("mode");
-                rMods = result.getInt("mods");
+                while (result.next()) {
+                    md5 = result.getString("map_md5");
+                    rMode = result.getInt("mode");
+                    rMods = result.getInt("mods");
+                }
+
+                eb.setAuthor(getBeatmapDataString(md5).get(0) + " by " + getBeatmapDataString(md5).get(1) + " +" + getModsName(rMods), getWebsiteLink(rMode, getBeatmapInt(md5).get(0), getBeatmapInt(md5).get(1)), "https://b.ppy.sh/thumb/" + getBeatmapInt(md5).get(0) + "l.jpg?");
+                eb.addField("**Play Record of " + getUserNameFromID(userID) + "**", "Grade: ***" + getGradeString(rMode, userID) + "*** **[" + getUserDataDouble(rMode, userID).get(0) + "pp]**\n" +
+                        "Achieved Rank: **#" + String.format("%,d", getBeatmapRank(getMapUserData(rMode, md5), userID)) + "**\n" +
+                        "Score: **" + String.format("%,d", getUserDataInt(rMode, userID).get(0)) + " ▸ " + getUserDataDouble(rMode, userID).get(1) + "%**\n" +
+                        "Combo: **" + String.format("%,d", getUserDataInt(rMode, userID).get(2)) + "x** / " + String.format("%,d", getBeatmapInt(md5).get(2)) + "x [" + String.format("%,d", getUserDataInt(rMode, userID).get(3)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(4)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(5)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(6)) + "]\n" +
+                        "Difficulty: **" + getBeatmapDataString(md5).get(2) + "**", false);
+                eb.setFooter("Played in " + getModeName(rMode) + " mode on mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
+                eb.setColor(getMessageColor(getGradeString(rMode, userID)));
+
+                jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(eb.build()).addActionRow(
+                        Button.primary("report", "Report"),
+                        Button.link(getWebsiteLink(rMode, getBeatmapInt(md5).get(0), getBeatmapInt(md5).get(1)), "Go to Map Page!")
+                ).queue();
+            } else {
+                isFirstLogin = false;
             }
-
-            eb.setAuthor(getBeatmapDataString(md5).get(0) + " by " + getBeatmapDataString(md5).get(1) + " +" + getModsName(rMods), getWebsiteLink(rMode, getBeatmapInt(md5).get(0), getBeatmapInt(md5).get(1)), "https://b.ppy.sh/thumb/" + getBeatmapInt(md5).get(0) + "l.jpg?");
-            eb.addField("**Play Record of " + getUserNameFromID(userID) + "**", "Grade: ***" + getGradeString(rMode, userID) + "*** **[" + getUserDataDouble(rMode, userID).get(0) + "pp]**\n" +
-                    "Achieved Rank: **#" + String.format("%,d", getBeatmapRank(getMapUserData(rMode, md5), userID)) + "**\n" +
-                    "Score: **" + String.format("%,d",getUserDataInt(rMode, userID).get(0)) + " ▸ " + getUserDataDouble(rMode, userID).get(1) + "%**\n" +
-                    "Combo: **" + String.format("%,d", getUserDataInt(rMode, userID).get(2)) + "x** / " + String.format("%,d",getBeatmapInt(md5).get(2)) + "x [" + String.format("%,d",getUserDataInt(rMode, userID).get(3)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(4)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(5)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(6)) + "]\n" +
-                    "Difficulty: **" + getBeatmapDataString(md5).get(2) + "**", false);
-            eb.setFooter("Played in " + getModeName(rMode) + " mode on mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
-            eb.setColor(getMessageColor(getGradeString(rMode, userID)));
-
-            jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(eb.build()).addActionRow(
-                    Button.link(getWebsiteLink(rMode, getBeatmapInt(md5).get(0), getBeatmapInt(md5).get(1)), "Go to Map Page!")
-            ).queue();
-        } else {
-            isFirstLogin = false;
-        }
     }
 
     //0 = id, 1 = userid
