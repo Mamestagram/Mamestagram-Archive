@@ -57,7 +57,7 @@ public class MapNotice {
                 eb.setColor(getMessageColor(getGradeString(rMode, userID)));
 
                 jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(eb.build()).addActionRow(
-                        Button.primary("report", "Report"),
+                        Button.primary("report", "Report Score"),
                         Button.link(getWebsiteLink(rMode, getBeatmapInt(md5).get(0), getBeatmapInt(md5).get(1)), "Go to Map Page!")
                 ).queue();
             } else {

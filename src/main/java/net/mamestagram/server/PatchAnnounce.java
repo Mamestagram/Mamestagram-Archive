@@ -73,12 +73,15 @@ public class PatchAnnounce extends ListenerAdapter {
     @Override
     public void onModalInteraction(ModalInteractionEvent e) {
 
-        String name = e.getValue("project-name").getAsString();
-        String version = e.getValue("version").getAsString();
-        String jpText = e.getValue("jpText").getAsString();
-        String enText = e.getValue("enText").getAsString();
+        if (e.getModalId().equals("announce-create")) {
 
-        e.reply("send").setEphemeral(true).queue();
-        jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(createAnnoucement(name,version,jpText, enText).build()).queue();
+            String name = e.getValue("project-name").getAsString();
+            String version = e.getValue("version").getAsString();
+            String jpText = e.getValue("jpText").getAsString();
+            String enText = e.getValue("enText").getAsString();
+
+            e.reply("send").setEphemeral(true).queue();
+            jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(createAnnoucement(name, version, jpText, enText).build()).queue();
+        }
     }
 }
