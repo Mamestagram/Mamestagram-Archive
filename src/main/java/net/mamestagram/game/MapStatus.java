@@ -196,7 +196,7 @@ public class MapStatus extends ListenerAdapter {
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
-            e.reply("送信しました").queue();
+            e.reply("送信しました").setEphemeral(true).queue();
         } else if(e.getModalId().equals("deny-request")) {
             try {
                 jda.getGuildById(944248031136587796L).getTextChannelById(1081737936401350717L).sendMessageEmbeds(mapRankedNotSuccess(e.getUser(), e.getValue("map_id").getAsString(), e.getValue("tester_comment").getAsString()).build())
@@ -207,7 +207,7 @@ public class MapStatus extends ListenerAdapter {
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            e.reply("送信しました").queue();
+            e.reply("送信しました").setEphemeral(true).queue();
         }
     }
 
