@@ -45,10 +45,12 @@ public class WebhookClientModule {
         WebhookMessageBuilder builder = new WebhookMessageBuilder();
         builder.setUsername(user.getName());
         builder.setAvatarUrl(user.getAvatarUrl());
-        builder.setContent(getTranslateSentence(text, "JA") + " (" + getTranslateSentence(text, "EN") + ")");
+        builder.setContent(getTranslateSentence(text, "JA"));
         client.send(builder.build());
         client.close();
     }
 
-    private static String createTranslateMessage(String text) {return null;}
+    private static String createTranslateMessage(String text) {
+        return null;
+    }
 }

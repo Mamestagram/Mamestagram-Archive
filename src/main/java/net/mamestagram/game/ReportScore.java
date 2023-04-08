@@ -25,7 +25,7 @@ public class ReportScore extends ListenerAdapter {
     public void onButtonInteraction(ButtonInteractionEvent e) {
 
         if(e.getComponentId().equals("report")) {
-            TextInput reportReason = createTextInput("reason", "Comments", "Please provide any information you believe could be be useful (Write JA or EN)", true, TextInputStyle.PARAGRAPH);
+            TextInput reportReason = createTextInput("reason", "Comments", "Please provide any information you believe could be useful (Write JA or EN)", true, TextInputStyle.PARAGRAPH);
             Modal modal = Modal.create("report-score", "Report this score?")
                     .addActionRows(ActionRow.of(reportReason))
                     .build();
@@ -55,7 +55,7 @@ public class ReportScore extends ListenerAdapter {
                     .flatMap(channel -> channel.sendMessageEmbeds(eb.build()))
                     .queue();
 
-            e.reply("send").setEphemeral(true).queue();
+            e.reply("Thank you for your cooperation!").setEphemeral(true).queue();
         }
     }
 }
