@@ -74,9 +74,9 @@ public class MapStatus extends ListenerAdapter {
         mapTitle = root.get(0).get("title").asText() + " by " + root.get(0).get("artist").asText();
         mapCreator = root.get(0).get("creator").asText();
 
-        eb.setTitle("**New Ranked Map is now available!**");
-        eb.addField("**Map Title**", mapTitle, false);
-        eb.addField("**Map Creator**", mapCreator, false);
+        eb.setTitle("**This map will be Ranked after server restart!**");
+        eb.addField("**Map**", "Name: **"+ mapTitle + "**\n" +
+                "Map Creator: **" + mapCreator + "**", false);
         eb.addField("**Map Tester**", user.getAsMention(), false);
         eb.addField("**Tester Comment**", "```" + comment + "```", false);
         eb.setColor(Color.green);
