@@ -17,9 +17,16 @@ import net.dv8tion.jda.api.interactions.modals.Modal;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static net.mamestagram.module.ModalModule.*;
@@ -53,10 +60,24 @@ public class MapStatus extends ListenerAdapter {
     private static EmbedBuilder mapRankedSuccess(User user, String mapsetID, String comment) throws IOException, SQLException {
 
         EmbedBuilder eb = new EmbedBuilder();
+
         PreparedStatement ps;
         ResultSet result;
         JsonNode root;
         String md5 = null, mapTitle, mapCreator;
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
+        Date date = new Date();
+        Calendar calendar = Calendar.getInstance();
+
+        try {
+             date = sdf.parse(DateTimeFormatter.ofPattern("MM/dd").format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
+        } catch(ParseException e) {
+            e.printStackTrace();
+        }
+
+        calendar.setTime(date);
+        calendar.add(Calendar.DATE, 1);
 
         ps = connection.prepareStatement("select md5 from maps where set_id = ? limit 1");
         ps.setInt(1, Integer.parseInt(mapsetID));
@@ -72,8 +93,8 @@ public class MapStatus extends ListenerAdapter {
         mapTitle = root.get(0).get("title").asText() + " by " + root.get(0).get("artist").asText();
         mapCreator = root.get(0).get("creator").asText();
 
-        eb.setTitle("**This map will be Ranked after server restart!**");
-        eb.addField("**Map**", "Name: **"+ mapTitle + "**\n" +
+        eb.setTitle(":star2: **This map will be Ranked at " + sdf.format(calendar.getTime()) + " 4:00 (JST)**");
+        eb.addField("**Map Detail**", "Name: **"+ mapTitle + "**\n" +
                 "Map Creator: **" + mapCreator + "**", false);
         eb.addField("**Map Tester**", user.getAsMention(), false);
         eb.addField("**Tester Comment**", "```" + comment + "```", false);
