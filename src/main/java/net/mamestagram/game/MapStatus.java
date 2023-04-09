@@ -56,7 +56,7 @@ public class MapStatus extends ListenerAdapter {
         PreparedStatement ps;
         ResultSet result;
         JsonNode root;
-        String md5 = "", mapTitle, mapCreator;
+        String md5 = null, mapTitle, mapCreator;
 
         ps = connection.prepareStatement("select md5 from maps where set_id = ? limit 1");
         ps.setInt(1, Integer.parseInt(mapsetID));
