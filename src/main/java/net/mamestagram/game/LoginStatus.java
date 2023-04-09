@@ -3,10 +3,15 @@ package net.mamestagram.game;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
+import javax.swing.text.DateFormatter;
 import java.awt.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 import static net.mamestagram.Main.*;
 
@@ -23,6 +28,7 @@ public class LoginStatus {
 
         PreparedStatement preparedStatement;
         ResultSet resultSet;
+        var date = DateTimeFormatter.ofPattern("HH:mm");
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
 
@@ -53,7 +59,8 @@ public class LoginStatus {
                 userName = resultSet.getString("name");
             }
 
-            embedBuilder.setTitle("**" + userName + " has logged in**");
+            embedBuilder.setTitle(":inbox_tray: **" + userName + " has logged in**");
+            embedBuilder.setFooter("Connected at " + date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
             embedBuilder.setColor(Color.GREEN);
 
             jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(embedBuilder.build()).addActionRow(
