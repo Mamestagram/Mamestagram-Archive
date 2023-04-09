@@ -14,14 +14,12 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import net.dv8tion.jda.api.interactions.components.text.TextInput;
 import net.dv8tion.jda.api.interactions.components.text.TextInputStyle;
 import net.dv8tion.jda.api.interactions.modals.Modal;
-import org.w3c.dom.Text;
 
 import java.awt.*;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static net.mamestagram.module.ModalModule.*;
@@ -148,7 +146,7 @@ public class MapStatus extends ListenerAdapter {
 
             e.replyModal(modal).queue();
         } else if(e.getComponentId().equals("deny")) {
-            TextInput mapID = createTextInput("map_id", "BeatmapsetID", "BeatmapsetIDを入力してください", true, TextInputStyle.SHORT);
+            TextInput mapID = createTextInput("mapset_id", "BeatmapsetID", "BeatmapsetIDを入力してください", true, TextInputStyle.SHORT);
             TextInput testerComment = createTextInput("tester_comment", "コメント", "コメントを入力", true, TextInputStyle.PARAGRAPH);
 
             Modal modal = Modal.create("deny-request", "マップの非承認通知作成")
@@ -200,7 +198,7 @@ public class MapStatus extends ListenerAdapter {
         } else if(e.getModalId().equals("deny-request")) {
             try {
                 jda.getGuildById(944248031136587796L).getTextChannelById(1081737936401350717L).sendMessageEmbeds(mapRankedNotSuccess(e.getUser(), e.getValue("map_id").getAsString(), e.getValue("tester_comment").getAsString()).build())
-                        .addActionRow(Button.link("https://osu.ppy.sh/beatmapsets/" + e.getValue("map_id").getAsString(), "Go to Map Page!"))
+                        .addActionRow(Button.link("https://osu.ppy.sh/beatmapsets/" + e.getValue("mapset_id").getAsString(), "Go to Map Page!"))
                         .queue();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
