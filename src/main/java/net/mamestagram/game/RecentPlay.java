@@ -19,7 +19,6 @@ public class RecentPlay {
     public static EmbedBuilder getRecentData(String sName, Member dName, int mode) throws SQLException, IOException {
 
         int userID;
-        String userGrade = "";
 
         PreparedStatement ps;
         ResultSet result;

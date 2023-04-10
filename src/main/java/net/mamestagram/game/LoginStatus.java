@@ -64,7 +64,7 @@ public class LoginStatus {
             embedBuilder.setColor(Color.GREEN);
 
             jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(embedBuilder.build()).addActionRow(
-                    Button.link("https://web.mamesosu.net/profile/id=" + userID + "/mode=std/special=none/bestpp=3&mostplays=1&recentplays=1#bestpp", "Go to Profile!")
+                    Button.link("https://web.mamesosu.net/profile/id=" + userID + "/mode=std/special=none/bestpp=1&mostplays=1&recentplays=1", "Go to Profile!")
             ).queue();
         } else {
             isFirstLogin = false;
