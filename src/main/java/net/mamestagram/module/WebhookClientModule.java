@@ -45,12 +45,8 @@ public class WebhookClientModule {
         WebhookMessageBuilder builder = new WebhookMessageBuilder();
         builder.setUsername(user.getName());
         builder.setAvatarUrl(user.getAvatarUrl());
-        builder.setContent(getTranslateSentence(text, "JA"));
+        builder.setContent(text);
         client.send(builder.build());
         client.close();
-    }
-
-    private static String createTranslateMessage(String text) {
-        return null;
     }
 }
