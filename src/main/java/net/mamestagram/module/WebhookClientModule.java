@@ -4,7 +4,6 @@ import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.WebhookCluster;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import okhttp3.OkHttpClient;
 import org.jetbrains.annotations.NotNull;
@@ -12,8 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 import static net.mamestagram.Main.TOKEN;
-import static net.mamestagram.module.TranslateModule.*;
-
 public class WebhookClientModule {
 
     public static WebhookClient createWebhookClient(String url, long id) {

@@ -77,7 +77,10 @@ public class MapStatus extends ListenerAdapter {
         }
 
         calendar.setTime(date);
-        calendar.add(Calendar.DATE, 1);
+
+        if (Integer.parseInt(DateTimeFormatter.ofPattern("HH").format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) >= 4) {
+            calendar.add(Calendar.DATE, 1);
+        }
 
         ps = connection.prepareStatement("select md5 from maps where set_id = ? limit 1");
         ps.setInt(1, Integer.parseInt(mapsetID));

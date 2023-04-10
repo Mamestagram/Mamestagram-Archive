@@ -305,7 +305,6 @@ public class OSUModule {
         double totalStarRate = 0.0;
         PreparedStatement ps;
         ResultSet result;
-        JsonNode root;
         ArrayList<String> mapMD5 = new ArrayList<>();
 
         ps = connection.prepareStatement("select id, map_md5 from scores where userid = ? and mode = " + mode + " and not grade = 'F'");
