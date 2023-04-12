@@ -59,6 +59,8 @@ public class MapStatus extends ListenerAdapter {
 
     private static EmbedBuilder mapRankedSuccess(User user, String mapsetID, String comment) throws IOException, SQLException {
 
+        System.out.println(mapsetID);
+
         EmbedBuilder eb = new EmbedBuilder();
 
         PreparedStatement ps;
@@ -102,8 +104,8 @@ public class MapStatus extends ListenerAdapter {
                 "Map Creator: **" + mapCreator + "**", false);
         eb.addField("**Map Tester**", user.getAsMention(), false);
         eb.addField("**Tester Comment**", "```" + comment + "```", false);
-        eb.setImage("https://b.ppy.sh/thumb/" + mapsetID + "l.jpg?");
-        eb.setFooter("Accepted at " + time.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
+        eb.setImage("https://assets.ppy.sh/beatmaps/" + mapsetID + "/covers/cover.jpg?");
+        eb.setFooter("Accepted at " + time.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))), "https://media.discordapp.net/attachments/944984741826932767/1095668104824115230/check.png?width=662&height=662");
         eb.setColor(Color.green);
 
         return eb;
@@ -205,6 +207,26 @@ public class MapStatus extends ListenerAdapter {
                 e.reply("Request has been sent!").setEphemeral(true).queue();
 
         } else if(e.getModalId().equals("accept-request")) {
+
+            try {
+                PreparedStatement ps;
+                ResultSet result;
+
+                ps = connection.prepareStatement("select status from maps where set_id = ?");
+
+                ps.setString(1, e.getValue("mapset_id").getAsString());
+                result = ps.executeQuery();
+
+                if(result.next()) {
+                    if(result.getInt("status") == 2) {
+                        e.reply("この譜面は既に申請されている譜面です").setEphemeral(true).queue();
+                        return;
+                    }
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
             try {
                 PreparedStatement ps = connection.prepareStatement("UPDATE maps SET status = 2 WHERE set_id = ?");
                 ps.setString(1, e.getValue("mapset_id").getAsString());
