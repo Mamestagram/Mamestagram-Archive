@@ -17,9 +17,8 @@ public class Profile {
 
     public static EmbedBuilder getProfileData(String sName, Member pName, int mode) throws SQLException, IOException {
 
-        int userID = 0, userRank = 0, userCountryRank = 0, userWeightedPP = 0, user1stRank = 0;
-        double userAveragePP = 0.0, userAverageRate = 0.0;
-        String userName, userCountry = "";
+        int userID;
+        String userName;
 
         PreparedStatement ps;
         ResultSet result;

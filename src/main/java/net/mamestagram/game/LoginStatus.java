@@ -17,8 +17,8 @@ import static net.mamestagram.Main.*;
 
 public class LoginStatus {
 
-    private static final long GUILDID = 944248031136587796L;
-    private static final long CHANNELID = 1081737936401350717L;
+    private static final long guildID = 944248031136587796L;
+    private static final long channelID = 1081737936401350717L;
     private static int currentLoginID = 0;
     private static int userID = 0;
     private static String userName;
@@ -63,7 +63,7 @@ public class LoginStatus {
             embedBuilder.setFooter("Connected at " + date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
             embedBuilder.setColor(Color.GREEN);
 
-            jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(embedBuilder.build()).addActionRow(
+            jda.getGuildById(guildID).getTextChannelById(channelID).sendMessageEmbeds(embedBuilder.build()).addActionRow(
                     Button.link("https://web.mamesosu.net/profile/id=" + userID + "/mode=std/special=none/bestpp=1&mostplays=1&recentplays=1", "Go to Profile!")
             ).queue();
         } else {

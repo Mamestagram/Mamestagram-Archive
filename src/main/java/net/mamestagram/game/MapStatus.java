@@ -66,6 +66,7 @@ public class MapStatus extends ListenerAdapter {
         JsonNode root;
         String md5 = null, mapTitle, mapCreator;
 
+        var time = DateTimeFormatter.ofPattern("HH:mm");
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
         Date date = new Date();
         Calendar calendar = Calendar.getInstance();
@@ -96,11 +97,13 @@ public class MapStatus extends ListenerAdapter {
         mapTitle = root.get(0).get("title").asText() + " by " + root.get(0).get("artist").asText();
         mapCreator = root.get(0).get("creator").asText();
 
-        eb.setTitle(":star2: **This map will be Ranked at " + sdf.format(calendar.getTime()) + " 4:00 (JST)**");
-        eb.addField("**Map Detail**", "Name: **"+ mapTitle + "**\n" +
+        eb.setTitle(":star2: **This map will be Ranked at " + sdf.format(calendar.getTime()) + " 4:00 (JST)!**");
+        eb.addField("**Map Data**", "Name: **"+ mapTitle + "**\n" +
                 "Map Creator: **" + mapCreator + "**", false);
         eb.addField("**Map Tester**", user.getAsMention(), false);
         eb.addField("**Tester Comment**", "```" + comment + "```", false);
+        eb.setImage("https://b.ppy.sh/thumb/" + mapsetID + "l.jpg?");
+        eb.setFooter("Accepted at " + time.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
         eb.setColor(Color.green);
 
         return eb;
@@ -210,7 +213,7 @@ public class MapStatus extends ListenerAdapter {
                 throw new RuntimeException(ex);
             }
             try {
-                jda.getGuildById(944248031136587796L).getTextChannelById(1081737936401350717L).sendMessageEmbeds(mapRankedSuccess(e.getUser(), e.getValue("mapset_id").getAsString(), e.getValue("tester_comment").getAsString()).build())
+                jda.getGuildById(944248031136587796L).getTextChannelById(1095604533591298140L).sendMessageEmbeds(mapRankedSuccess(e.getUser(), e.getValue("mapset_id").getAsString(), e.getValue("tester_comment").getAsString()).build())
                         .addActionRow(Button.link("https://osu.ppy.sh/beatmapsets/" + e.getValue("mapset_id").getAsString(), "Go to Map Page!"))
                         .queue();
             } catch (IOException ex) {
@@ -221,7 +224,7 @@ public class MapStatus extends ListenerAdapter {
             e.reply("送信しました").setEphemeral(true).queue();
         } else if(e.getModalId().equals("deny-request")) {
             try {
-                jda.getGuildById(944248031136587796L).getTextChannelById(1081737936401350717L).sendMessageEmbeds(mapRankedNotSuccess(e.getUser(), e.getValue("map_id").getAsString(), e.getValue("tester_comment").getAsString()).build())
+                jda.getGuildById(944248031136587796L).getTextChannelById(1095604533591298140L).sendMessageEmbeds(mapRankedNotSuccess(e.getUser(), e.getValue("map_id").getAsString(), e.getValue("tester_comment").getAsString()).build())
                         .addActionRow(Button.link("https://osu.ppy.sh/beatmapsets/" + e.getValue("mapset_id").getAsString(), "Go to Map Page!"))
                         .queue();
             } catch (SQLException ex) {

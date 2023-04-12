@@ -15,8 +15,8 @@ import static net.mamestagram.module.OSUModule.*;
 
 public class MapNotice {
 
-    private static int BPLAYID = 0;
-    private static int NPLAYID = 0;
+    private static int bPlayID = 0;
+    private static int nPLAYID = 0;
     private static boolean isFirstLogin = true;
 
     public static void getMapNotice() throws SQLException, IOException {
@@ -31,14 +31,14 @@ public class MapNotice {
 
             EmbedBuilder eb = new EmbedBuilder();
 
-            BPLAYID = NPLAYID;
+            bPlayID = nPLAYID;
 
-            NPLAYID = getIDData().get(0);
+            nPLAYID = getIDData().get(0);
             userID = getIDData().get(1);
 
-            if (BPLAYID != NPLAYID && !isFirstLogin) {
+            if (bPlayID != nPLAYID && !isFirstLogin) {
                 ps = connection.prepareStatement("select map_md5, mode, mods from scores where id = ?");
-                ps.setInt(1, NPLAYID);
+                ps.setInt(1, nPLAYID);
                 result = ps.executeQuery();
 
                 while (result.next()) {
