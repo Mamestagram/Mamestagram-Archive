@@ -133,9 +133,9 @@ public class MapStatus extends ListenerAdapter {
         mapTitle =  root.get(0).get("title").asText() + " by " + root.get(0).get("artist").asText();
         mapCreator = root.get(0).get("creator").asText();
 
-        eb.setTitle("**Ranked request has been canceled!**");
-        eb.addField("**Map Title**", mapTitle, false);
-        eb.addField("**Map Creator**", mapCreator, false);
+        eb.setTitle("**:x: Ranked request has been canceled!**");
+        eb.addField("**Map Data**", "Name: **"+ mapTitle + "**\n" +
+                "Map Creator: **" + mapCreator + "**", false);
         eb.addField("**Map Tester**", user.getAsMention(), false);
         eb.addField("**Tester Comment**", "```" + comment + "```", false);
         eb.setColor(Color.RED);
