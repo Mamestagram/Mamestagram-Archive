@@ -17,8 +17,6 @@ import net.dv8tion.jda.api.interactions.modals.Modal;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -27,46 +25,41 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
+import static net.mamestagram.Main.connection;
+import static net.mamestagram.Main.jda;
+import static net.mamestagram.module.OSUModule.getMapData;
 import static net.mamestagram.module.ModalModule.*;
-import static net.mamestagram.module.OSUModule.*;
-import static net.mamestagram.Main.*;
 
 public class MapStatus extends ListenerAdapter {
 
+    private static EmbedBuilder eb;
+    private static PreparedStatement ps;
+    private static ResultSet result;
+    private final static long GUILDID = 944248031136587796L;
+    private final static long CHANNELID = 1095604533591298140L;
+    private final static long ANNOUNCEID =1093845482247307276L;
+
     private static EmbedBuilder mapRequestMessage() {
 
-        EmbedBuilder eb = new EmbedBuilder();
+        eb = new EmbedBuilder();
 
-        eb.setTitle("**Map Ranked Request**");
-        eb.addField("**How do I make a request?**", "Click the button below and enter the required data", false);
-        eb.setColor(Color.CYAN);
-
+        eb.setTitle("**Map Status Change Request**");
+        eb.addField("**:notebook_with_decorative_cover: How to Request**", "Click the button for the status you wish to apply for and enter the required data", false);
+        eb.addField("**:pencil: Changeable status**", ":white_check_mark: Ranked\n:heart: Loved", false);
+        eb.setColor(Color.PINK);
         return eb;
     }
 
-    private static EmbedBuilder mapRequestToDMMessage(String url, String mode) {
+    private static EmbedBuilder mapRankedSuccessMessage(User user, String mapsetID, int status, String comment) throws IOException, SQLException {
 
-        EmbedBuilder eb = new EmbedBuilder();
-        eb.setTitle("**Map Request**");
-        eb.addField("**Map Link**", url, false);
-        eb.addField("**Map Mode**", mode, false);
-        eb.setColor(Color.green);
+        eb = new EmbedBuilder();
 
-        return eb;
-    }
-
-    private static EmbedBuilder mapRankedSuccess(User user, String mapsetID, String comment) throws IOException, SQLException {
-
-        System.out.println(mapsetID);
-
-        EmbedBuilder eb = new EmbedBuilder();
-
-        PreparedStatement ps;
-        ResultSet result;
         JsonNode root;
-        String md5 = null, mapTitle, mapCreator;
+        String md5 = null, mapTitle, mapCreator, mapArtist;
 
         var time = DateTimeFormatter.ofPattern("HH:mm");
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd");
@@ -74,7 +67,7 @@ public class MapStatus extends ListenerAdapter {
         Calendar calendar = Calendar.getInstance();
 
         try {
-             date = sdf.parse(DateTimeFormatter.ofPattern("MM/dd").format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
+            date = sdf.parse(DateTimeFormatter.ofPattern("MM/dd").format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
         } catch(ParseException e) {
             e.printStackTrace();
         }
@@ -96,29 +89,34 @@ public class MapStatus extends ListenerAdapter {
 
         root = getMapData(md5);
 
-        mapTitle = root.get(0).get("title").asText() + " by " + root.get(0).get("artist").asText();
+        mapTitle = root.get(0).get("title").asText();
+        mapArtist = root.get(0).get("artist").asText();
         mapCreator = root.get(0).get("creator").asText();
 
-        eb.setTitle(":star2: **This map will be Ranked at " + sdf.format(calendar.getTime()) + " 4:00 (JST)!**");
+        if(status == 1) {
+            eb.setColor(Color.green);
+            eb.setTitle(":star2: **This map will be Ranked at " + sdf.format(calendar.getTime()) + " 4:00 (JST)**");
+        } else if(status == 2) {
+            eb.setColor(Color.PINK);
+            eb.setTitle(":star2: **This map will be Loved at " + sdf.format(calendar.getTime()) + " 4:00 (JST)**");
+        }
         eb.addField("**Map Data**", "Name: **"+ mapTitle + "**\n" +
-                "Map Creator: **" + mapCreator + "**", false);
+                "Artist: **" + mapArtist + "**\n" +
+                "Creator: **" + mapCreator + "**", false);
         eb.addField("**Map Tester**", user.getAsMention(), false);
         eb.addField("**Tester Comment**", "```" + comment + "```", false);
         eb.setImage("https://assets.ppy.sh/beatmaps/" + mapsetID + "/covers/cover.jpg?");
         eb.setFooter("Accepted at " + time.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))), "https://media.discordapp.net/attachments/944984741826932767/1095668104824115230/check.png?width=662&height=662");
-        eb.setColor(Color.green);
 
         return eb;
     }
 
-    private static EmbedBuilder mapRankedNotSuccess(User user, String mapsetID, String comment) throws SQLException, IOException {
+    private static EmbedBuilder mapRankedNotSuccessMessage(User user, String mapsetID, int status, String comment) throws SQLException, IOException {
 
-        EmbedBuilder eb = new EmbedBuilder();
+        eb = new EmbedBuilder();
 
-        PreparedStatement ps;
-        ResultSet result;
         JsonNode root;
-        String md5 = null, mapTitle, mapCreator;
+        String md5 = null, mapTitle, mapCreator, mapArtist;
 
         ps = connection.prepareStatement("select md5 from maps where set_id = ? limit 1");
         ps.setInt(1, Integer.parseInt(mapsetID));
@@ -130,12 +128,18 @@ public class MapStatus extends ListenerAdapter {
 
         root = getMapData(md5);
 
-        mapTitle =  root.get(0).get("title").asText() + " by " + root.get(0).get("artist").asText();
+        mapTitle =  root.get(0).get("title").asText();
+        mapArtist = root.get(0).get("artist").asText();
         mapCreator = root.get(0).get("creator").asText();
 
-        eb.setTitle("**:x: Ranked request has been canceled!**");
+        if(status == 1) {
+            eb.setTitle("**:x: Ranked request has been canceled!**");
+        } else {
+            eb.setTitle("**:x: Loved request has been canceled!**");
+        }
         eb.addField("**Map Data**", "Name: **"+ mapTitle + "**\n" +
-                "Map Creator: **" + mapCreator + "**", false);
+                "Artist: **" + mapArtist + "**\n" +
+                "Creator: **" + mapCreator + "**", false);
         eb.addField("**Map Tester**", user.getAsMention(), false);
         eb.addField("**Tester Comment**", "```" + comment + "```", false);
         eb.setColor(Color.RED);
@@ -143,43 +147,81 @@ public class MapStatus extends ListenerAdapter {
         return eb;
     }
 
+    private static EmbedBuilder mapRequestToDMMessage(User user, String id, int statusid, String mode) {
+
+        EmbedBuilder eb = new EmbedBuilder();
+
+        if(statusid == 1) {
+            eb.setTitle("**Map Ranked Requestが届きました!**\n**マップをプレイ後、承認の連絡を送信してください**");
+            eb.setColor(Color.green);
+        } else if(statusid == 2) {
+            eb.setTitle("**Map Loved Requestが届きました!**\n**マップをプレイ後、承認の連絡を送信してください**");
+            eb.setColor(Color.PINK);
+        }
+        eb.addField("**Map Link**", "https://osu.ppy.sh/beatmapsets/" + id, false);
+        eb.addField("**Map Mode**", mode, false);
+        eb.addField("**Request**", user.getAsMention(), false);
+
+        return eb;
+    }
+
+
     @Override
     public void onMessageReceived(MessageReceivedEvent e) {
 
-        if(e.getChannel().getIdLong() == 1093845482247307276L && e.getMessage().getContentRaw().equals("create-map-request")) {
-            e.getMessage().replyEmbeds(mapRequestMessage().build()).addActionRow(
-                    Button.primary("request", "Map Request")
-            ).queue();
+        if(e.getChannel().getIdLong() == ANNOUNCEID && e.getMessage().getContentRaw().equals("create-req-form")) {
+            e.getMessage().replyEmbeds(mapRequestMessage().build())
+                    .addActionRow(
+                            Button.success("button_ranked", "Ranked"),
+                            Button.danger("button_loved", "Loved")
+                    ).queue();
         }
     }
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent e) {
 
-        if(e.getComponentId().equals("request")) {
-            TextInput mapURL = createTextInput("map_url", "Map URL", "Please enter the URL of the map you wish to request", true, TextInputStyle.SHORT);
-            TextInput mapPlayMode = createTextInput("map_mode", "Map's Mode", "Type 'osu', 'mania', 'catch', 'taiko'", true, TextInputStyle.SHORT);
-
-            Modal modal = Modal.create("request-maps", "Map request for Ranked")
-                    .addActionRows(ActionRow.of(mapURL), ActionRow.of(mapPlayMode))
+        if(e.getComponentId().equals("button_ranked")) {
+            TextInput mapID = createTextInput("ranked_mapID", "Beatmapset ID", "Example: 674137 (If you don't know, please look it up.)", true, TextInputStyle.SHORT);
+            TextInput mode = createTextInput("ranked_mode", "Map Mode", "Type 'osu', 'taiko', 'catch', 'mania'", true, TextInputStyle.SHORT);
+            Modal modal = Modal.create("request-ranked", "Ranked Request Form")
+                    .addActionRows(ActionRow.of(mapID), ActionRow.of(mode))
                     .build();
 
             e.replyModal(modal).queue();
-        } else if(e.getComponentId().equals("accept")) {
-            TextInput mapsetID = createTextInput("mapset_id", "BeatmapsetID", "BeatmapsetIDを入力してください", true, TextInputStyle.SHORT);
-            TextInput testerComment = createTextInput("tester_comment", "コメント", "コメントを入力", true, TextInputStyle.PARAGRAPH);
-
-            Modal modal = Modal.create("accept-request", "マップの承認通知作成")
-                    .addActionRows(ActionRow.of(mapsetID) ,ActionRow.of(testerComment))
+        } else if(e.getComponentId().equals("button_loved")) {
+            TextInput mapID = createTextInput("loved_mapID", "BeatmapsetID", "Example: 674137 (If you don't know, please look it up.)", true, TextInputStyle.SHORT);
+            TextInput mode = createTextInput("loved_mode", "Map Mode", "Type 'osu', 'taiko', 'catch', 'mania'", true, TextInputStyle.SHORT);
+            Modal modal = Modal.create("request-loved", "Loved Request Form")
+                    .addActionRows(ActionRow.of(mapID), ActionRow.of(mode))
                     .build();
 
             e.replyModal(modal).queue();
-        } else if(e.getComponentId().equals("deny")) {
-            TextInput mapID = createTextInput("mapset_id", "BeatmapsetID", "BeatmapsetIDを入力してください", true, TextInputStyle.SHORT);
-            TextInput testerComment = createTextInput("tester_comment", "コメント", "コメントを入力", true, TextInputStyle.PARAGRAPH);
+        } else if(e.getComponentId().equals("ranked_accept")) {
+            TextInput comment = createTextInput("ranked-accept_comment", "コメント", "必ずプレイヤーが役に立つコメントを入力してください！", true, TextInputStyle.PARAGRAPH);
+            Modal modal = Modal.create("ranked-request-accept", "Rankedリクエスト許可フォーム")
+                    .addActionRows(ActionRow.of(comment))
+                    .build();
 
-            Modal modal = Modal.create("deny-request", "マップの非承認通知作成")
-                    .addActionRows(ActionRow.of(mapID), ActionRow.of(testerComment))
+            e.replyModal(modal).queue();
+        } else if(e.getComponentId().equals("ranked_deny")) {
+            TextInput comment = createTextInput("ranked-deny_comment", "コメント", "何故許可できないのかの理由を入力してください", true, TextInputStyle.PARAGRAPH);
+            Modal modal = Modal.create("ranked-request-deny", "Rankedリクエスト拒否フォーム")
+                    .addActionRows(ActionRow.of(comment))
+                    .build();
+
+            e.replyModal(modal).queue();
+        } else if(e.getComponentId().equals("loved_accept")) {
+            TextInput comment = createTextInput("loved-accept_comment", "コメント", "必ずプレイヤーが役に立つコメントを入力してください！", true, TextInputStyle.PARAGRAPH);
+            Modal modal = Modal.create("loved-request-accept", "Lovedリクエスト許可フォーム")
+                    .addActionRows(ActionRow.of(comment))
+                    .build();
+
+            e.replyModal(modal).queue();
+        } else if(e.getComponentId().equals("loved_deny")) {
+            TextInput comment = createTextInput("loved_deny_comment", "コメント", "何故許可できないのかの理由を入力してください", true, TextInputStyle.PARAGRAPH);
+            Modal modal = Modal.create("loved-request-deny", "Lovedリクエスト拒否フォーム")
+                    .addActionRows(ActionRow.of(comment))
                     .build();
 
             e.replyModal(modal).queue();
@@ -189,73 +231,90 @@ public class MapStatus extends ListenerAdapter {
     @Override
     public void onModalInteraction(ModalInteractionEvent e) {
 
-        if(e.getModalId().equals("request-maps")) {
-
+        if(e.getModalId().equals("request-ranked")) {
             Role osuTesterRole = e.getGuild().getRoleById(1093865053448589342L);
-
             List<Member> osuTester = e.getGuild().getMembersWithRoles(osuTesterRole);
 
-            String mapMode = e.getValue("map_mode").getAsString();
+            for(Member user : osuTester) {
+                user.getUser().openPrivateChannel()
+                        .flatMap(channel -> channel.sendMessage(e.getValue("ranked_mapID").getAsString())
+                                .addEmbeds(mapRequestToDMMessage(e.getUser(), e.getValue("ranked_mapID").getAsString(), 1, e.getValue("ranked_mode").getAsString()).build())
+                                .addActionRow(Button.success("ranked_accept", "承認"),
+                                        Button.danger("ranked_deny", "拒否")
+                        )).queue();
+            }
+            e.reply("Thank you for your request. Your request has been sent to the tester.").setEphemeral(true).queue();
+        } else if(e.getModalId().equals("request-loved")) {
+            Role osuTesterRole = e.getGuild().getRoleById(1093865053448589342L);
+            List<Member> osuTester = e.getGuild().getMembersWithRoles(osuTesterRole);
 
-                for(Member user : osuTester) {
-                    user.getUser().openPrivateChannel()
-                            .flatMap(channel -> channel.sendMessage(e.getUser().getAsMention() + "からマップリクエストがありました。\n必ず**マップをプレイ後**、下の通知を送信してください")
-                                    .addEmbeds(mapRequestToDMMessage(e.getValue("map_url").getAsString(), mapMode).build())
-                                    .addActionRow(Button.success("accept", "承認"), Button.primary("deny", "拒否")))
-                            .queue();
-                }
-                e.reply("Request has been sent!").setEphemeral(true).queue();
-
-        } else if(e.getModalId().equals("accept-request")) {
-
+            for(Member user : osuTester) {
+                user.getUser().openPrivateChannel()
+                        .flatMap(channel -> channel.sendMessage(e.getValue("loved_mapID").getAsString())
+                                .addEmbeds(mapRequestToDMMessage(e.getUser(), e.getValue("loved_mapID").getAsString(), 2, e.getValue("loved_mode").getAsString()).build())
+                                .addActionRow(Button.success("loved_accept", "承認"),
+                                        Button.danger("loved_deny", "拒否")
+                                )).queue();
+            }
+            e.reply("Thank you for your request. Your request has been sent to the tester.").setEphemeral(true).queue();
+        } else if(e.getModalId().equals("ranked-request-accept") || e.getModalId().equals("loved-request-accept")) {
             try {
-                PreparedStatement ps;
-                ResultSet result;
+                ps = connection.prepareStatement("select status from maps where set_id = ? limit 1");
+                ps.setString(1, e.getMessage().getContentRaw());
 
-                ps = connection.prepareStatement("select status from maps where set_id = ?");
-
-                ps.setString(1, e.getValue("mapset_id").getAsString());
                 result = ps.executeQuery();
 
                 if(result.next()) {
-                    if(result.getInt("status") == 2) {
-                        e.reply("この譜面は既に申請されている譜面です").setEphemeral(true).queue();
+                    if(result.getInt("status") == 2 && e.getModalId().equals("ranked-request-accept")) {
+                        e.reply("この譜面は既に申請が完了しています！").setEphemeral(true).queue();
+                        return;
+                    } else if(result.getInt("status") == 5 && e.getModalId().equals("loved-request-accept")) {
+                        e.reply("この譜面は既に申請が完了しています！").setEphemeral(true).queue();
                         return;
                     }
                 }
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
 
-            try {
-                PreparedStatement ps = connection.prepareStatement("UPDATE maps SET status = 2 WHERE set_id = ?");
-                ps.setString(1, e.getValue("mapset_id").getAsString());
+                if(e.getModalId().equals("ranked-request-accept")) {
+                    ps = connection.prepareStatement("UPDATE maps SET status = 2 WHERE set_id = ?");
+                } else {
+                    ps = connection.prepareStatement("UPDATE maps SET status = 5 WHERE set_id = ?");
+                }
+                ps.setString(1, e.getMessage().getContentRaw());
                 ps.executeUpdate();
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
             try {
-                jda.getGuildById(944248031136587796L).getTextChannelById(1095604533591298140L).sendMessageEmbeds(mapRankedSuccess(e.getUser(), e.getValue("mapset_id").getAsString(), e.getValue("tester_comment").getAsString()).build())
-                        .addActionRow(Button.link("https://osu.ppy.sh/beatmapsets/" + e.getValue("mapset_id").getAsString(), "Go to Map Page!"))
-                        .queue();
+                if(e.getModalId().equals("ranked-request-accept")) {
+                    jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(mapRankedSuccessMessage(e.getUser(), e.getMessage().getContentRaw(), 1, e.getValue("ranked-accept_comment").getAsString()).build())
+                            .addActionRow(Button.link("https://osu.ppy.sh/beatmapsets/" + e.getMessage().getContentRaw(), "Go to Map Page!")).queue();
+                    e.reply("送信が完了しました!").setEphemeral(true).queue();
+                } else {
+                    jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(mapRankedSuccessMessage(e.getUser(), e.getMessage().getContentRaw(), 2, e.getValue("loved-accept_comment").getAsString()).build())
+                            .addActionRow(Button.link("https://osu.ppy.sh/beatmapsets/" + e.getMessage().getContentRaw(), "Go to Map Page!")).queue();
+                    e.reply("送信が完了しました!").setEphemeral(true).queue();
+                }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
-            e.reply("送信しました").setEphemeral(true).queue();
-        } else if(e.getModalId().equals("deny-request")) {
+        } else if(e.getModalId().equals("ranked-request-deny") || e.getModalId().equals("loved-request-deny")) {
             try {
-                jda.getGuildById(944248031136587796L).getTextChannelById(1095604533591298140L).sendMessageEmbeds(mapRankedNotSuccess(e.getUser(), e.getValue("map_id").getAsString(), e.getValue("tester_comment").getAsString()).build())
-                        .addActionRow(Button.link("https://osu.ppy.sh/beatmapsets/" + e.getValue("mapset_id").getAsString(), "Go to Map Page!"))
-                        .queue();
+                if (e.getModalId().equals("ranked-request-deny")) {
+                    jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(mapRankedNotSuccessMessage(e.getUser(), e.getMessage().getContentRaw(), 1, e.getValue("ranked-deny_comment").getAsString()).build())
+                            .addActionRow(Button.link("https://osu.ppy.sh/beatmapsets/" + e.getMessage().getContentRaw(), "Go to Map Page!")).queue();
+                    e.reply("送信が完了しました!").setEphemeral(true).queue();
+                } else if(e.getModalId().equals("loved-request-deny")){
+                    jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(mapRankedNotSuccessMessage(e.getUser(), e.getMessage().getContentRaw(), 2, e.getValue("loved_deny_comment").getAsString()).build())
+                            .addActionRow(Button.link("https://osu.ppy.sh/beatmapsets/" + e.getMessage().getContentRaw(), "Go to Map Page!")).queue();
+                    e.reply("送信が完了しました!").setEphemeral(true).queue();
+                }
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
-            e.reply("送信しました").setEphemeral(true).queue();
         }
     }
-
 }
