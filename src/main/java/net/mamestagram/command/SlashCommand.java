@@ -74,7 +74,6 @@ public class SlashCommand extends ListenerAdapter {
                     }
                 }
             }
-            case "server" -> e.replyEmbeds(connectGuideMessage().build()).queue();
             case "ranking" -> {
                 rankView = "";
                 row = 0;

@@ -55,18 +55,18 @@ public class RecentPlay {
         }
 
         eb.setAuthor(getBeatmapDataString(getMD5String(mode, userID)).get(0) + " +" + getModsName(getUserDataInt(mode, userID).get(1)), getWebsiteLink(mode, getBeatmapDataInt(getMD5String(mode, userID)).get(0), getBeatmapDataInt(getMD5String(mode, userID)).get(1)), "https://osu.ppy.sh/images/layout/avatar-guest.png");
-        eb.addField("**Performance**", "Grade: ***" + getUserDataString(mode, userID) + "*** **[" + getUserDataDouble(mode, userID).get(1) + "pp]**\n" +
+        eb.addField("**:chart_with_upwards_trend: Performance**", "Grade: ***" + getUserDataString(mode, userID) + "*** **[" + getUserDataDouble(mode, userID).get(1) + "pp]**\n" +
                 "Score: **" + String.format("%,d", getUserDataInt(mode, userID).get(0)) + "** ▸ **" + getUserDataDouble(mode, userID).get(0) + "%**\n" +
                 "Combo: **" + String.format("%,d", getUserDataInt(mode, userID).get(2)) + "x** / " + String.format("%,d", getBeatmapDataInt(getMD5String(mode, userID)).get(3)) + "x [" + String.format("%,d",getUserDataInt(mode, userID).get(3)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(4)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(5)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(6)) + "]", false);
 
-        eb.addField("**Map Detail**", "Name: **" + getBeatmapDataString(getMD5String(mode, userID)).get(0) + "**\n" +
+        eb.addField("**:notepad_spiral: Map Detail**", "Name: **" + getBeatmapDataString(getMD5String(mode, userID)).get(0) + "**\n" +
                 "Difficulty: **" + getBeatmapDataString(getMD5String(mode, userID)).get(1) + "**\n" +
                 "Rating: **★" + getBeatmapDataDouble(getMD5String(mode, userID)).get(3) + "** for NM\n" +
                 "Passed Rate: **" + getBeatmapDataDouble(getMD5String(mode, userID)).get(4) + "%**\n" +
                 "AR: **" + getBeatmapDataDouble(getMD5String(mode, userID)).get(0) + "** / CS: **" + getBeatmapDataDouble(getMD5String(mode, userID)).get(1) + "** / OD: **" + getBeatmapDataDouble(getMD5String(mode, userID)).get(2)  + "** / BPM: **" + getBeatmapDataInt(getMD5String(mode, userID)).get(2) + "**\n" +
                 "MapRanked: **" + isRanked(getBeatmapDataInt(getMD5String(mode, userID)).get(5)) + "**",false);
         eb.setColor(getMessageColor(getUserDataString(mode, userID)));
-        eb.setImage("https://b.ppy.sh/thumb/" + getBeatmapDataInt(getMD5String(mode, userID)).get(0) + "l.jpg?");
+        eb.setImage("https://assets.ppy.sh/beatmaps/" + getBeatmapDataInt(getMD5String(mode, userID)).get(0) + "/covers/cover.jpg?");
         eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
 
         return eb;

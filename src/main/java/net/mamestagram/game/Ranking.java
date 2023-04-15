@@ -65,8 +65,8 @@ public class Ranking {
             rankView += "#" + (i + 1) + ": **__" + rName.get(i) + "__** (" + rCountry.get(i) + ")\n" + "Acc: **" + rAcc.get(i) + "%**\nPP: **" + rPP.get(i) + "pp**\nSS: ``" + rSS.get(i) + "`` / S: ``" + rS.get(i) + "`` / A: ``" + rA.get(i) + "``\n\n";
         }
 
-        eb.addField("**Ranking (mamesosu.net)\n **", rankView, false);
-        eb.setColor(Color.CYAN);
+        eb.addField("**:pushpin: Player Ranking**", rankView, false);
+        eb.setColor(Color.WHITE);
 
         return eb;
     }

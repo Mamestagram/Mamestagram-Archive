@@ -48,17 +48,18 @@ public class MapNotice {
                 }
 
                 eb.setAuthor(getBeatmapDataString(md5).get(0) + " by " + getBeatmapDataString(md5).get(1) + " +" + getModsName(rMods), getWebsiteLink(rMode, getBeatmapInt(md5).get(0), getBeatmapInt(md5).get(1)), "https://b.ppy.sh/thumb/" + getBeatmapInt(md5).get(0) + "l.jpg?");
-                eb.addField("**Play Record of " + getUserNameFromID(userID) + "**", "Grade: ***" + getGradeString(rMode, userID) + "*** **[" + getUserDataDouble(rMode, userID).get(0) + "pp]**\n" +
+                eb.addField(":chart_with_upwards_trend: **" + getUserNameFromID(userID) + "'s Play Data**", "Grade: ***" + getGradeString(rMode, userID) + "*** **[" + getUserDataDouble(rMode, userID).get(0) + "pp]**\n" +
                         "Achieved Rank: **#" + String.format("%,d", getBeatmapRank(getMapUserData(rMode, md5), userID)) + "**\n" +
                         "Score: **" + String.format("%,d", getUserDataInt(rMode, userID).get(0)) + " ▸ " + getUserDataDouble(rMode, userID).get(1) + "%**\n" +
                         "Combo: **" + String.format("%,d", getUserDataInt(rMode, userID).get(2)) + "x** / " + String.format("%,d", getBeatmapInt(md5).get(2)) + "x [" + String.format("%,d", getUserDataInt(rMode, userID).get(3)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(4)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(5)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(6)) + "]\n" +
                         "Difficulty: **" + getBeatmapDataString(md5).get(2) + "**", false);
-                eb.setFooter("Played in " + getModeName(rMode) + " mode on mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
+                eb.setImage("https://assets.ppy.sh/beatmaps/" + getBeatmapInt(md5).get(0) + "/covers/cover.jpg?");
+                eb.setFooter("Played in " + getModeName(rMode) + " mode on mamesosu.net");
                 eb.setColor(getMessageColor(getGradeString(rMode, userID)));
 
                 jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(eb.build()).addActionRow(
-                        Button.danger("report", "Report Score"),
-                        Button.link(getWebsiteLink(rMode, getBeatmapInt(md5).get(0), getBeatmapInt(md5).get(1)), "Go to Map Page!")
+                        Button.link(getWebsiteLink(rMode, getBeatmapInt(md5).get(0), getBeatmapInt(md5).get(1)), "Go to Map Page!"),
+                        Button.danger("report", "Report Score")
                 ).queue();
             } else {
                 isFirstLogin = false;

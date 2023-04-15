@@ -11,13 +11,11 @@ public class EmbedMessageData extends ListenerAdapter {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setAuthor("Command list for Mamestagram Bot", "https://media.discordapp.net/attachments/944984741826932767/1080466807338573824/MS1B_logo.png", "https://media.discordapp.net/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
-        eb.addField("General", "``/help`` - Displays help for the bot\n" +
-                        "``/server`` - Displays a video on how to connect to the server\n",
-                false);
-        eb.addField("osu!", "``/osuprofile`` ``<mode>`` - Displays account information\n" +
-                "``/ranking`` ``<mode>`` - Showing the ranking of mamestagram\n" +
-                "``/result`` ``<mode>`` - Submit your play on mamestagram\n",false);
+        eb.setTitle(":book: Command list for Mamestagram Bot");
+        eb.addField(":pushpin: **General**", "``/help`` - Send help message", false);
+        eb.addField(":key: **Private Server**", "``/osuprofile`` ``<mode>`` - Send profile information\n" +
+                "``/ranking`` ``<mode>`` - Send ranking information\n" +
+                "``/result`` ``<mode>`` - Send the most recent play information\n",false);
         eb.setColor(Color.PINK);
 
         return eb;
@@ -27,20 +25,8 @@ public class EmbedMessageData extends ListenerAdapter {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle(":x:  **Can't found player ``" + dName + "``**.");
+        eb.setTitle(":x:  **Can't found player ``" + dName + "``**");
         eb.setColor(Color.RED);
-
-        return eb;
-    }
-
-    public static EmbedBuilder connectGuideMessage() {
-
-        EmbedBuilder eb = new EmbedBuilder();
-
-        eb.setTitle("**Connection Guide**");
-        eb.addField("URL", "https://youtu.be/CAfovJYSEvw", false);
-        eb.setImage("https://i9.ytimg.com/vi_webp/CAfovJYSEvw/mq2.webp?sqp=CIDDpKAG-oaymwEmCMACELQB8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGH8gMChaMA8=&rs=AOn4CLBmwk5vYxDKWlU65EaVPTmuXwdJrQ");
-        eb.setColor(Color.CYAN);
 
         return eb;
     }
@@ -49,7 +35,7 @@ public class EmbedMessageData extends ListenerAdapter {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle("**:x:  Acquisition error occurred.**");
+        eb.setTitle("**:x:  Acquisition error occurred**");
         eb.setColor(Color.RED);
 
         return eb;
