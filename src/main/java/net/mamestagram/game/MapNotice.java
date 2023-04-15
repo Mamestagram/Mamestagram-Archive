@@ -48,7 +48,7 @@ public class MapNotice {
                 }
 
                 eb.setAuthor(getBeatmapDataString(md5).get(0) + " by " + getBeatmapDataString(md5).get(1) + " +" + getModsName(rMods), getWebsiteLink(rMode, getBeatmapInt(md5).get(0), getBeatmapInt(md5).get(1)), "https://osu.ppy.sh/images/layout/avatar-guest.png");
-                eb.addField(":chart_with_upwards_trend: **" + getUserNameFromID(userID) + "'s Play Data**", "Grade: ***" + getGradeString(rMode, userID) + "*** **[" + getUserDataDouble(rMode, userID).get(0) + "pp]**\n" +
+                eb.addField(":chart_with_upwards_trend: **" + getUserNameFromID(userID) + "'s Play Record**", "Grade: ***" + getGradeString(rMode, userID) + "*** **[" + getUserDataDouble(rMode, userID).get(0) + "pp]**\n" +
                         "Achieved Rank: **#" + String.format("%,d", getBeatmapRank(getMapUserData(rMode, md5), userID)) + "**\n" +
                         "Score: **" + String.format("%,d", getUserDataInt(rMode, userID).get(0)) + " ▸ " + getUserDataDouble(rMode, userID).get(1) + "%**\n" +
                         "Combo: **" + String.format("%,d", getUserDataInt(rMode, userID).get(2)) + "x** / " + String.format("%,d", getBeatmapInt(md5).get(2)) + "x [" + String.format("%,d", getUserDataInt(rMode, userID).get(3)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(4)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(5)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(6)) + "]\n" +

@@ -54,7 +54,7 @@ public class MapStatus extends ListenerAdapter {
         return eb;
     }
 
-    private static EmbedBuilder mapRankedSuccessMessage(User user, String mapsetID, int status, String comment) throws IOException, SQLException {
+    private static EmbedBuilder mapRankedSuccessMessage(User user, String mapsetID, int status, String mode, String comment) throws IOException, SQLException {
 
         eb = new EmbedBuilder();
 
@@ -103,6 +103,7 @@ public class MapStatus extends ListenerAdapter {
         eb.addField("**Map Data**", "Name: **"+ mapTitle + "**\n" +
                 "Artist: **" + mapArtist + "**\n" +
                 "Creator: **" + mapCreator + "**", false);
+        eb.addField("**Map Mode**", mode, false);
         eb.addField("**Map Tester**", user.getAsMention(), false);
         eb.addField("**Tester Comment**", "```" + comment + "```", false);
         eb.setImage("https://assets.ppy.sh/beatmaps/" + mapsetID + "/covers/cover.jpg?");
@@ -199,8 +200,9 @@ public class MapStatus extends ListenerAdapter {
             e.replyModal(modal).queue();
         } else if(e.getComponentId().equals("ranked_accept")) {
             TextInput comment = createTextInput("ranked-accept_comment", "コメント", "必ずプレイヤーが役に立つコメントを入力してください！", true, TextInputStyle.PARAGRAPH);
+            TextInput mode = createTextInput("ranked-accept_mode", "モード", "Type 'osu', 'mania', 'taiko', 'catch'", true, TextInputStyle.SHORT);
             Modal modal = Modal.create("ranked-request-accept", "Rankedリクエスト許可フォーム")
-                    .addActionRows(ActionRow.of(comment))
+                    .addActionRows(ActionRow.of(mode), ActionRow.of(comment))
                     .build();
 
             e.replyModal(modal).queue();
@@ -213,8 +215,9 @@ public class MapStatus extends ListenerAdapter {
             e.replyModal(modal).queue();
         } else if(e.getComponentId().equals("loved_accept")) {
             TextInput comment = createTextInput("loved-accept_comment", "コメント", "必ずプレイヤーが役に立つコメントを入力してください！", true, TextInputStyle.PARAGRAPH);
+            TextInput mode = createTextInput("loved-accept_mode", "モード", "Type 'osu', 'mania', 'taiko', 'catch'", true, TextInputStyle.SHORT);
             Modal modal = Modal.create("loved-request-accept", "Lovedリクエスト許可フォーム")
-                    .addActionRows(ActionRow.of(comment))
+                    .addActionRows(ActionRow.of(mode) ,ActionRow.of(comment))
                     .build();
 
             e.replyModal(modal).queue();
@@ -286,11 +289,11 @@ public class MapStatus extends ListenerAdapter {
             }
             try {
                 if(e.getModalId().equals("ranked-request-accept")) {
-                    jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(mapRankedSuccessMessage(e.getUser(), e.getMessage().getContentRaw(), 1, e.getValue("ranked-accept_comment").getAsString()).build())
+                    jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(mapRankedSuccessMessage(e.getUser(), e.getMessage().getContentRaw(), 1, e.getValue("ranked-accept_mode").getAsString() ,e.getValue("ranked-accept_comment").getAsString()).build())
                             .addActionRow(Button.link("https://osu.ppy.sh/beatmapsets/" + e.getMessage().getContentRaw(), "Go to Map Page!")).queue();
                     e.reply("送信が完了しました!").setEphemeral(true).queue();
                 } else {
-                    jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(mapRankedSuccessMessage(e.getUser(), e.getMessage().getContentRaw(), 2, e.getValue("loved-accept_comment").getAsString()).build())
+                    jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(mapRankedSuccessMessage(e.getUser(), e.getMessage().getContentRaw(), 2, e.getValue("loved-accept_mode").getAsString(), e.getValue("loved-accept_comment").getAsString()).build())
                             .addActionRow(Button.link("https://osu.ppy.sh/beatmapsets/" + e.getMessage().getContentRaw(), "Go to Map Page!")).queue();
                     e.reply("送信が完了しました!").setEphemeral(true).queue();
                 }
