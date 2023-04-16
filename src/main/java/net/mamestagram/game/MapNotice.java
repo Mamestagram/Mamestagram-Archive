@@ -25,6 +25,7 @@ public class MapNotice {
             final long CHANNELID = 1081737936401350717L;
 
             int rMode = 0, userID, rMods = 0;
+            double rDiff = 0.0;
             String md5 = "";
             PreparedStatement ps;
             ResultSet result;
@@ -47,7 +48,16 @@ public class MapNotice {
                     rMods = result.getInt("mods");
                 }
 
-                eb.setAuthor(getBeatmapDataString(md5).get(0) + " by " + getBeatmapDataString(md5).get(1) + " +" + getModsName(rMods), getWebsiteLink(rMode, getBeatmapInt(md5).get(0), getBeatmapInt(md5).get(1)), "https://osu.ppy.sh/images/layout/avatar-guest.png");
+                ps = connection.prepareStatement("select diff from maps where md5 = ? limit 1");
+                ps.setString(1, md5);
+                result = ps.executeQuery();
+
+                if(result.next()) {
+                    rDiff = result.getDouble("diff");
+                    rDiff = roundNumber(rDiff, 2);
+                }
+
+                eb.setAuthor(getBeatmapDataString(md5).get(1)  + " - " + getBeatmapDataString(md5).get(0) + " +" + getModsName(rMods) + " [★" + rDiff + "]", getWebsiteLink(rMode, getBeatmapInt(md5).get(0), getBeatmapInt(md5).get(1)), "https://osu.ppy.sh/images/layout/avatar-guest.png");
                 eb.addField(":chart_with_upwards_trend: **" + getUserNameFromID(userID) + "'s Play Record**", "Grade: ***" + getGradeString(rMode, userID) + "*** **[" + getUserDataDouble(rMode, userID).get(0) + "pp]**\n" +
                         "Achieved Rank: **#" + String.format("%,d", getBeatmapRank(getMapUserData(rMode, md5), userID)) + "**\n" +
                         "Score: **" + String.format("%,d", getUserDataInt(rMode, userID).get(0)) + " ▸ " + getUserDataDouble(rMode, userID).get(1) + "%**\n" +
