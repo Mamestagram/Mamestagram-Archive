@@ -292,10 +292,18 @@ public class MapStatus extends ListenerAdapter {
                     jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(mapRankedSuccessMessage(e.getUser(), e.getMessage().getContentRaw(), 1, e.getValue("ranked-accept_mode").getAsString() ,e.getValue("ranked-accept_comment").getAsString()).build())
                             .addActionRow(Button.link("https://osu.ppy.sh/beatmapsets/" + e.getMessage().getContentRaw(), "Go to Map Page!")).queue();
                     e.reply("送信が完了しました!").setEphemeral(true).queue();
+
+                    ps = connection.prepareStatement("INSERT INTO customstats_map (set_id, status) values (?, 2)");
+                    ps.setInt(1, Integer.parseInt(e.getMessage().getContentRaw()));
+                    ps.executeUpdate();
                 } else {
                     jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(mapRankedSuccessMessage(e.getUser(), e.getMessage().getContentRaw(), 2, e.getValue("loved-accept_mode").getAsString(), e.getValue("loved-accept_comment").getAsString()).build())
                             .addActionRow(Button.link("https://osu.ppy.sh/beatmapsets/" + e.getMessage().getContentRaw(), "Go to Map Page!")).queue();
                     e.reply("送信が完了しました!").setEphemeral(true).queue();
+
+                    ps = connection.prepareStatement("INSERT INTO customstats_map (set_id, status) values (?, 5)");
+                    ps.setInt(1, Integer.parseInt(e.getMessage().getContentRaw()));
+                    ps.executeUpdate();
                 }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
