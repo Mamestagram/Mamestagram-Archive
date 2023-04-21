@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import static net.mamestagram.Main.*;
 
 public class WebDBUpdate {
+
     private static int UPDATE_USER_ID;
     private static int BEFORE_USER_ID;
     private static PreparedStatement ps;

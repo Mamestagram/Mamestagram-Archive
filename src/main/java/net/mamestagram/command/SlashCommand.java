@@ -85,9 +85,6 @@ public class SlashCommand extends ListenerAdapter {
                     throw new RuntimeException(ex);
                 }
             }
-            case "link" -> {
-
-            }
         }
     }
 
