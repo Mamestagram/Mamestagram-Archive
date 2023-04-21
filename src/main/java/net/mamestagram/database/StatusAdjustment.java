@@ -2,7 +2,6 @@ package net.mamestagram.database;
 
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
