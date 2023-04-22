@@ -57,7 +57,7 @@ public class RecentPlay {
         eb.setAuthor(getBeatmapDataString(getMD5String(mode, userID)).get(0) + " +" + getModsName(getUserDataInt(mode, userID).get(1)), getWebsiteLink(mode, getBeatmapDataInt(getMD5String(mode, userID)).get(0), getBeatmapDataInt(getMD5String(mode, userID)).get(1)), "https://osu.ppy.sh/images/layout/avatar-guest.png");
         eb.addField("**:chart_with_upwards_trend: Performance**", "Grade: ***" + getUserDataString(mode, userID) + "*** **[" + getUserDataDouble(mode, userID).get(1) + "pp]**\n" +
                 "Score: **" + String.format("%,d", getUserDataInt(mode, userID).get(0)) + "** ▸ **" + getUserDataDouble(mode, userID).get(0) + "%**\n" +
-                "Combo: **" + String.format("%,d", getUserDataInt(mode, userID).get(2)) + "x** / " + String.format("%,d", getBeatmapDataInt(getMD5String(mode, userID)).get(3)) + "x [" + String.format("%,d",getUserDataInt(mode, userID).get(3)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(4)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(5)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(6)) + "]", false);
+                "Combo: **" + String.format("%,d", getUserDataInt(mode, userID).get(2)) + "x** / " + String.format("%,d", getBeatmapDataInt(getMD5String(mode, userID)).get(3)) + "x [" + String.format("%,d",getUserDataInt(mode, userID).get(7)) + "/" +  String.format("%,d",getUserDataInt(mode, userID).get(3)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(8)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(4)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(5)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(6)) + "]", false);
 
         eb.addField("**:notepad_spiral: Map Detail**", "Name: **" + getBeatmapDataString(getMD5String(mode, userID)).get(0) + "**\n" +
                 "Difficulty: **" + getBeatmapDataString(getMD5String(mode, userID)).get(1) + "**\n" +
@@ -149,7 +149,7 @@ public class RecentPlay {
         PreparedStatement ps;
         ResultSet result;
         ArrayList<Integer> arrayData = new ArrayList<>();
-        String query = ("select mods, score, max_combo, n300, n100, n50, nmiss from scores where userid = ? and mode = " + playMode + " order by id desc limit 1");
+        String query = ("select mods, score, max_combo, n300, n100, n50, nmiss, ngeki, nkatu from scores where userid = ? and mode = " + playMode + " order by id desc limit 1");
 
         ps = connection.prepareStatement(query);
 
@@ -164,6 +164,8 @@ public class RecentPlay {
             arrayData.add(result.getInt("n100"));
             arrayData.add(result.getInt("n50"));
             arrayData.add(result.getInt("nmiss"));
+            arrayData.add(result.getInt("ngeki"));
+            arrayData.add(result.getInt("nkatu"));
         }
 
         return arrayData;
