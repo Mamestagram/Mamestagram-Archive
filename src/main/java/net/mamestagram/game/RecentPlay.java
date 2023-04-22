@@ -135,7 +135,7 @@ public class RecentPlay {
 
         root = getMapData(md5);
 
-        arrayData.add(root.get(0).get("title").asText() + " by " + root.get(0).get("artist").asText());
+        arrayData.add(root.get(0).get("title").asText() + " - " + root.get(0).get("artist").asText());
         arrayData.add(root.get(0).get("version").asText());
         arrayData.add(root.get(0).get("creator").asText());
 
