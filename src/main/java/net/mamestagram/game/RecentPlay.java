@@ -1,6 +1,7 @@
 package net.mamestagram.game;
 
-import com.fasterxml.jackson.databind.JsonNode;
+//TODO エラー直す array out
+
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
@@ -60,14 +61,15 @@ public class RecentPlay {
                 "Combo: **" + String.format("%,d", getUserDataInt(mode, userID).get(2)) + "x** / " + String.format("%,d", getBeatmapDataInt(getMD5String(mode, userID)).get(3)) + "x [" + String.format("%,d",getUserDataInt(mode, userID).get(7)) + "/" +  String.format("%,d",getUserDataInt(mode, userID).get(3)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(8)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(4)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(5)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(6)) + "]", false);
 
         eb.addField("**:notepad_spiral: Map Detail**", "Name: **" + getBeatmapDataString(getMD5String(mode, userID)).get(0) + "**\n" +
-                "Difficulty: **" + getBeatmapDataString(getMD5String(mode, userID)).get(1) + "**\n" +
+                "Difficulty: **" + getBeatmapDataString(getMD5String(mode, userID)).get(1) + "**\n"  +
                 "Rating: **★" + getBeatmapDataDouble(getMD5String(mode, userID)).get(3) + "** for NM\n" +
-                "Passed Rate: **" + getBeatmapDataDouble(getMD5String(mode, userID)).get(4) + "%**\n" +
                 "AR: **" + getBeatmapDataDouble(getMD5String(mode, userID)).get(0) + "** / CS: **" + getBeatmapDataDouble(getMD5String(mode, userID)).get(1) + "** / OD: **" + getBeatmapDataDouble(getMD5String(mode, userID)).get(2)  + "** / BPM: **" + getBeatmapDataInt(getMD5String(mode, userID)).get(2) + "**\n" +
-                "MapRanked: **" + isRanked(getBeatmapDataInt(getMD5String(mode, userID)).get(5)) + "**",false);
+                "Status: **" + isRanked(getBeatmapDataInt(getMD5String(mode, userID)).get(5)) + "** ",false);
         eb.setColor(getMessageColor(getUserDataString(mode, userID)));
         eb.setImage("https://assets.ppy.sh/beatmaps/" + getBeatmapDataInt(getMD5String(mode, userID)).get(0) + "/covers/cover.jpg?");
         eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
+
+        System.out.println("process fin");
 
         return eb;
     }
@@ -83,6 +85,7 @@ public class RecentPlay {
         result = ps.executeQuery();
 
         if(result.next()) {
+            System.out.println("md5 ok");
             return result.getString("map_md5");
         } else {
             return null;
@@ -91,53 +94,77 @@ public class RecentPlay {
 
     //0 = AR, 1 = CS, 2 = OD, 3 = MapRating, 4 = PassRate
 
-    private static ArrayList<Double> getBeatmapDataDouble(String md5) throws IOException{
+    private static ArrayList<Double> getBeatmapDataDouble(String md5) throws SQLException{
 
         ArrayList<Double> arrayData = new ArrayList<>();
-        JsonNode root;
+        PreparedStatement ps;
+        ResultSet result;
 
-        root = getMapData(md5);
+        ps = connection.prepareStatement("select ar, cs, od, diff, passes, plays from maps where md5 = ?");
+        ps.setString(1, md5);
+        result = ps.executeQuery();
 
-        arrayData.add(root.get(0).get("diff_approach").asDouble());
-        arrayData.add(root.get(0).get("diff_size").asDouble());
-        arrayData.add(root.get(0).get("diff_overall").asDouble());
-        arrayData.add((double)Math.round((root.get(0).get("difficultyrating").asDouble() * 100)) / 100);
-        arrayData.add((double) Math.round((((root.get(0).get("passcount").asDouble() / root.get(0).get("playcount").asDouble()) * 100) * 100) / 100));
+        if(result.next()) {
+            arrayData.add(result.getDouble("ar"));
+            arrayData.add(result.getDouble("cs"));
+            arrayData.add(result.getDouble("od"));
+            arrayData.add((double) Math.round((result.getDouble("diff") * 100)) / 100);
+        }
 
+        for(double i : arrayData) {
+            System.out.println(i);
+        }
         return arrayData;
     }
 
     //beatmapsetid = 0, beatmapid = 1, bpm = 2, max_combo = 3, length = 4, approved = 5
 
-    private static ArrayList<Integer> getBeatmapDataInt(String md5) throws IOException {
+    private static ArrayList<Integer> getBeatmapDataInt(String md5) throws SQLException {
 
         ArrayList<Integer> arrayData = new ArrayList<>();
-        JsonNode root;
+        PreparedStatement ps;
+        ResultSet result;
 
-        root = getMapData(md5);
+        ps = connection.prepareStatement("select set_id, id, bpm, max_combo, total_length, status from maps where id = ?");
+        ps.setString(1, md5);
+        result = ps.executeQuery();
 
-        arrayData.add(root.get(0).get("beatmapset_id").asInt());
-        arrayData.add(root.get(0).get("beatmap_id").asInt());
-        arrayData.add(root.get(0).get("bpm").asInt());
-        arrayData.add(root.get(0).get("max_combo").asInt());
-        arrayData.add(root.get(0).get("total_length").asInt());
-        arrayData.add(root.get(0).get("approved").asInt());
+        if(result.next()) {
+            arrayData.add(result.getInt("set_id"));
+            arrayData.add(result.getInt("id"));
+            arrayData.add((result.getInt("bpm")));
+            arrayData.add(result.getInt("max_combo"));
+            arrayData.add(result.getInt("total_length"));
+            arrayData.add(result.getInt("status"));
 
+            for(int i : arrayData) {
+                System.out.println(i);
+            }
+        }
+
+        System.out.println("userdata int ok");
         return arrayData;
     }
 
     //title = 0, verison = 1, creator = 2
 
-    private static ArrayList<String> getBeatmapDataString(String md5) throws IOException {
+    private static ArrayList<String> getBeatmapDataString(String md5) throws SQLException {
 
         ArrayList<String> arrayData = new ArrayList<>();
-        JsonNode root;
+        PreparedStatement ps;
+        ResultSet result;
 
-        root = getMapData(md5);
+        ps = connection.prepareStatement("select artist, title, version, creator from maps where md5 = ?");
+        ps.setString(1, md5);
+        result = ps.executeQuery();
 
-        arrayData.add(root.get(0).get("title").asText() + " - " + root.get(0).get("artist").asText());
-        arrayData.add(root.get(0).get("version").asText());
-        arrayData.add(root.get(0).get("creator").asText());
+        if(result.next()) {
+            arrayData.add(result.getString("title") + " - " + result.getString("artist"));
+            arrayData.add(result.getString("version"));
+            arrayData.add(result.getString("creator"));
+        }
+
+        System.out.println("bm data ok");
 
         return arrayData;
     }
@@ -166,8 +193,13 @@ public class RecentPlay {
             arrayData.add(result.getInt("nmiss"));
             arrayData.add(result.getInt("ngeki"));
             arrayData.add(result.getInt("nkatu"));
+
+            for(int i : arrayData) {
+                System.out.println(i);
+            }
         }
 
+        System.out.println("user score int ok");
         return arrayData;
     }
 
@@ -189,6 +221,8 @@ public class RecentPlay {
             arrayData.add(result.getDouble("pp"));
         }
 
+
+        System.out.println("user score double ok");
         return arrayData;
     }
 
@@ -202,6 +236,8 @@ public class RecentPlay {
 
         ps.setInt(1, userID);
         result = ps.executeQuery();
+
+        System.out.println("user data string ok");
 
         if(result.next()) {
             return result.getString("grade");

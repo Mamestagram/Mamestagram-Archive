@@ -103,12 +103,19 @@ public class OSUModule {
 
     public static String isRanked(int approved) {
 
-        boolean isApproved = approved == 1;
-
-        if(isApproved) {
-            return "Yes";
-        } else {
-            return "No";
+        switch (approved) {
+            case 0 -> {
+                return "Graveyard";
+            }
+            case 2 -> {
+                return "Ranked";
+            }
+            case 5 -> {
+                return "Loved";
+            }
+            default -> {
+                return "Unknown";
+            }
         }
     }
 
