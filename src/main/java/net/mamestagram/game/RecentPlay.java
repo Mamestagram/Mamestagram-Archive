@@ -69,8 +69,6 @@ public class RecentPlay {
         eb.setImage("https://assets.ppy.sh/beatmaps/" + getBeatmapDataInt(getMD5String(mode, userID)).get(0) + "/covers/cover.jpg?");
         eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
 
-        System.out.println("process fin");
-
         return eb;
     }
 
@@ -85,7 +83,6 @@ public class RecentPlay {
         result = ps.executeQuery();
 
         if(result.next()) {
-            System.out.println("md5 ok");
             return result.getString("map_md5");
         } else {
             return null;
@@ -109,11 +106,10 @@ public class RecentPlay {
             arrayData.add(result.getDouble("cs"));
             arrayData.add(result.getDouble("od"));
             arrayData.add((double) Math.round((result.getDouble("diff") * 100)) / 100);
+        } else {
+            System.out.println("error on double");
         }
 
-        for(double i : arrayData) {
-            System.out.println(i);
-        }
         return arrayData;
     }
 
@@ -125,7 +121,7 @@ public class RecentPlay {
         PreparedStatement ps;
         ResultSet result;
 
-        ps = connection.prepareStatement("select set_id, id, bpm, max_combo, total_length, status from maps where id = ?");
+        ps = connection.prepareStatement("select set_id, id, bpm, max_combo, total_length, status from maps where md5 = ?");
         ps.setString(1, md5);
         result = ps.executeQuery();
 
@@ -136,13 +132,9 @@ public class RecentPlay {
             arrayData.add(result.getInt("max_combo"));
             arrayData.add(result.getInt("total_length"));
             arrayData.add(result.getInt("status"));
-
-            for(int i : arrayData) {
-                System.out.println(i);
-            }
-        }
-
-        System.out.println("userdata int ok");
+        } else {
+        System.out.println("error on int_beatmap");
+    }
         return arrayData;
     }
 
@@ -162,9 +154,9 @@ public class RecentPlay {
             arrayData.add(result.getString("title") + " - " + result.getString("artist"));
             arrayData.add(result.getString("version"));
             arrayData.add(result.getString("creator"));
+        } else {
+            System.out.println("error on string data");
         }
-
-        System.out.println("bm data ok");
 
         return arrayData;
     }
@@ -193,13 +185,10 @@ public class RecentPlay {
             arrayData.add(result.getInt("nmiss"));
             arrayData.add(result.getInt("ngeki"));
             arrayData.add(result.getInt("nkatu"));
-
-            for(int i : arrayData) {
-                System.out.println(i);
-            }
+        } else {
+            System.out.println("error on userdata_int");
         }
 
-        System.out.println("user score int ok");
         return arrayData;
     }
 
@@ -219,10 +208,10 @@ public class RecentPlay {
         if(result.next()) {
             arrayData.add(result.getDouble("acc"));
             arrayData.add(result.getDouble("pp"));
+        } else {
+            System.out.println("error on double_userdata");
         }
 
-
-        System.out.println("user score double ok");
         return arrayData;
     }
 
@@ -237,11 +226,10 @@ public class RecentPlay {
         ps.setInt(1, userID);
         result = ps.executeQuery();
 
-        System.out.println("user data string ok");
-
         if(result.next()) {
             return result.getString("grade");
         } else {
+            System.out.println("error on grade_data");
             return null;
         }
     }
