@@ -285,7 +285,9 @@ public class MapStatus extends ListenerAdapter {
                 ps.setString(1, e.getMessage().getContentRaw());
                 ps.executeUpdate();
             } catch (SQLException ex) {
-                throw new RuntimeException(ex);
+                throw new RuntimeException(ex); 
+                e.reply("この譜面はデータベースに存在していないため、処理に失敗しました").setEphemeral(true).queue();
+                return;
             }
             try {
                 if(e.getModalId().equals("ranked-request-accept")) {
@@ -307,8 +309,12 @@ public class MapStatus extends ListenerAdapter {
                 }
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
+                e.reply("システムエラーが発生しました").setEphemeral(true).queue();
+                return;
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
+                e.reply("SQLエラーが発生しました").setEphemeral(true).queue();
+                return;
             }
         } else if(e.getModalId().equals("ranked-request-deny") || e.getModalId().equals("loved-request-deny")) {
             try {
@@ -323,8 +329,12 @@ public class MapStatus extends ListenerAdapter {
                 }
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
+                e.reply("SQLエラーが発生しました").setEphemeral(true).queue();
+                return;
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
+                e.reply("システムエラーが発生しました").setEphemeral(true).queue();
+                return;
             }
         }
     }
