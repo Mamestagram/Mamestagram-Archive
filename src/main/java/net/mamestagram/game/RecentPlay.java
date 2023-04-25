@@ -1,7 +1,5 @@
 package net.mamestagram.game;
 
-//TODO エラー直す array out
-
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 
@@ -107,7 +105,7 @@ public class RecentPlay {
             arrayData.add(result.getDouble("od"));
             arrayData.add((double) Math.round((result.getDouble("diff") * 100)) / 100);
         } else {
-            System.out.println("error on double");
+            System.out.println("[Error] Can't get Beatmap double type data! Please fix this method!");
         }
 
         return arrayData;
@@ -133,7 +131,7 @@ public class RecentPlay {
             arrayData.add(result.getInt("total_length"));
             arrayData.add(result.getInt("status"));
         } else {
-        System.out.println("error on int_beatmap");
+        System.out.println("[Error] Can't get Beatmap int type data! Please fix this method!");
     }
         return arrayData;
     }
@@ -155,7 +153,7 @@ public class RecentPlay {
             arrayData.add(result.getString("version"));
             arrayData.add(result.getString("creator"));
         } else {
-            System.out.println("error on string data");
+            System.out.println("[Error] Can't get Beatmap string type data! Please fix this method!");
         }
 
         return arrayData;
@@ -186,7 +184,7 @@ public class RecentPlay {
             arrayData.add(result.getInt("ngeki"));
             arrayData.add(result.getInt("nkatu"));
         } else {
-            System.out.println("error on userdata_int");
+            System.out.println("[Error] Can't get Userdata int type data! Please fix this method!");
         }
 
         return arrayData;
@@ -209,7 +207,7 @@ public class RecentPlay {
             arrayData.add(result.getDouble("acc"));
             arrayData.add(result.getDouble("pp"));
         } else {
-            System.out.println("error on double_userdata");
+            System.out.println("[Error] Can't get Userdata double type data! Please fix this method!");
         }
 
         return arrayData;
@@ -229,7 +227,7 @@ public class RecentPlay {
         if(result.next()) {
             return result.getString("grade");
         } else {
-            System.out.println("error on grade_data");
+            System.out.println("[Error] Can't get Userdata string type data! Please fix this method!");
             return null;
         }
     }
