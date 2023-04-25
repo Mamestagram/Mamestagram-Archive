@@ -5,6 +5,9 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import javax.swing.text.DateFormatter;
 import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.List.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +15,7 @@ import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import static net.mamestagram.Main.*;
 
@@ -26,6 +30,8 @@ public class LoginStatus {
 
     public static void getLoginStatus() throws SQLException {
 
+        ArrayList<Integer> modePP = new ArrayList<>();
+        List<Integer> tempData = new ArrayList<>(Arrays.asList(0, 0)); //0 = pp, 1 = mode
         PreparedStatement preparedStatement;
         ResultSet resultSet;
         var date = DateTimeFormatter.ofPattern("HH:mm");
@@ -57,6 +63,36 @@ public class LoginStatus {
 
             while (resultSet.next()) {
                 userName = resultSet.getString("name");
+            }
+
+            for(int i = 0; i <= 8; i++) {
+                preparedStatement = connection.prepareStatement("select pp from stats where id = ? and mode = ?");
+                preparedStatement.setInt(1, userID);
+                preparedStatement.setInt(2, i);
+                resultSet = preparedStatement.executeQuery();
+
+                if(resultSet.next()) {
+                    modePP.add(resultSet.getInt("pp"));
+                }
+            }
+
+            int currentCount = 0;
+
+            for(int i : modePP) {
+                if(tempData.get(0) <= i) {
+                    tempData.add(0, i);
+                    tempData.add(1, currentCount);
+                }
+                currentCount++;
+            }
+
+            preparedStatement = connection.prepareStatement("select pp, plays, acc, tscore, max_combo, playtime from stats where id = ? and mode = ?");
+            preparedStatement.setInt(1, tempData.get(0));
+            preparedStatement.setInt(2, tempData.get(1));
+            resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                //TODO
             }
 
             embedBuilder.setTitle(":inbox_tray: **" + userName + " has logged in**");

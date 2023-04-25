@@ -105,16 +105,16 @@ public class OSUModule {
 
         switch (approved) {
             case 0 -> {
-                return "Graveyard";
+                return ":skull: Graveyard";
             }
             case 2 -> {
-                return "Ranked";
+                return ":white_check_mark: Ranked";
             }
             case 5 -> {
-                return "Loved";
+                return ":heart: Loved";
             }
             default -> {
-                return "Unknown";
+                return ":x: Unknown";
             }
         }
     }
@@ -202,6 +202,7 @@ public class OSUModule {
         for (int i = 0; i < rID.size() - 1; i++) {
             if (rID.get(i).equals(0)) {
                 for (int j = i + 1; j < rID.size(); j++) {
+
                     if (!rID.get(j).equals(0)) {
                         Collections.swap(rID, i, j);
                         break;
@@ -222,58 +223,6 @@ public class OSUModule {
 
     public static double roundNumber(double num, int n) {
         return Math.round(num * Math.pow(10, n)) / Math.pow(10, n);
-    }
-
-    public static int getUserRank(int userid, int mode) throws SQLException {
-
-        PreparedStatement ps;
-        ResultSet result;
-        ArrayList<Integer> mapID = new ArrayList<>();
-        ArrayList<String> mapMD5 = new ArrayList<>();
-        int mapCount = 0, count = 0;
-        int rankCount = 0;
-
-        ps = connection.prepareStatement("select id, map_md5 from scores where userid = " + userid + " and not grade = 'F' and mode = " + mode);
-        result = ps.executeQuery();
-
-        while(result.next()) {
-            mapID.add(result.getInt("id"));
-            mapMD5.add(result.getString("map_md5"));
-        }
-
-        ps = connection.prepareStatement("select COUNT(*) from scores");
-        result = ps.executeQuery();
-
-        if (result.next()) {
-            mapCount = result.getInt("COUNT(*)");
-        }
-
-        for(int i = 1; i <= mapCount; i++) {
-
-            ArrayList<Integer> id = new ArrayList<>();
-
-            try {
-                if (i == mapID.get(count)) {
-                    ps = connection.prepareStatement("select userid from scores where map_md5 = ? and not grade = 'F' and mode = ? order by score desc");
-                    ps.setString(1, mapMD5.get(count));
-                    ps.setInt(2, mode);
-                    result = ps.executeQuery();
-
-                    while (result.next()) {
-                        id.add(result.getInt("userid"));
-                    }
-
-                    if (getBeatmapRank(id, userid) == 1) {
-                        rankCount++;
-                    }
-                    count++;
-                }
-            } catch (IndexOutOfBoundsException e) {
-                break;
-            }
-        }
-
-        return rankCount;
     }
 
     public static double getAveragePP(int userID, int mode) throws SQLException {

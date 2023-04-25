@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static net.mamestagram.Main.*;
+import static net.mamestagram.module.SQLModule.*;
 import static net.mamestagram.message.EmbedMessageData.*;
 import static net.mamestagram.module.OSUModule.*;
 
@@ -65,7 +66,7 @@ public class Profile {
                 "Weighted PP: **" + String.format("%,d",getWeightedPP(mode, userID)) + "pp**", false);
         eb.addField("**:bar_chart: Play Analysis**", "Average PP: **" + roundNumber(getAveragePP(userID, mode), 2) + "**\n" +
         "Average Rate: **" + roundNumber(getAverageStarRate(userID, mode), 2) + "**\n" +
-                "Map #1: **" + String.format("%,d",getUserRank(userID, mode)) + "**", false);
+                "Map #1: **" + String.format("%,d",getNumberOfMapsWonByUser(userID, mode)) + "**", false);
         eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
         eb.setColor(Color.CYAN);
 
@@ -86,73 +87,6 @@ public class Profile {
             return result.getString("country");
         } else {
             return null;
-        }
-    }
-
-    private static int getCountryRank(int playMode, int userID) throws SQLException {
-
-        PreparedStatement ps;
-        ResultSet result;
-        String query = ("SELECT COUNT(*) + 1 AS 'cranking' " +
-                "FROM stats " +
-                "JOIN users " +
-                "ON stats.id = users.id " +
-                "WHERE pp > ( " +
-                "    SELECT pp " +
-                "    FROM stats " +
-                "    WHERE id = ? " +
-                "    AND mode = ? " +
-                "    AND country = ( " +
-                "        SELECT country " +
-                "        FROM users " +
-                "        WHERE id = ? " +
-                "        AND mode = ? " +
-                "    ) " +
-                ") " +
-                "AND mode = ?");
-
-        ps = connection.prepareStatement(query);
-
-        ps.setInt(1, userID);
-        ps.setInt(2, playMode);
-        ps.setInt(3, userID);
-        ps.setInt(4, playMode);
-        ps.setInt(5, playMode);
-
-        result = ps.executeQuery();
-
-        if(result.next()) {
-            return result.getInt("cranking");
-        } else {
-            return 0;
-        }
-    }
-
-    private static int getGlobalRank(int playMode, int userID) throws SQLException {
-
-        PreparedStatement ps;
-        ResultSet result;
-        String query = ("SELECT COUNT(*) + 1 AS 'ranking' " +
-                "FROM stats " +
-                "WHERE pp > (" +
-                "SELECT pp " +
-                "FROM stats " +
-                "WHERE id = ? " +
-                "AND mode = ? ) " +
-                "AND mode = ?");
-
-        ps = connection.prepareStatement(query);
-
-        ps.setInt(1, userID);
-        ps.setInt(2, playMode);
-        ps.setInt(3, playMode);
-
-        result = ps.executeQuery();
-
-        if(result.next()) {
-            return result.getInt("ranking");
-        } else {
-            return 0;
         }
     }
 
