@@ -273,7 +273,6 @@ public class OSUModule {
             }
         }
 
-        System.out.println("[Profile Log] GetUser - OK");
         return rankCount;
     }
 
@@ -296,9 +295,7 @@ public class OSUModule {
         for(double score : TotalPP) {
             resultPP += score;
         }
-
-        System.out.println("[Profile Log] GetPP - OK");
-
+        
         if(TotalPP.size() != 0) {
             return resultPP / (TotalPP.size());
         } else {
@@ -340,8 +337,6 @@ public class OSUModule {
                 }
             }
         }
-
-        System.out.println("[Profile Log] GetAverage - OK");
 
         if(dataCount != 0) {
             return totalStarRate / (dataCount);
