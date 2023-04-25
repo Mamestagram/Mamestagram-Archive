@@ -92,7 +92,7 @@ public class LoginStatus {
             resultSet = preparedStatement.executeQuery();
 
             if(resultSet.next()) {
-                //TODO
+                //TODO 処理を書く
             }
 
             embedBuilder.setTitle(":inbox_tray: **" + userName + " has logged in**");
