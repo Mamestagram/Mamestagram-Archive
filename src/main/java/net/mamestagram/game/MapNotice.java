@@ -58,14 +58,14 @@ public class MapNotice {
                 }
 
                 eb.setAuthor(getBeatmapDataString(md5).get(1)  + " - " + getBeatmapDataString(md5).get(0) + " +" + getModsName(rMods) + " [★" + rDiff + "]", getWebsiteLink(rMode, getBeatmapInt(md5).get(0), getBeatmapInt(md5).get(1)), "https://osu.ppy.sh/images/layout/avatar-guest.png");
-                eb.addField(":chart_with_upwards_trend: **" + getUserNameFromID(userID) + "'s Play Record**", "Grade: ***" + getGradeString(rMode, userID) + "*** **[" + getUserDataDouble(rMode, userID).get(0) + "pp]**\n" +
+                eb.addField(":chart_with_upwards_trend: **" + getUserNameFromID(userID) + "'s Play Record**", "Grade: " + getUserRankEmoji(rMode, userID).get(1) + " **[" + getUserDataDouble(rMode, userID).get(0) + "pp]**\n" +
                         "Achieved Rank: **#" + String.format("%,d", getBeatmapRank(getMapUserData(rMode, md5), userID)) + "**\n" +
                         "Score: **" + String.format("%,d", getUserDataInt(rMode, userID).get(0)) + " ▸ " + getUserDataDouble(rMode, userID).get(1) + "%**\n" +
                         "Combo: **" + String.format("%,d", getUserDataInt(rMode, userID).get(2)) + "x** / " + String.format("%,d", getBeatmapInt(md5).get(2)) + "x [" + String.format("%,d", getUserDataInt(rMode, userID).get(7)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(3)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(8)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(4)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(5)) + "/" + String.format("%,d", getUserDataInt(rMode, userID).get(6)) + "]\n" +
                         "Difficulty: **" + getBeatmapDataString(md5).get(2) + "**", false);
                 eb.setImage("https://assets.ppy.sh/beatmaps/" + getBeatmapInt(md5).get(0) + "/covers/cover.jpg?");
                 eb.setFooter("Played in " + getModeName(rMode) + " mode on mamesosu.net");
-                eb.setColor(getMessageColor(getGradeString(rMode, userID)));
+                eb.setColor(getMessageColor(getUserRankEmoji(rMode, userID).get(0)));
 
                 jda.getGuildById(GUILDID).getTextChannelById(CHANNELID).sendMessageEmbeds(eb.build()).addActionRow(
                         Button.link(getWebsiteLink(rMode, getBeatmapInt(md5).get(0), getBeatmapInt(md5).get(1)), "Go to Map Page!"),
@@ -145,24 +145,6 @@ public class MapNotice {
         }
 
         return userID;
-    }
-
-    private static String getGradeString(int playMode, int userID) throws SQLException {
-
-        String query = ("select grade from scores where mode = ? and userid = ? and not grade = 'F' order by id desc limit 1");
-        PreparedStatement ps;
-        ResultSet result;
-
-        ps = connection.prepareStatement(query);
-        ps.setInt(1, playMode);
-        ps.setInt(2, userID);
-        result = ps.executeQuery();
-
-        if(result.next()) {
-            return result.getString("grade");
-        } else {
-            return null;
-        }
     }
 
     //0 = score, 1 = mods, 2 = max_combo, 3 = n300, 4 = n100, 5 = n50, 6 = miss, 7 = geki, 8 = katu
