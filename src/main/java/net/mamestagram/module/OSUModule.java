@@ -314,42 +314,42 @@ public class OSUModule {
 
                 case "C" -> {
                     data.add(0, "C");
-                    data.add(1, "<:rankC:1100524465596665939>");
+                    data.add(1, "<:rankC:1100664705997082755>");
                     return data;
                 }
                 case "B" -> {
                     data.add(0, "B");
-                    data.add(1, "<:rankB:1100524462836813834>");
+                    data.add(1, "<:rankB:1100664044735701012>");
                     return data;
                 }
                 case "A" -> {
                     data.add(0, "A");
-                    data.add(1, "<:rankA:1100524472898953216>");
+                    data.add(1, "<:rankA:1100664700905205900>");
                     return data;
                 }
                 case "S" -> {
                     data.add(0, "S");
-                    data.add(1, "<:rankS:1100524470139093062>");
+                    data.add(1, "<:rankS:1100664689588969523>");
                     return data;
                 }
                 case "SH" -> {
                     data.add(0, "SH");
-                    data.add(1, "<:rankSH:1100524664331182100>");
+                    data.add(1, "<:rankSH:1100664691270893678>");
                     return data;
                 }
                 case "X" -> {
                     data.add(0, "X");
-                    data.add(1, "<:rankX:1100524700150534154>");
+                    data.add(1, "<:rankX:1100664694982836346>");
                     return data;
                 }
                 case "XH" -> {
                     data.add(0, "XH");
-                    data.add(1, "<:rankXH:1100524740352950322>");
+                    data.add(1, "<:rankXH:1100664698237624430>");
                     return data;
                 }
                 default -> {
                     data.add(0, "D");
-                    data.add(1, "<:rankD:1100524468595593226>");
+                    data.add(1, "<:rankD:1100664707892920340>");
                     return data;
                 }
             }
