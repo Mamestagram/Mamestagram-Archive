@@ -319,7 +319,7 @@ public class OSUModule {
                 }
                 case "B" -> {
                     data.add(0, "B");
-                    data.add(1, "<:rankB:1100664044735701012>");
+                    data.add(1, "<:rankB:1100664703224664125>");
                     return data;
                 }
                 case "A" -> {
