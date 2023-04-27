@@ -2,12 +2,14 @@ package net.mamestagram.game;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static net.mamestagram.Main.*;
 import static net.mamestagram.module.OSUModule.*;
@@ -54,16 +56,15 @@ public class RecentPlay {
         }
 
         eb.setAuthor(getBeatmapDataString(getMD5String(mode, userID)).get(0) + " +" + getModsName(getUserDataInt(mode, userID).get(1)), getWebsiteLink(mode, getBeatmapDataInt(getMD5String(mode, userID)).get(0), getBeatmapDataInt(getMD5String(mode, userID)).get(1)), "https://osu.ppy.sh/images/layout/avatar-guest.png");
-        eb.addField("**:chart_with_upwards_trend: Performance**", "Grade: ***" + getUserDataString(mode, userID) + "*** **[" + getUserDataDouble(mode, userID).get(1) + "pp]**\n" +
-                "Score: **" + String.format("%,d", getUserDataInt(mode, userID).get(0)) + "** ▸ **" + getUserDataDouble(mode, userID).get(0) + "%**\n" +
+        eb.addField("**Performance**", "Grade: " + Objects.requireNonNull(getUserRankEmoji(mode, userID)).get(1) + " **[" + getUserDataDouble(mode, userID).get(1) + "pp]**\n" +
+                "Points: **" + String.format("%,d", getUserDataInt(mode, userID).get(0)) + "** ▸ **" + getUserDataDouble(mode, userID).get(0) + "%**\n" +
                 "Combo: **" + String.format("%,d", getUserDataInt(mode, userID).get(2)) + "x** / " + String.format("%,d", getBeatmapDataInt(getMD5String(mode, userID)).get(3)) + "x [" + String.format("%,d",getUserDataInt(mode, userID).get(7)) + "/" +  String.format("%,d",getUserDataInt(mode, userID).get(3)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(8)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(4)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(5)) + "/" + String.format("%,d",getUserDataInt(mode, userID).get(6)) + "]", false);
 
-        eb.addField("**:notepad_spiral: Map Detail**", "Name: **" + getBeatmapDataString(getMD5String(mode, userID)).get(0) + "**\n" +
-                "Difficulty: **" + getBeatmapDataString(getMD5String(mode, userID)).get(1) + "**\n"  +
+        eb.addField("**Map Detail**", "Beatmap: **" + getBeatmapDataString(getMD5String(mode, userID)).get(0) + " [" + getBeatmapDataString(getMD5String(mode, userID)).get(1) + "]**\n" +
                 "Rating: **★" + getBeatmapDataDouble(getMD5String(mode, userID)).get(3) + "** for NM\n" +
                 "AR: **" + getBeatmapDataDouble(getMD5String(mode, userID)).get(0) + "** / CS: **" + getBeatmapDataDouble(getMD5String(mode, userID)).get(1) + "** / OD: **" + getBeatmapDataDouble(getMD5String(mode, userID)).get(2)  + "** / BPM: **" + getBeatmapDataInt(getMD5String(mode, userID)).get(2) + "**\n" +
                 "Status: **" + isRanked(getBeatmapDataInt(getMD5String(mode, userID)).get(5)) + "** ",false);
-        eb.setColor(getMessageColor(getUserDataString(mode, userID)));
+        eb.setColor(getMessageColor(Objects.requireNonNull(getUserRankEmoji(mode, userID)).get(0)));
         eb.setImage("https://assets.ppy.sh/beatmaps/" + getBeatmapDataInt(getMD5String(mode, userID)).get(0) + "/covers/cover.jpg?");
         eb.setFooter("mamesosu.net", "https://cdn.discordapp.com/attachments/944984741826932767/1080466807338573824/MS1B_logo.png");
 
@@ -213,22 +214,4 @@ public class RecentPlay {
         return arrayData;
     }
 
-    private static String getUserDataString(int playMode, int userID) throws SQLException {
-
-        PreparedStatement ps;
-        ResultSet result;
-        String query = ("select grade from scores where userid = ? and mode = " + playMode + " order by id desc limit 1");
-
-        ps = connection.prepareStatement(query);
-
-        ps.setInt(1, userID);
-        result = ps.executeQuery();
-
-        if(result.next()) {
-            return result.getString("grade");
-        } else {
-            System.out.println("[Error] Can't get Userdata string type data! Please fix this method!");
-            return null;
-        }
-    }
 }

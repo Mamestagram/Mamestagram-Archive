@@ -13,7 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import static net.mamestagram.Main.connection;
 import static net.mamestagram.Main.osuAPIKey;
@@ -291,6 +293,69 @@ public class OSUModule {
             return totalStarRate / (dataCount);
         } else {
             return 0.0;
+        }
+    }
+
+    public static List<String> getUserRankEmoji(int playMode, int userID) throws SQLException {
+
+        PreparedStatement ps;
+        ResultSet result;
+        String query = ("select grade from scores where userid = ? and mode = " + playMode + " order by id desc limit 1");
+
+        ps = connection.prepareStatement(query);
+
+        ps.setInt(1, userID);
+        result = ps.executeQuery();
+
+        if(result.next()) {
+            List<String> data = new ArrayList<>(Arrays.asList(null, null));
+
+            switch (result.getString("grade")) {
+
+                case "C" -> {
+                    data.add(0, "C");
+                    data.add(1, "<:rankC:1100664705997082755>");
+                    return data;
+                }
+                case "B" -> {
+                    data.add(0, "B");
+                    data.add(1, "<:rankB:1100664703224664125>");
+                    return data;
+                }
+                case "A" -> {
+                    data.add(0, "A");
+                    data.add(1, "<:rankA:1100664700905205900>");
+                    return data;
+                }
+                case "S" -> {
+                    data.add(0, "S");
+                    data.add(1, "<:rankS:1100664689588969523>");
+                    return data;
+                }
+                case "SH" -> {
+                    data.add(0, "SH");
+                    data.add(1, "<:rankSH:1100664691270893678>");
+                    return data;
+                }
+                case "X" -> {
+                    data.add(0, "X");
+                    data.add(1, "<:rankX:1100664694982836346>");
+                    return data;
+                }
+                case "XH" -> {
+                    data.add(0, "XH");
+                    data.add(1, "<:rankXH:1100664698237624430>");
+                    return data;
+                }
+                default -> {
+                    data.add(0, "D");
+                    data.add(1, "<:rankD:1100664707892920340>");
+                    return data;
+                }
+            }
+        } else {
+            System.out.println("[Error] Can't get Userdata string type data! Please fix this method!");
+            return null;
         }
     }
 }

@@ -40,6 +40,7 @@ public class StatusAdjustment extends ListenerAdapter {
                     ps.setInt(1, beatmapStatus.get(arrayCount));
                     ps.setInt(2, i);
                     ps.executeUpdate();
+                    System.out.println("[Update] BeatmapsetID: " + i + " fixed Status!");
                 }
             }
 
