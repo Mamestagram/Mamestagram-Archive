@@ -52,7 +52,7 @@ public class UserScore extends ListenerAdapter {
     public static void autoSendPlayerScoreBoard() throws SQLException {
 
         final long guildID = 944248031136587796L;
-        final long channelID = 1081737936401350717L;
+        final long channelID = 1012678670252523530L;
 
         if(getUserScoreBoard(null, 0, false) != null) {
             jda.getGuildById(guildID).getTextChannelById(channelID).sendMessageEmbeds(getUserScoreBoard(null, 0, false).build()).queue();
