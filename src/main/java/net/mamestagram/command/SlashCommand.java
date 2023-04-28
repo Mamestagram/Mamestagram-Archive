@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import static net.mamestagram.message.EmbedMessageData.*;
 
 import static net.mamestagram.game.Profile.*;
-import static net.mamestagram.game.RecentPlay.*;
 import static net.mamestagram.game.Ranking.*;
 import static net.mamestagram.module.OSUModule.*;
 import static net.mamestagram.module.CommandModule.*;
@@ -28,9 +27,9 @@ public class SlashCommand extends ListenerAdapter {
 
         if(e.getName().equals("osuprofile") && e.getFocusedOption().getName().equals("mode")) {
             createAutoCompleteInteraction(e, modes);
-        } else if(e.getName().equals("result") && e.getFocusedOption().getName().equals("mode")) {
+        }/* else if(e.getName().equals("result") && e.getFocusedOption().getName().equals("mode")) {
             createAutoCompleteInteraction(e, modes);
-        } else if(e.getName().equals("ranking") && e.getFocusedOption().getName().equals("mode")) {
+        }*/ else if(e.getName().equals("ranking") && e.getFocusedOption().getName().equals("mode")) {
             createAutoCompleteInteraction(e, modes);
         }
     }
@@ -59,7 +58,7 @@ public class SlashCommand extends ListenerAdapter {
                     throw new RuntimeException(ex);
                 }
             }
-            case "result" -> {
+            /*case "result" -> {
                 if (!e.isAcknowledged()) {
                     try {
                         if(e.getOption("user") == null) {
@@ -74,7 +73,7 @@ public class SlashCommand extends ListenerAdapter {
                         ex.printStackTrace();
                     }
                 }
-            }
+            }*/
             case "ranking" -> {
                 rankView = "";
                 row = 0;

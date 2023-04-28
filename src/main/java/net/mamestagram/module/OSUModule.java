@@ -296,66 +296,69 @@ public class OSUModule {
         }
     }
 
-    public static List<String> getUserRankEmoji(int playMode, int userID) throws SQLException {
+    public static String getUserRankEmoji(String grade) {
 
-        PreparedStatement ps;
-        ResultSet result;
-        String query = ("select grade from scores where userid = ? and mode = " + playMode + " order by id desc limit 1");
-
-        ps = connection.prepareStatement(query);
-
-        ps.setInt(1, userID);
-        result = ps.executeQuery();
-
-        if(result.next()) {
-            List<String> data = new ArrayList<>(Arrays.asList(null, null));
-
-            switch (result.getString("grade")) {
+            switch (grade) {
 
                 case "C" -> {
-                    data.add(0, "C");
-                    data.add(1, "<:rankC:1100664705997082755>");
-                    return data;
+                    return "<:rankC:1100664705997082755>";
                 }
                 case "B" -> {
-                    data.add(0, "B");
-                    data.add(1, "<:rankB:1100664703224664125>");
-                    return data;
+                    return "<:rankB:1100664703224664125>";
                 }
                 case "A" -> {
-                    data.add(0, "A");
-                    data.add(1, "<:rankA:1100664700905205900>");
-                    return data;
+                    return "<:rankA:1100664700905205900>";
                 }
                 case "S" -> {
-                    data.add(0, "S");
-                    data.add(1, "<:rankS:1100664689588969523>");
-                    return data;
+                    return "<:rankS:1100664689588969523>";
                 }
                 case "SH" -> {
-                    data.add(0, "SH");
-                    data.add(1, "<:rankSH:1100664691270893678>");
-                    return data;
+                    return "<:rankSH:1100664691270893678>";
                 }
                 case "X" -> {
-                    data.add(0, "X");
-                    data.add(1, "<:rankX:1100664694982836346>");
-                    return data;
+                    return "<:rankX:1100664694982836346>";
                 }
                 case "XH" -> {
-                    data.add(0, "XH");
-                    data.add(1, "<:rankXH:1100664698237624430>");
-                    return data;
+                    return "<:rankXH:1100664698237624430>";
                 }
                 default -> {
-                    data.add(0, "D");
-                    data.add(1, "<:rankD:1100664707892920340>");
-                    return data;
+                    return "<:rankD:1100664707892920340>";
                 }
             }
-        } else {
-            System.out.println("[Error] Can't get Userdata string type data! Please fix this method!");
-            return null;
+
+    }
+
+    public static String getMapStatusEmoji(int status) {
+        switch (status) {
+            case 1, 2 -> {
+                return "<:ranked:1100846082998669333> **Ranked**";
+            }
+            case 5 -> {
+                return "<:loved:1100846331418914857> **Loved**";
+            }
+            default -> {
+                return "<:graveyard:1100846539368316979> **Graveyard**";
+            }
+        }
+    }
+
+    public static String getModeEmoji(int mode) {
+        switch (mode) {
+            case 0, 4, 8 -> {
+                return "<:osu:1100702517119168562>";
+            }
+            case 1, 5 -> {
+                return "<:taiko:1100702510152429588>";
+            }
+            case 2, 6 -> {
+                return "<:catch:992621083985457202>";
+            }
+            case 3 -> {
+                return "<:mania:1100702514501910630>";
+            }
+            default -> {
+                return null;
+            }
         }
     }
 }
