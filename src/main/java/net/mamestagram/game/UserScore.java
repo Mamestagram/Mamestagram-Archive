@@ -5,6 +5,7 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,7 +27,7 @@ public class UserScore extends ListenerAdapter {
     private static PreparedStatement ps;
     private static ResultSet result;
     private static EmbedBuilder eb;
-    static int userID, bUserID, nUserID;
+    static int userID, bID, nID;
     static boolean isFirstBoot = true;
     static String userName;
 
@@ -42,95 +43,127 @@ public class UserScore extends ListenerAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent e) {
         if(e.getName().equals("result")) {
             try {
-                e.replyEmbeds(getUserScoreBoard(e.getMember(), getModeNumber(e.getOption("mode").getAsString()), true).build()).queue();
+                if(e.getOption("user") == null) {
+                    e.replyEmbeds(getUserScoreBoard(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getUserID(e, e.getMember()).get(1), getModeNumber(e.getOption("mode").getAsString())).build()).addActionRow(
+                            Button.link(getWebsiteLink(getModeNumber(e.getOption("mode").getAsString()), getMapDataIntergerFromID(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getModeNumber(e.getOption("mode").getAsString())).get(1), getMapDataIntergerFromID(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getModeNumber(e.getOption("mode").getAsString())).get(0)), "Go to map page!"),
+                            Button.danger("report", "Report Score!")
+                    ).queue();
+                } else {
+                    if(getUserID(e, e.getMember()) != null) {
+                        e.replyEmbeds(getUserScoreBoard(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getUserID(e, e.getMember()).get(1), getModeNumber(e.getOption("mode").getAsString())).build()).addActionRow(
+                                Button.link(getWebsiteLink(getModeNumber(e.getOption("mode").getAsString()), getMapDataIntergerFromID(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getModeNumber(e.getOption("mode").getAsString())).get(1), getMapDataIntergerFromID(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getModeNumber(e.getOption("mode").getAsString())).get(0)), "Go to map page!"),
+                                Button.danger("report", "Report Score!")
+                        ).queue();
+                    } else {
+                        e.replyEmbeds(notUserFoundMessage(e.getOption("user").getAsString()).build()).setEphemeral(true).queue();
+                    }
+                }
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
         }
     }
 
+private static List<String> getUserID(SlashCommandInteractionEvent e, Member member) throws SQLException {
+
+        String query = "select id from users where name = ?";
+        List<String> userData = new ArrayList<>(Arrays.asList("0", null));
+
+        if(e.getOption("user") == null) {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, member.getNickname());
+            result = ps.executeQuery();
+            if (!result.next()) {
+                ps = connection.prepareStatement(query);
+                ps.setString(1, member.getUser().getName());
+                result = ps.executeQuery();
+                if(!result.next()) {
+                    return null;
+                } else {
+                    userData.add(0, String.valueOf(result.getInt("id")));
+                    userData.add(1, member.getUser().getName());
+                }
+            } else {
+                userData.add(0, String.valueOf(result.getInt("id")));
+                userData.add(1, member.getNickname());
+            }
+        } else {
+            ps = connection.prepareStatement(query);
+            ps.setString(1, e.getOption("user").getAsString());
+            result = ps.executeQuery();
+            if(result.next()) {
+                userData.add(0, String.valueOf(result.getInt("id")));
+                userData.add(1, e.getOption("user").getAsString());
+            } else {
+                return null;
+            }
+        }
+
+        return userData;
+    }
+
     public static void autoSendPlayerScoreBoard() throws SQLException {
 
         final long guildID = 944248031136587796L;
-        final long channelID = 1012678670252523530L;
+        final long channelID = 1081737936401350717L;
+        int mode = 0;
 
-        if(getUserScoreBoard(null, 0, false) != null) {
-            jda.getGuildById(guildID).getTextChannelById(channelID).sendMessageEmbeds(getUserScoreBoard(null, 0, false).build()).queue();
+        ps = connection.prepareStatement("select id from scores where not grade = 'F' order by id desc limit 1");
+        result = ps.executeQuery();
+
+        if(isFirstBoot) {
+            if(result.next()) {
+                nID = result.getInt("id");
+                bID = result.getInt("id");
+            }
+            isFirstBoot = false;
+            return;
+        }
+
+            if(result.next()) {
+                bID = nID;
+
+                nID = result.getInt("id");
+
+                if(nID != bID) {
+                    ps = connection.prepareStatement("select userid, mode from scores where id = ?");
+                    ps.setInt(1, nID);
+                    result = ps.executeQuery();
+                    if(result.next()) {
+                        userID = result.getInt("userid");
+                        mode = result.getInt("mode");
+                    }
+                    ps = connection.prepareStatement("select name from users where id = ?");
+                    ps.setInt(1, userID);
+                    result = ps.executeQuery();
+                    if(result.next()) userName = result.getString("name");
+                    jda.getGuildById(guildID).getTextChannelById(channelID).sendMessageEmbeds(getUserScoreBoard(userID, userName, mode).build()).addActionRow(
+                            Button.link(getWebsiteLink(mode, getMapDataIntergerFromID(userID, mode).get(1), getMapDataIntergerFromID(userID, mode).get(0)), "Go to Map Page!"),
+                            Button.danger("report", "Report Score")
+                    ).queue();
+            }
         }
     }
 
-    private static EmbedBuilder getUserScoreBoard(Member user, int mode, boolean commandMode) throws SQLException{
-
-        String searchQuery = "select id, name from users where name = ?";
+    private static EmbedBuilder getUserScoreBoard(int userID, String userName, int mode) throws SQLException{
 
         eb = new EmbedBuilder();
 
-       if(commandMode) {
-           ps = connection.prepareStatement(searchQuery);
-           ps.setString(1, user.getNickname());
-           result = ps.executeQuery();
-           if (!result.next()) {
-               ps = connection.prepareStatement(searchQuery);
-               ps.setString(1, user.getUser().getName());
-               result = ps.executeQuery();
-               if (!result.next()) {
-                   return notUserFoundMessage(user.getUser().getName());
-               } else {
-                   userID = result.getInt("id");
-                   userName = result.getString("name");
-               }
-           } else {
-               userID = result.getInt("id");
-               userName = result.getString("name");
-           }
-       } else {
-           ps = connection.prepareStatement("select COUNT(id) from scores where not grade = 'F'");
-           result = ps.executeQuery();
-           if(isFirstBoot) {
-               if(result.next()) {
-                   bUserID = result.getInt("COUNT(id)");
-                   nUserID = result.getInt("COUNT(id)");
-               }
-               isFirstBoot = false;
-               return null;
-           } else {
-               bUserID = nUserID;
-
-               if(result.next()) nUserID = result.getInt("COUNT(id)");
-
-               if(bUserID != nUserID) {
-                   ps = connection.prepareStatement("select userid, mode from scores where id = ?");
-                   ps.setInt(1, nUserID);
-                   result = ps.executeQuery();
-                   if(result.next()) {
-                       mode = result.getInt("mode");
-                       userID = result.getInt("userid");
-                       ps = connection.prepareStatement("select name from users where id = ?");
-                       ps.setInt(1, userID);
-                       result = ps.executeQuery();
-                       if(result.next()) {
-                           userName = result.getString("name");
-                       }
-                   }
-               } else {
-                   return null;
-               }
-           }
-       }
-
-        eb.setAuthor(userName + "( " + getMapDataDoubleFromID(userID, mode).get(6) + " :star2: ) " + getMapDataStringFromID(userID, mode).get(1) + " - " +
-                getMapDataStringFromID(userID, mode).get(0) + " [" + getMapDataStringFromID(userID, mode).get(2) + "] +" + getModsName(getUserDataIntergerFromID(userID, mode).get(2)) + " " + getUserDataDoubleFromID(userID, mode).get(1) + "% | " + getUserDataIntergerFromID(userID, mode).get(1)
-                + "x | " + getUserDataDoubleFromID(userID, mode).get(0) + "pp", getWebsiteLink(mode, getMapDataIntergerFromID(userID, mode).get(1), getMapDataIntergerFromID(userID, mode).get(0)), "https://a.mamesosu.net/" + userID);
+        eb.setAuthor(userName + " (★" + roundNumber(getMapDataDoubleFromID(userID, mode).get(6), 2) + ") " + getMapDataStringFromID(userID, mode).get(1) + " - " +
+                getMapDataStringFromID(userID, mode).get(0) + " [" + getMapDataStringFromID(userID, mode).get(2) + "] +" + getModsName(getUserDataIntergerFromID(userID, mode).get(2)) + " " + roundNumber(getUserDataDoubleFromID(userID, mode).get(1), 2) + "% | " + getUserDataIntergerFromID(userID, mode).get(1)
+                + "x | " + roundNumber(getUserDataDoubleFromID(userID, mode).get(0), 2) + "pp", getWebsiteLink(mode, getMapDataIntergerFromID(userID, mode).get(1), getMapDataIntergerFromID(userID, mode).get(0)), "https://a.mamesosu.net/" + userID);
         eb.addField( getModeEmoji(getMapDataIntergerFromID(userID, mode).get(4))+ " **Map Info**", "Beatmap: **" + getMapDataStringFromID(userID, mode).get(1) + " - " + getMapDataStringFromID(userID, mode).get(0) + " [" + getMapDataStringFromID(userID, mode).get(2) + "]**\n" +
                 "Rating: :star2: **" + roundNumber(getMapDataDoubleFromID(userID, mode).get(6), 2) + "**\n" +
-                "AR: **" + getMapDataDoubleFromID(userID, mode).get(2) + "** / CS: **" + getMapDataDoubleFromID(userID, mode).get(1) + "** / OD: **" + getMapDataDoubleFromID(userID, mode).get(3) + "** / BPM: **" + getMapDataDoubleFromID(userID, mode).get(0) + "**\n" +
+                "AR: **" + getMapDataDoubleFromID(userID, mode).get(3) + "** / CS: **" + getMapDataDoubleFromID(userID, mode).get(2) + "** / OD: **" + getMapDataDoubleFromID(userID, mode).get(4) + "** / BPM: **" + getMapDataDoubleFromID(userID, mode).get(1) + "**\n" +
                 "MapStatus: " + getMapStatusEmoji(getMapDataIntergerFromID(userID, mode).get(2)), false);
         eb.addField(getModeEmoji(getMapDataIntergerFromID(userID, mode).get(4)) + " **User Scores**", "Grade: " + getUserRankEmoji(getUserDataStringFromID(userID, mode).get(0)) + " ▸ **" + getCompareScoreData(userID, mode).get(0) + "%**\n" +
                 "Score: **" + String.format("%,d", getUserDataIntergerFromID(userID, mode).get(0)) + "** ▸ **" + getCompareScoreData(userID, mode).get(2) + "%**\n" +
-                "Accuracy: **" + getUserDataDoubleFromID(userID, mode).get(1) + "%** ▸ **" + getCompareScoreData(userID, mode).get(0) + "%**\n" +
+                "Accuracy: **" + roundNumber(getUserDataDoubleFromID(userID, mode).get(1), 2) + "%** ▸ **" + getCompareScoreData(userID, mode).get(1) + "%**\n" +
                 "Combo: **" + getUserDataIntergerFromID(userID, mode).get(1) + "x** ▸ **" + getCompareScoreData(userID, mode).get(3) + "%**\n" +
-                "**[ <:hit300k:1100843483549409280> " + getUserDataIntergerFromID(userID, mode).get(3) + " / <:hit300:1100843418260873286> " + getUserDataIntergerFromID(userID, mode).get(4) + " / <:hit100k:1100843460157779969> " + getUserDataIntergerFromID(userID, mode).get(5) + " / <:hit100:1100843408530096188> " + getUserDataIntergerFromID(userID, mode).get(6) + " / <:hit50:1100843399675912223> " + getUserDataIntergerFromID(userID, mode).get(7) + " / <:hit0:1100843386996543519> " + getUserDataIntergerFromID(userID, mode).get(8) + " ]**\n" +
+                "**[ <:hit300k:1100843483549409280>" + getUserDataIntergerFromID(userID, mode).get(3) + " / <:hit300:1100843418260873286>" + getUserDataIntergerFromID(userID, mode).get(4) + " / <:hit100k:1100843460157779969>" + getUserDataIntergerFromID(userID, mode).get(5) + " / <:hit100:1100843408530096188>" + getUserDataIntergerFromID(userID, mode).get(6) + " / <:hit50:1100843399675912223>" + getUserDataIntergerFromID(userID, mode).get(7) + " / <:hit0:1100843386996543519>" + getUserDataIntergerFromID(userID, mode).get(8) + " ]**\n" +
                 "Mods: **" + getModsName(getUserDataIntergerFromID(userID, mode).get(2)) + "**", false);
+        eb.setColor(getMessageColor(getUserDataStringFromID(userID, mode).get(0)));
+        eb.setImage("https://assets.ppy.sh/beatmaps/" + getMapDataIntergerFromID(userID, mode).get(1) + "/covers/cover.jpg?");
         return eb;
     }
 
@@ -234,16 +267,16 @@ public class UserScore extends ListenerAdapter {
         ps.setInt(2, id);
         result = ps.executeQuery();
         if(result.next()) {
-            userData.add(result.getInt("score"));
-            userData.add(result.getInt("max_combo"));
-            userData.add(result.getInt("mods"));
-            userData.add(result.getInt("ngeki"));
-            userData.add(result.getInt("n300"));
-            userData.add(result.getInt("nkatu"));
-            userData.add(result.getInt("n100"));
-            userData.add(result.getInt("n50"));
-            userData.add(result.getInt("nmiss"));
-            userData.add(result.getInt("status"));
+            userData.add(0, result.getInt("score"));
+            userData.add(1, result.getInt("max_combo"));
+            userData.add(2, result.getInt("mods"));
+            userData.add(3, result.getInt("ngeki"));
+            userData.add(4, result.getInt("n300"));
+            userData.add(5, result.getInt("nkatu"));
+            userData.add(6, result.getInt("n100"));
+            userData.add(7, result.getInt("n50"));
+            userData.add(8, result.getInt("nmiss"));
+            userData.add(9, result.getInt("status"));
         }
 
         return userData;
@@ -260,8 +293,8 @@ public class UserScore extends ListenerAdapter {
         ps.setInt(2, id);
         result = ps.executeQuery();
         if(result.next()) {
-            userData.add(result.getDouble("pp"));
-            userData.add(result.getDouble("acc"));
+            userData.add(0, result.getDouble("pp"));
+            userData.add(1, result.getDouble("acc"));
         }
 
         return userData;
@@ -278,8 +311,8 @@ public class UserScore extends ListenerAdapter {
         ps.setInt(2, id);
         result = ps.executeQuery();
         if(result.next()) {
-            userData.add(result.getString("grade"));
-            userData.add(result.getString("play_time"));
+            userData.add(0, result.getString("grade"));
+            userData.add(1, result.getString("play_time"));
         }
 
         return userData;
@@ -287,32 +320,46 @@ public class UserScore extends ListenerAdapter {
 
     //0 = pp, 1 = acc, 2 = score, 3 = max_combo
 
-    private static List<Double> getCompareScoreData(int id, int mode) throws SQLException {
+    private static List<String> getCompareScoreData(int id, int mode) throws SQLException {
 
-        List<Double> compareData = new ArrayList<>(Arrays.asList(100.0, 100.0, 100.0, 100.0));
-        List<Double> tempPP = new ArrayList<>(), tempACC = new ArrayList<>();
-        List<Integer> tempScore = new ArrayList<>(), tempCombo = new ArrayList<>();
+        List<Double> compareData = new ArrayList<>(Arrays.asList(0.0, 0.0, 0.0, 0.0));
+        List<String> resultData = new ArrayList<>(Arrays.asList("+0.0", "+0.0", "+0.0", "+0.0"));
+        double tempPP = 0.0, tempACC = 0.0;
+        int tempScore = 0, tempCombo = 0;
+        String mapMD5 = getMD5FromID(id, mode);
 
-        ps = connection.prepareStatement("select COUNT(id) from scores where userid = ? and mode = ? and not grade = 'F'");
+        ps = connection.prepareStatement("select COUNT(id) from scores where userid = ? and mode = ? and not grade = 'F' and map_md5 = ?");
         ps.setInt(1, id);
         ps.setInt(2, mode);
-        if(ps.getResultSet().getInt("COUNT(id)") > 1) {
+        ps.setString(3, mapMD5);
+        result = ps.executeQuery();
+        if(result.next() && result.getInt("COUNT(id)") > 1) {
 
-            ps = connection.prepareStatement("select pp, acc, score, max_combo from scores where userid = ? and mode = ? and not grade = 'F' order by id desc limit 2");
+            ps = connection.prepareStatement("select pp, acc, score, max_combo from scores where userid = ? and mode = ? and not grade = 'F' and map_md5 = ? order by score desc limit 1");
             ps.setInt(1, id);
             ps.setInt(2, mode);
+            ps.setString(3, mapMD5);
             result = ps.executeQuery();
-            while (result.next()) {
-                tempACC.add(result.getDouble("acc"));
-                tempPP.add(result.getDouble("pp"));
-                tempScore.add(result.getInt("score"));
-                tempCombo.add(result.getInt("max_combo"));
+            if (result.next()) {
+                tempACC = result.getDouble("acc");
+                tempPP = result.getDouble("pp");
+                tempScore = result.getInt("score");
+                tempCombo = result.getInt("max_combo");
             }
-            compareData.add(0, roundNumber((tempPP.get(0) / tempPP.get(1)) * 100, 2));
-            compareData.add(1, roundNumber((tempACC.get(0) / tempACC.get(1)) * 100, 2));
-            compareData.add(2, roundNumber(((double)tempScore.get(0) / (double)tempScore.get(1)) * 100, 2));
-            compareData.add(3, roundNumber(((double)tempCombo.get(0) / (double)tempScore.get(1)) * 100, 2));
+
+            compareData.add(0, roundNumber(((getUserDataDoubleFromID(id, mode).get(0) / tempPP) * 100) - 100, 2));
+            compareData.add(1,roundNumber(((getUserDataDoubleFromID(id, mode).get(1) / tempACC) * 100) - 100, 2));
+            compareData.add(2,roundNumber(((getUserDataIntergerFromID(id, mode).get(0) / (double)tempScore) * 100) - 100, 2));
+            compareData.add(3, roundNumber(((getUserDataIntergerFromID(id, mode).get(1) / (double)tempCombo) * 100) - 100, 2));
+
+            for(int i = 0; i < compareData.size(); i++) {
+                if(compareData.get(i) < 0.0) {
+                    resultData.add(i, String.valueOf(compareData.get(i)));
+                } else {
+                    resultData.add(i, "+" + compareData.get(i));
+                }
+            }
         }
-        return compareData;
+        return resultData;
     }
 }
