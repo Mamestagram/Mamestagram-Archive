@@ -156,7 +156,7 @@ private static List<String> getUserID(SlashCommandInteractionEvent e, Member mem
                 "Rating: :star2: **" + roundNumber(getMapDataDoubleFromID(userID, mode).get(6), 2) + "**\n" +
                 "AR: **" + getMapDataDoubleFromID(userID, mode).get(3) + "** / CS: **" + getMapDataDoubleFromID(userID, mode).get(2) + "** / OD: **" + getMapDataDoubleFromID(userID, mode).get(4) + "** / BPM: **" + getMapDataDoubleFromID(userID, mode).get(1) + "**\n" +
                 "MapStatus: " + getMapStatusEmoji(getMapDataIntergerFromID(userID, mode).get(2)), false);
-        eb.addField(getModeEmoji(getMapDataIntergerFromID(userID, mode).get(4)) + " **User Scores**", "Grade: " + getUserRankEmoji(getUserDataStringFromID(userID, mode).get(0)) + " ▸ **" + getCompareScoreData(userID, mode).get(0) + "%**\n" +
+        eb.addField(getModeEmoji(getMapDataIntergerFromID(userID, mode).get(4)) + " **User Scores**", "Grade: " + getUserRankEmoji(getUserDataStringFromID(userID, mode).get(0)) + " **[" + roundNumber(getUserDataDoubleFromID(userID, mode).get(0), 2) + "pp]**" + " ▸ **" + getCompareScoreData(userID, mode).get(0) + "%**\n" +
                 "Score: **" + String.format("%,d", getUserDataIntergerFromID(userID, mode).get(0)) + "** ▸ **" + getCompareScoreData(userID, mode).get(2) + "%**\n" +
                 "Accuracy: **" + roundNumber(getUserDataDoubleFromID(userID, mode).get(1), 2) + "%** ▸ **" + getCompareScoreData(userID, mode).get(1) + "%**\n" +
                 "Combo: **" + getUserDataIntergerFromID(userID, mode).get(1) + "x** ▸ **" + getCompareScoreData(userID, mode).get(3) + "%**\n" +
@@ -164,6 +164,7 @@ private static List<String> getUserID(SlashCommandInteractionEvent e, Member mem
                 "Mods: **" + getModsName(getUserDataIntergerFromID(userID, mode).get(2)) + "**", false);
         eb.setColor(getMessageColor(getUserDataStringFromID(userID, mode).get(0)));
         eb.setImage("https://assets.ppy.sh/beatmaps/" + getMapDataIntergerFromID(userID, mode).get(1) + "/covers/cover.jpg?");
+        eb.setFooter("Played at " + getUserDataStringFromID(userID, mode).get(1), "https://media.discordapp.net/attachments/944984741826932767/1080466807338573824/MS1B_logo.png?width=625&height=625");
         return eb;
     }
 

@@ -7,17 +7,16 @@ import javax.swing.text.DateFormatter;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
-import java.util.List.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static net.mamestagram.Main.*;
+import static net.mamestagram.module.OSUModule.*;
 
 public class LoginStatus {
 
@@ -86,22 +85,27 @@ public class LoginStatus {
                 currentCount++;
             }
 
-            preparedStatement = connection.prepareStatement("select pp, plays, acc, tscore, max_combo, playtime from stats where id = ? and mode = ?");
-            preparedStatement.setInt(1, tempData.get(0));
+            System.out.println(tempData.get(0));
+            System.out.println(tempData.get(1));
+
+            preparedStatement = connection.prepareStatement("select pp, plays, acc, max_combo from stats where id = ? and mode = ?");
+            preparedStatement.setInt(1, userID);
             preparedStatement.setInt(2, tempData.get(1));
             resultSet = preparedStatement.executeQuery();
 
             if(resultSet.next()) {
-                //TODO 処理を書く
+                embedBuilder.setThumbnail("https://a.mamesosu.net/");
+                embedBuilder.setTitle("**" + userName + " has logged in!**");
+                embedBuilder.addField(getModeEmoji(tempData.get(1)) + " **Player Info**", "Performance: **" + String.format("%,d", resultSet.getInt("pp")) + "pp**\n" +
+                        "Accuracy: **" + roundNumber(resultSet.getDouble("acc"), 2) + "%**\n" +
+                        "Play Count: **" + String.format("%,d", resultSet.getInt("plays")) + "**\n" +
+                        "Max Combo: **" + String.format("%,d", resultSet.getInt("max_combo")) + "x**\n", false);
+                embedBuilder.setFooter("Mode: " + getModeName(tempData.get(1)) + " | " + date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))), "https://media.discordapp.net/attachments/944984741826932767/1080466807338573824/MS1B_logo.png?width=585&height=585");
+                embedBuilder.setColor(Color.WHITE);
+                jda.getGuildById(guildID).getTextChannelById(channelID).sendMessageEmbeds(embedBuilder.build()).addActionRow(
+                        Button.link("https://web.mamesosu.net/profile/id=" + userID + "/mode=std/special=none/bestpp=1&mostplays=1&recentplays=1", "Go to Profile!")
+                ).queue();
             }
-
-            embedBuilder.setTitle(":inbox_tray: **" + userName + " has logged in**");
-            embedBuilder.setFooter("Connected at " + date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
-            embedBuilder.setColor(Color.GREEN);
-
-            jda.getGuildById(guildID).getTextChannelById(channelID).sendMessageEmbeds(embedBuilder.build()).addActionRow(
-                    Button.link("https://web.mamesosu.net/profile/id=" + userID + "/mode=std/special=none/bestpp=1&mostplays=1&recentplays=1", "Go to Profile!")
-            ).queue();
         } else {
             isFirstLogin = false;
         }

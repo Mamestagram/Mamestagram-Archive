@@ -56,16 +56,16 @@ public class OSUModule {
             case 0 -> {
                 return  "Standard";
             }
-            case 1 -> {
+            case 1, 5 -> {
                 return  "Taiko";
             }
-            case 2 -> {
+            case 2, 6 -> {
                 return  "Catch";
             }
             case 3 -> {
                 return  "Mania";
             }
-            case 4, 5, 6 -> {
+            case 4 -> {
                 return  "Relax";
             }
             case 8 -> {
