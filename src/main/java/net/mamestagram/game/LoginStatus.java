@@ -85,9 +85,6 @@ public class LoginStatus {
                 currentCount++;
             }
 
-            System.out.println(tempData.get(0));
-            System.out.println(tempData.get(1));
-
             preparedStatement = connection.prepareStatement("select pp, plays, acc, max_combo from stats where id = ? and mode = ?");
             preparedStatement.setInt(1, userID);
             preparedStatement.setInt(2, tempData.get(1));
