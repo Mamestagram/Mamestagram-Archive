@@ -336,7 +336,7 @@ private static List<String> getUserID(SlashCommandInteractionEvent e, Member mem
         result = ps.executeQuery();
         if(result.next() && result.getInt("COUNT(id)") > 1) {
 
-            ps = connection.prepareStatement("select pp, acc, score, max_combo from scores where userid = ? and mode = ? and not grade = 'F' and map_md5 = ? order by score desc limit 1");
+            ps = connection.prepareStatement("select pp, acc, score, max_combo from scores where userid = ? and mode = ? and not grade = 'F' and map_md5 = ? order by pp desc limit 1");
             ps.setInt(1, id);
             ps.setInt(2, mode);
             ps.setString(3, mapMD5);
