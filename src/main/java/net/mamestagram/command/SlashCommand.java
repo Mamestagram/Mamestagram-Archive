@@ -27,9 +27,7 @@ public class SlashCommand extends ListenerAdapter {
 
         if(e.getName().equals("osuprofile") && e.getFocusedOption().getName().equals("mode")) {
             createAutoCompleteInteraction(e, modes);
-        }/* else if(e.getName().equals("result") && e.getFocusedOption().getName().equals("mode")) {
-            createAutoCompleteInteraction(e, modes);
-        }*/ else if(e.getName().equals("ranking") && e.getFocusedOption().getName().equals("mode")) {
+        } else if(e.getName().equals("ranking") && e.getFocusedOption().getName().equals("mode")) {
             createAutoCompleteInteraction(e, modes);
         }
     }
@@ -58,22 +56,6 @@ public class SlashCommand extends ListenerAdapter {
                     throw new RuntimeException(ex);
                 }
             }
-            /*case "result" -> {
-                if (!e.isAcknowledged()) {
-                    try {
-                        if(e.getOption("user") == null) {
-                            e.reply("**This is the result of your " + e.getOption("mode").getAsString() + " play!**").setEmbeds(getRecentData(null, e.getMember(), (int) mode).build()).queue();
-                        } else {
-                            e.reply("**This is the result of " + e.getOption("user").getAsString() + "'s " + e.getOption("mode").getAsString() + " play!**").setEmbeds(getRecentData(e.getOption("user").getAsString(), e.getMember(), (int)mode).build()).queue();
-                        }
-                    } catch (SQLException | IOException ex) {
-                        throw new RuntimeException(ex);
-                    } catch (NullPointerException ex) {
-                        e.replyEmbeds(notArgumentMessage().build()).queue();
-                        ex.printStackTrace();
-                    }
-                }
-            }*/
             case "ranking" -> {
                 rankView = "";
                 row = 0;
