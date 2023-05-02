@@ -72,11 +72,9 @@ public class SlashCommand extends ListenerAdapter {
 
     @Override
     public void onButtonInteraction(ButtonInteractionEvent e) {
-
+        
         if(e.getComponentId().equals("next")) {
-
             rankView = "";
-
             try {
                 int divRow = rowCount / 5;
                 int modRow = rowCount % 5;
