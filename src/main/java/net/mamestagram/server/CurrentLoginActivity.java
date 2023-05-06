@@ -5,8 +5,6 @@ import net.dv8tion.jda.api.entities.Activity;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 import static net.mamestagram.Main.*;
 
@@ -21,7 +19,7 @@ public class CurrentLoginActivity {
         ps = connection.prepareStatement("select latest_activity from users");
         result = ps.executeQuery();
         while (result.next()) {
-            if((System.currentTimeMillis() / 1000) - 120L < result.getLong("latest_activity")) {
+            if((System.currentTimeMillis() / 1000) - 600L < result.getLong("latest_activity")) {
                 count++;
             }
         }
