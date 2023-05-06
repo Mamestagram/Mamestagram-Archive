@@ -47,14 +47,14 @@ public class UserScore extends ListenerAdapter {
                 if(e.getOption("user") == null) {
                     e.replyEmbeds(getUserScoreBoard(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getUserID(e, e.getMember()).get(1), getModeNumber(e.getOption("mode").getAsString())).build()).addActionRow(
                             Button.link("https://web.mamesosu.net/direct/" + getMapDataIntergerFromID(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getModeNumber(e.getOption("mode").getAsString())).get(1), " ")
-                                    .withEmoji(Emoji.fromFormatted("<:download:1104198158331945143>")),
+                                    .withEmoji(Emoji.fromFormatted("<:download:1104222730863263777>")),
                             Button.danger("report", "Report")
                     ).queue();
                 } else {
                     if(getUserID(e, e.getMember()) != null) {
                         e.replyEmbeds(getUserScoreBoard(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getUserID(e, e.getMember()).get(1), getModeNumber(e.getOption("mode").getAsString())).build()).addActionRow(
                                 Button.link("https://web.mamesosu.net/direct/" + getMapDataIntergerFromID(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getModeNumber(e.getOption("mode").getAsString())).get(1), " ")
-                                        .withEmoji(Emoji.fromFormatted("<:download:1104198158331945143>")),
+                                        .withEmoji(Emoji.fromFormatted("<:download:1104222730863263777>")),
                                 Button.danger("report", "Report")
                         ).queue();
                     } else {
@@ -142,7 +142,7 @@ private static List<String> getUserID(SlashCommandInteractionEvent e, Member mem
                     if(result.next()) userName = result.getString("name");
                     jda.getGuildById(guildID).getTextChannelById(channelID).sendMessageEmbeds(getUserScoreBoard(userID, userName, mode).build()).addActionRow(
                             Button.link("https://web.mamesosu.net/direct/" + getMapDataIntergerFromID(userID, mode).get(1), " ")
-                                            .withEmoji(Emoji.fromFormatted("<:download:1104198158331945143>")),
+                                            .withEmoji(Emoji.fromFormatted("<:download:1104222730863263777>")),
                             Button.danger("report", "Report")
                     ).queue();
             }
