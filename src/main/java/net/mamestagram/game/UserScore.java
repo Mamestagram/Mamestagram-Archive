@@ -2,9 +2,12 @@ package net.mamestagram.game;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.sql.PreparedStatement;
@@ -18,8 +21,6 @@ import static net.mamestagram.message.EmbedMessageData.*;
 import static net.mamestagram.module.CommandModule.*;
 import static net.mamestagram.Main.*;
 import static net.mamestagram.module.OSUModule.*;
-
-//実装後以降予定 (Commandのほうは削除する)
 
 public class UserScore extends ListenerAdapter {
 
@@ -45,14 +46,16 @@ public class UserScore extends ListenerAdapter {
             try {
                 if(e.getOption("user") == null) {
                     e.replyEmbeds(getUserScoreBoard(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getUserID(e, e.getMember()).get(1), getModeNumber(e.getOption("mode").getAsString())).build()).addActionRow(
-                            Button.link(getWebsiteLink(getModeNumber(e.getOption("mode").getAsString()), getMapDataIntergerFromID(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getModeNumber(e.getOption("mode").getAsString())).get(1), getMapDataIntergerFromID(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getModeNumber(e.getOption("mode").getAsString())).get(0)), "Go to map page!"),
-                            Button.danger("report", "Report Score!")
+                            Button.link("https://web.mamesosu.net/direct/" + getMapDataIntergerFromID(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getModeNumber(e.getOption("mode").getAsString())).get(1), " ")
+                                    .withEmoji(Emoji.fromFormatted("<:download:1104198158331945143>")),
+                            Button.danger("report", "Report")
                     ).queue();
                 } else {
                     if(getUserID(e, e.getMember()) != null) {
                         e.replyEmbeds(getUserScoreBoard(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getUserID(e, e.getMember()).get(1), getModeNumber(e.getOption("mode").getAsString())).build()).addActionRow(
-                                Button.link(getWebsiteLink(getModeNumber(e.getOption("mode").getAsString()), getMapDataIntergerFromID(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getModeNumber(e.getOption("mode").getAsString())).get(1), getMapDataIntergerFromID(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getModeNumber(e.getOption("mode").getAsString())).get(0)), "Go to map page!"),
-                                Button.danger("report", "Report Score!")
+                                Button.link("https://web.mamesosu.net/direct/" + getMapDataIntergerFromID(Integer.parseInt(getUserID(e, e.getMember()).get(0)), getModeNumber(e.getOption("mode").getAsString())).get(1), " ")
+                                        .withEmoji(Emoji.fromFormatted("<:download:1104198158331945143>")),
+                                Button.danger("report", "Report")
                         ).queue();
                     } else {
                         e.replyEmbeds(notUserFoundMessage(e.getOption("user").getAsString()).build()).setEphemeral(true).queue();
@@ -138,8 +141,9 @@ private static List<String> getUserID(SlashCommandInteractionEvent e, Member mem
                     result = ps.executeQuery();
                     if(result.next()) userName = result.getString("name");
                     jda.getGuildById(guildID).getTextChannelById(channelID).sendMessageEmbeds(getUserScoreBoard(userID, userName, mode).build()).addActionRow(
-                            Button.link(getWebsiteLink(mode, getMapDataIntergerFromID(userID, mode).get(1), getMapDataIntergerFromID(userID, mode).get(0)), "Go to Map Page!"),
-                            Button.danger("report", "Report Score")
+                            Button.link("https://web.mamesosu.net/direct/" + getMapDataIntergerFromID(userID, mode).get(1), " ")
+                                            .withEmoji(Emoji.fromFormatted("<:download:1104198158331945143>")),
+                            Button.danger("report", "Report")
                     ).queue();
             }
         }
