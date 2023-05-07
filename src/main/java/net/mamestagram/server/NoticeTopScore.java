@@ -12,7 +12,7 @@ public class NoticeTopScore {
             isFirstBoot = false;
             return;
         } else {
-            
+            //TODO
         }
     }
 }
