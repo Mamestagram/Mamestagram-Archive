@@ -2,3 +2,4 @@
 out/
 target/
 src/main/java/net/mamestagram/Main.java
+src/main/java/net/mamestagram/database/SQLConnector.java

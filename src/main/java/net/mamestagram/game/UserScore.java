@@ -24,7 +24,6 @@ import static net.mamestagram.module.OSUModule.*;
 
 public class UserScore extends ListenerAdapter {
 
-    private final String[] modes = new String[] {"Standard", "Taiko", "Mania", "Relax", "AutoPilot"};
     private static PreparedStatement ps;
     private static ResultSet result;
     private static EmbedBuilder eb;
@@ -34,6 +33,8 @@ public class UserScore extends ListenerAdapter {
 
     @Override
     public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent e) {
+
+        final String[] modes = new String[] {"Standard", "Taiko", "Mania", "Relax", "AutoPilot"};
 
         if(e.getName().equals("result") && e.getFocusedOption().getName().equals("mode")) {
             createAutoCompleteInteraction(e, modes);
@@ -63,6 +64,8 @@ public class UserScore extends ListenerAdapter {
                 }
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
+            } catch (NullPointerException ex1) {
+                e.replyEmbeds(notUserFoundMessage(e.getUser().getName()).build()).setEphemeral(true).queue();
             }
         }
     }
@@ -167,8 +170,8 @@ private static List<String> getUserID(SlashCommandInteractionEvent e, Member mem
                 "**[ <:hit300k:1100843483549409280>" + getUserDataIntergerFromID(userID, mode).get(3) + " / <:hit300:1100843418260873286>" + getUserDataIntergerFromID(userID, mode).get(4) + " / <:hit100k:1100843460157779969>" + getUserDataIntergerFromID(userID, mode).get(5) + " / <:hit100:1100843408530096188>" + getUserDataIntergerFromID(userID, mode).get(6) + " / <:hit50:1100843399675912223>" + getUserDataIntergerFromID(userID, mode).get(7) + " / <:hit0:1100843386996543519>" + getUserDataIntergerFromID(userID, mode).get(8) + " ]**\n" +
                 "Mods: **" + getModsName(getUserDataIntergerFromID(userID, mode).get(2)) + "**", false);
         eb.setColor(getMessageColor(getUserDataStringFromID(userID, mode).get(0)));
-        eb.setImage("https://assets.ppy.sh/beatmaps/" + getMapDataIntergerFromID(userID, mode).get(1) + "/covers/cover.jpg?");
         eb.setFooter("Played at " + getUserDataStringFromID(userID, mode).get(1), "https://media.discordapp.net/attachments/944984741826932767/1080466807338573824/MS1B_logo.png?width=625&height=625");
+        eb.setImage("https://assets.ppy.sh/beatmaps/" + getMapDataIntergerFromID(userID, mode).get(1) + "/covers/cover.jpg?");
         return eb;
     }
 
