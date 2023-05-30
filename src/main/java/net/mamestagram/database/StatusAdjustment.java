@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static net.mamestagram.Main.*;
+import static net.mamestagram.server.SystemLogger.*;
 
 public class StatusAdjustment extends ListenerAdapter {
 
@@ -40,7 +41,7 @@ public class StatusAdjustment extends ListenerAdapter {
                     ps.setInt(1, beatmapStatus.get(arrayCount));
                     ps.setInt(2, i);
                     ps.executeUpdate();
-                    System.out.println("[Update] BeatmapsetID: " + i + " fixed Status!");
+                    setLogger("Fixed Custom beatmap status! ID: " + i, 0);
                 }
             }
 
