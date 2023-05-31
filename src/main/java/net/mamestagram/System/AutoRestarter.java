@@ -17,6 +17,9 @@ public class AutoRestarter {
 
     public static void executeRestart() throws InterruptedException, SQLException {
 
+        final long guildID = 944248031136587796L;
+        final long channelID = 1081737936401350717L;
+
         var date = DateTimeFormatter.ofPattern("HH");
         if(isFirstBoot) {
             scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 6;
@@ -28,6 +31,7 @@ public class AutoRestarter {
         int nowHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
         if(nowHour == scheduleHour) {
             setLogger("System will be restart", 0);
+            jda.getGuildById(guildID).getTextChannelById(channelID).sendMessage("This bot will restart to clear the memory cache (this bot will stop for 1 minute)").queue();
             jda.shutdownNow();
             connection.close();
             System.gc();
@@ -36,6 +40,7 @@ public class AutoRestarter {
             connection = connectToServer();
             scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 6;
             if(scheduleHour >= 24) scheduleHour -= 24;
+            jda.getGuildById(guildID).getTextChannelById(channelID).sendMessage("Bot has been restarted").queue();
             setLogger("System has restarted", 0);
         }
     }
