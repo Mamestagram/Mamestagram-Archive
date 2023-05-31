@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
+import java.awt.*;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -146,8 +147,36 @@ private static List<String> getUserID(SlashCommandInteractionEvent e, Member mem
                                             .withEmoji(Emoji.fromFormatted("<:download:1104222730863263777>")),
                             Button.danger("report", "Report")
                     ).queue();
+                    jda.getGuildById(guildID).getTextChannelById(channelID).sendMessageEmbeds(getUserRankScoreBoard(userID, userName, mode).build()).queue();
             }
         }
+    }
+
+    private static EmbedBuilder getUserRankScoreBoard(int userID, String userName, int mode) throws SQLException {
+
+        ArrayList<Integer> id = new ArrayList<>();
+        String md5 = "";
+        eb = new EmbedBuilder();
+
+        ps = connection.prepareStatement("select md5 from scores where userid = ? and mode = ? and not grade = 'F' order by id desc");
+        ps.setInt(1, userID);
+        ps.setInt(2, mode);
+        result = ps.executeQuery();
+        if(result.next()) {
+            md5 = result.getString("md5");
+        }
+        ps = connection.prepareStatement("select userid from scores where map_md5 = ? and not grade = 'F' and mode = ? order by score desc");
+        ps.setString(1, md5);
+        ps.setInt(2, mode);
+        result = ps.executeQuery();
+        while(result.next()) {
+            id.add(result.getInt("userid"));
+        }
+        eb.setTitle("**" + userName + "** achieved " + "**#" + getBeatmapRank(id, userID) + "** on **" + getMapDataStringFromID(userID, mode).get(1) + " - " + getMapDataStringFromID(userID, mode).get(0) + "**");
+        eb.setThumbnail("https://a.mamesosu.net/");
+        eb.setColor(Color.YELLOW);
+
+        return eb;
     }
 
     private static EmbedBuilder getUserScoreBoard(int userID, String userName, int mode) throws SQLException{
