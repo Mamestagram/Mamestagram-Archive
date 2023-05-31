@@ -1,13 +1,13 @@
-package net.mamestagram.game;
+package net.mamestagram.Game;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static net.mamestagram.Main.*;
-import static net.mamestagram.module.OSUModule.*;
+import static net.mamestagram.Module.OSU.*;
 
-public class BanConvertScore {
+public class ConvertScore {
 
     private static int nScoreID = 0;
     private static int bScoreID = 0;

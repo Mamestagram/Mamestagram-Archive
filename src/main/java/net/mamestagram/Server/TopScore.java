@@ -1,8 +1,6 @@
-package net.mamestagram.server;
+package net.mamestagram.Server;
 
-import java.sql.SQLException;
-
-public class NoticeTopScore {
+public class TopScore {
 
     static boolean isFirstBoot = true;
 

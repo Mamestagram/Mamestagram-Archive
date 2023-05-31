@@ -1,4 +1,4 @@
-package net.mamestagram.module;
+package net.mamestagram.Module;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -6,9 +6,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static net.mamestagram.Main.connection;
-import static net.mamestagram.module.OSUModule.*;
+import static net.mamestagram.Module.OSU.*;
 
-public class SQLModule {
+public class DataBase {
 
     public static int getGlobalRank(int userID, int playMode) throws SQLException {
         PreparedStatement ps;

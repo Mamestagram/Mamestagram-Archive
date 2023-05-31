@@ -1,4 +1,4 @@
-package net.mamestagram.command;
+package net.mamestagram.Command;
 
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -9,12 +9,12 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import static net.mamestagram.message.EmbedMessageData.*;
+import static net.mamestagram.Message.EmbedMessageData.*;
 
-import static net.mamestagram.game.Profile.*;
-import static net.mamestagram.game.Ranking.*;
-import static net.mamestagram.module.OSUModule.*;
-import static net.mamestagram.module.CommandModule.*;
+import static net.mamestagram.Game.Profile.*;
+import static net.mamestagram.Game.Ranking.*;
+import static net.mamestagram.Module.OSU.*;
+import static net.mamestagram.Module.Command.*;
 
 public class SlashCommand extends ListenerAdapter {
 
@@ -48,12 +48,11 @@ public class SlashCommand extends ListenerAdapter {
                     } else {
                         e.replyEmbeds(getProfileData(e.getOption("user").getAsString(), e.getMember(), (int)(mode)).build()).queue();
                     }
-                } catch (SQLException ex) {
+                } catch (SQLException | IOException ex) {
+
                     throw new RuntimeException(ex);
                 } catch (NullPointerException ex) {
                     e.replyEmbeds(notArgumentMessage().build()).queue();
-                } catch (IOException ex) {
-                    throw new RuntimeException(ex);
                 }
             }
             case "ranking" -> {

@@ -1,4 +1,4 @@
-package net.mamestagram.message;
+package net.mamestagram.Message;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;

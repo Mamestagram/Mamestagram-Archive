@@ -1,4 +1,4 @@
-package net.mamestagram.module;
+package net.mamestagram.Module;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,14 +13,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static net.mamestagram.Main.connection;
 import static net.mamestagram.Main.osuAPIKey;
 
-public class OSUModule {
+public class OSU {
 
     public static String getModsName(int n) {
 

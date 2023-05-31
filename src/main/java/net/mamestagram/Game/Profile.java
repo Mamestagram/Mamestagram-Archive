@@ -1,4 +1,4 @@
-package net.mamestagram.game;
+package net.mamestagram.Game;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -10,9 +10,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static net.mamestagram.Main.*;
-import static net.mamestagram.module.SQLModule.*;
-import static net.mamestagram.message.EmbedMessageData.*;
-import static net.mamestagram.module.OSUModule.*;
+import static net.mamestagram.Module.DataBase.*;
+import static net.mamestagram.Message.EmbedMessageData.*;
+import static net.mamestagram.Module.OSU.*;
 
 public class Profile {
 

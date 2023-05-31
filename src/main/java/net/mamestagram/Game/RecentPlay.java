@@ -1,13 +1,11 @@
-package net.mamestagram.game;
+package net.mamestagram.Game;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
 import java.sql.PreparedStatement;
@@ -17,12 +15,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static net.mamestagram.message.EmbedMessageData.*;
-import static net.mamestagram.module.CommandModule.*;
+import static net.mamestagram.Message.EmbedMessageData.*;
+import static net.mamestagram.Module.Command.*;
 import static net.mamestagram.Main.*;
-import static net.mamestagram.module.OSUModule.*;
+import static net.mamestagram.Module.OSU.*;
 
-public class UserScore extends ListenerAdapter {
+public class RecentPlay extends ListenerAdapter {
 
     private static PreparedStatement ps;
     private static ResultSet result;

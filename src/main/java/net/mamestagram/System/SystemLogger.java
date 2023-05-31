@@ -1,4 +1,4 @@
-package net.mamestagram.server;
+package net.mamestagram.System;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;

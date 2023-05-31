@@ -1,4 +1,4 @@
-package net.mamestagram.database;
+package net.mamestagram.Database;
 
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
@@ -8,9 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static net.mamestagram.Main.*;
-import static net.mamestagram.server.SystemLogger.*;
+import static net.mamestagram.System.SystemLogger.*;
 
-public class StatusAdjustment extends ListenerAdapter {
+public class StatusAdjuster extends ListenerAdapter {
 
     private static PreparedStatement ps;
     private static ResultSet result;

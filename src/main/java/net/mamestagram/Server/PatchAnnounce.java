@@ -1,4 +1,4 @@
-package net.mamestagram.server;
+package net.mamestagram.Server;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.events.interaction.ModalInteractionEvent;
@@ -17,7 +17,7 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import static net.mamestagram.Main.*;
-import static net.mamestagram.module.ModalModule.*;
+import static net.mamestagram.Module.Modal.*;
 
 public class PatchAnnounce extends ListenerAdapter {
 

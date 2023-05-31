@@ -1,4 +1,4 @@
-package net.mamestagram.module;
+package net.mamestagram.Module;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,7 +12,7 @@ import java.net.http.HttpResponse;
 
 import static net.mamestagram.Main.*;
 
-public class TranslateModule {
+public class Translate {
 
     public static String getTranslateSentence(String text, String targetLang) throws InterruptedException, IOException {
 

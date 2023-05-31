@@ -1,4 +1,4 @@
-package net.mamestagram.server;
+package net.mamestagram.Server;
 
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;

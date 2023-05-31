@@ -1,4 +1,4 @@
-package net.mamestagram.server;
+package net.mamestagram.Server;
 
 import net.dv8tion.jda.api.entities.Activity;
 
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 
 import static net.mamestagram.Main.*;
 
-public class CurrentLoginActivity {
+public class LoginActivity {
 
     public static void updateLoginStatus() throws SQLException {
 

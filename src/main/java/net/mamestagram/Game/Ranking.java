@@ -1,4 +1,4 @@
-package net.mamestagram.game;
+package net.mamestagram.Game;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 

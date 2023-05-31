@@ -1,4 +1,4 @@
-package net.mamestagram.module;
+package net.mamestagram.Module;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 
 import static net.mamestagram.Main.TOKEN;
-public class WebhookClientModule {
+public class Webhook {
 
     public static WebhookClient createWebhookClient(String url, long id) {
 

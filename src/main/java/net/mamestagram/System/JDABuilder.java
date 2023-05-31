@@ -1,14 +1,16 @@
-package net.mamestagram.server;
+package net.mamestagram.System;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
-import net.mamestagram.command.SlashCommand;
-import net.mamestagram.game.MapStatus;
-import net.mamestagram.game.ReportScore;
-import net.mamestagram.game.UserScore;
+import net.mamestagram.Command.SlashCommand;
+import net.mamestagram.Game.MapStatus;
+import net.mamestagram.Game.ReportScore;
+import net.mamestagram.Game.RecentPlay;
+import net.mamestagram.Server.PatchAnnounce;
+import net.mamestagram.Server.RoleDistribution;
 
 public class JDABuilder {
 
@@ -32,7 +34,7 @@ public class JDABuilder {
                 .addEventListeners(new RoleDistribution())
                 .addEventListeners(new ReportScore())
                 .addEventListeners(new MapStatus())
-                .addEventListeners(new UserScore())
+                .addEventListeners(new RecentPlay())
                 //.setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setActivity(Activity.streaming("mamesosu.net", "https://web.mamesosu.net/leaderboard/mode=std/special=none"))
                 .build();

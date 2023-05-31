@@ -1,4 +1,4 @@
-package net.mamestagram.system;
+package net.mamestagram.System;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -6,9 +6,9 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 import static net.mamestagram.Main.*;
-import static net.mamestagram.server.SystemLogger.*;
-import static net.mamestagram.server.JDABuilder.*;
-import static net.mamestagram.database.SQLConnector.*;
+import static net.mamestagram.System.SystemLogger.*;
+import static net.mamestagram.System.JDABuilder.*;
+import static net.mamestagram.Database.SQLConnector.*;
 
 public class AutoRestarter {
 

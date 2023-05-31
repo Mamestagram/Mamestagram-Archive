@@ -1,4 +1,4 @@
-package net.mamestagram.game;
+package net.mamestagram.Game;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.User;
@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.interactions.modals.Modal;
 
 import java.awt.*;
 
-import static net.mamestagram.module.ModalModule.*;
+import static net.mamestagram.Module.Modal.*;
 import static net.mamestagram.Main.*;
 
 public class ReportScore extends ListenerAdapter {

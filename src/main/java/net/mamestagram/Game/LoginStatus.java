@@ -1,9 +1,8 @@
-package net.mamestagram.game;
+package net.mamestagram.Game;
 
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
-import javax.swing.text.DateFormatter;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static net.mamestagram.Main.*;
-import static net.mamestagram.module.OSUModule.*;
+import static net.mamestagram.Module.OSU.*;
 
 public class LoginStatus {
 

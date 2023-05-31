@@ -1,4 +1,4 @@
-package net.mamestagram.game;
+package net.mamestagram.Game;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -31,8 +31,8 @@ import java.util.List;
 
 import static net.mamestagram.Main.connection;
 import static net.mamestagram.Main.jda;
-import static net.mamestagram.module.OSUModule.getMapData;
-import static net.mamestagram.module.ModalModule.*;
+import static net.mamestagram.Module.OSU.getMapData;
+import static net.mamestagram.Module.Modal.*;
 
 public class MapStatus extends ListenerAdapter {
 
@@ -47,7 +47,7 @@ public class MapStatus extends ListenerAdapter {
 
         eb = new EmbedBuilder();
 
-        eb.setTitle("**Map Status Change Request**");
+        eb.setTitle("**Map StatusAdjuster Change Request**");
         eb.addField("**:notebook_with_decorative_cover: How to Request**", "Click the button for the status you wish to apply for and enter the required data", false);
         eb.addField("**:pencil: Changeable status**", ":white_check_mark: Ranked\n:heart: Loved", false);
         eb.setColor(Color.PINK);
