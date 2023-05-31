@@ -158,12 +158,12 @@ private static List<String> getUserID(SlashCommandInteractionEvent e, Member mem
         String md5 = "";
         eb = new EmbedBuilder();
 
-        ps = connection.prepareStatement("select md5 from scores where userid = ? and mode = ? and not grade = 'F' order by id desc");
+        ps = connection.prepareStatement("select map_md5 from scores where userid = ? and mode = ? and not grade = 'F' order by id desc");
         ps.setInt(1, userID);
         ps.setInt(2, mode);
         result = ps.executeQuery();
         if(result.next()) {
-            md5 = result.getString("md5");
+            md5 = result.getString("map_md5");
         }
         ps = connection.prepareStatement("select userid from scores where map_md5 = ? and not grade = 'F' and mode = ? order by score desc");
         ps.setString(1, md5);
@@ -173,7 +173,6 @@ private static List<String> getUserID(SlashCommandInteractionEvent e, Member mem
             id.add(result.getInt("userid"));
         }
         eb.setTitle("**" + userName + "** achieved " + "**#" + getBeatmapRank(id, userID) + "** on **" + getMapDataStringFromID(userID, mode).get(1) + " - " + getMapDataStringFromID(userID, mode).get(0) + "**");
-        eb.setThumbnail("https://a.mamesosu.net/");
         eb.setColor(Color.YELLOW);
 
         return eb;
