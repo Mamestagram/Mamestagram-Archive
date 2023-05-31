@@ -19,7 +19,7 @@ public class AutoRestarter {
 
         var date = DateTimeFormatter.ofPattern("HH");
         if(isFirstBoot) {
-            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 4;
+            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 6;
             if(scheduleHour >= 24) scheduleHour -= 24;
             isFirstBoot = false;
             return;
@@ -34,7 +34,7 @@ public class AutoRestarter {
             Thread.sleep(5000);
             jda = createJDA(TOKEN);
             connection = connectToServer();
-            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 4;
+            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 6;
             if(scheduleHour >= 24) scheduleHour -= 24;
             setLogger("System has restarted", 0);
         }
