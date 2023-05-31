@@ -172,8 +172,8 @@ private static List<String> getUserID(SlashCommandInteractionEvent e, Member mem
         while(result.next()) {
             id.add(result.getInt("userid"));
         }
-        eb.setTitle("**" + userName + "** achieved " + "**#" + getBeatmapRank(id, userID) + "** on **" + getMapDataStringFromID(userID, mode).get(1) + " - " + getMapDataStringFromID(userID, mode).get(0) + "**");
-        eb.setColor(Color.YELLOW);
+        eb.setTitle("**" + userName + "** achieved " + "**#" + getBeatmapRank(id, userID) + "** on **" + getMapDataStringFromID(userID, mode).get(1) + " - " + getMapDataStringFromID(userID, mode).get(0) + " [" + getMapDataStringFromID(userID, mode).get(2) + "]** with **" + roundNumber(getUserDataDoubleFromID(userID, mode).get(1), 2) + "%**");
+        eb.setColor(Color.blue);
 
         return eb;
     }
