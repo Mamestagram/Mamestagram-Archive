@@ -22,7 +22,7 @@ public class AutoRestarter {
 
         var date = DateTimeFormatter.ofPattern("HH");
         if(isFirstBoot) {
-            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 6;
+            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 5;
             if(scheduleHour >= 24) scheduleHour -= 24;
             isFirstBoot = false;
             return;
@@ -31,16 +31,14 @@ public class AutoRestarter {
         int nowHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
         if(nowHour == scheduleHour) {
             setLogger("System will be restart", 0);
-            jda.getGuildById(guildID).getTextChannelById(channelID).sendMessage("This bot will restart to clear the memory cache (this bot will stop for 1 minute)").queue();
             jda.shutdownNow();
             connection.close();
             System.gc();
             Thread.sleep(5000);
             jda = createJDA(TOKEN);
             connection = connectToServer();
-            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 6;
+            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 5;
             if(scheduleHour >= 24) scheduleHour -= 24;
-            jda.getGuildById(guildID).getTextChannelById(channelID).sendMessage("Bot has been restarted").queue();
             setLogger("System has restarted", 0);
         }
     }

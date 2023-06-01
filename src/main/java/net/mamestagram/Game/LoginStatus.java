@@ -63,21 +63,21 @@ public class LoginStatus {
                 userName = resultSet.getString("name");
             }
 
-            for(int i = 0; i <= 8; i++) {
+            for (int i = 0; i <= 8; i++) {
                 preparedStatement = connection.prepareStatement("select pp from stats where id = ? and mode = ?");
                 preparedStatement.setInt(1, userID);
                 preparedStatement.setInt(2, i);
                 resultSet = preparedStatement.executeQuery();
 
-                if(resultSet.next()) {
+                if (resultSet.next()) {
                     modePP.add(resultSet.getInt("pp"));
                 }
             }
 
             int currentCount = 0;
 
-            for(int i : modePP) {
-                if(tempData.get(0) <= i) {
+            for (int i : modePP) {
+                if (tempData.get(0) <= i) {
                     tempData.add(0, i);
                     tempData.add(1, currentCount);
                 }
@@ -89,7 +89,7 @@ public class LoginStatus {
             preparedStatement.setInt(2, tempData.get(1));
             resultSet = preparedStatement.executeQuery();
 
-            if(resultSet.next()) {
+            if (resultSet.next()) {
                 embedBuilder.setThumbnail("https://a.mamesosu.net/");
                 embedBuilder.setTitle("**" + userName + " has logged in!**");
                 embedBuilder.addField(getModeEmoji(tempData.get(1)) + " **Player Info**", "Performance: **" + String.format("%,d", resultSet.getInt("pp")) + "pp**\n" +
@@ -102,7 +102,6 @@ public class LoginStatus {
                         Button.link("https://web.mamesosu.net/profile/id=" + userID + "/mode=std/special=none/bestpp=1&mostplays=1&recentplays=1", "Go to Profile!")
                 ).queue();
             }
-        } else {
             isFirstLogin = false;
         }
     }
