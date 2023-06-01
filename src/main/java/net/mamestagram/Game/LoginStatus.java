@@ -45,7 +45,12 @@ public class LoginStatus {
             currentLoginID = resultSet.getInt("id");
         }
 
-        if (previousLoginID != currentLoginID && !isFirstLogin) {
+        if(isFirstLogin) {
+            isFirstLogin = false;
+            return;
+        }
+
+        if (previousLoginID != currentLoginID) {
 
             preparedStatement = connection.prepareStatement("SELECT userid FROM ingame_logins WHERE id = ?");
             preparedStatement.setInt(1, currentLoginID);
@@ -102,7 +107,6 @@ public class LoginStatus {
                         Button.link("https://web.mamesosu.net/profile/id=" + userID + "/mode=std/special=none/bestpp=1&mostplays=1&recentplays=1", "Go to Profile!")
                 ).queue();
             }
-            isFirstLogin = false;
         }
     }
 }
