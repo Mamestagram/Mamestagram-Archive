@@ -4,6 +4,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.mamestagram.Command.SlashCommand;
 import net.mamestagram.Game.MapStatus;
@@ -35,7 +36,7 @@ public class JDABuilder {
                 .addEventListeners(new ReportScore())
                 .addEventListeners(new MapStatus())
                 .addEventListeners(new RecentPlay())
-                //.setMemberCachePolicy(MemberCachePolicy.ALL)
+                .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setActivity(Activity.streaming("mamesosu.net", "https://web.mamesosu.net/leaderboard/mode=std/special=none"))
                 .build();
 
