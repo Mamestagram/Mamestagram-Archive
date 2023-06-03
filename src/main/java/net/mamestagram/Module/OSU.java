@@ -328,7 +328,7 @@ public class OSU {
 
     public static String getMapStatusEmoji(int status) {
         switch (status) {
-            case 1, 2 -> {
+            case 1, 2, 3, 4 -> {
                 return "<:ranked:1100846082998669333> **Ranked**";
             }
             case 5 -> {

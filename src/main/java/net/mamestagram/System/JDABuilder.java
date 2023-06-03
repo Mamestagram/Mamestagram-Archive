@@ -10,6 +10,7 @@ import net.mamestagram.Command.SlashCommand;
 import net.mamestagram.Game.MapStatus;
 import net.mamestagram.Game.ReportScore;
 import net.mamestagram.Game.RecentPlay;
+import net.mamestagram.Message.WelcomeMessage;
 import net.mamestagram.Server.PatchAnnounce;
 import net.mamestagram.Server.RoleDistribution;
 
@@ -36,6 +37,7 @@ public class JDABuilder {
                 .addEventListeners(new ReportScore())
                 .addEventListeners(new MapStatus())
                 .addEventListeners(new RecentPlay())
+                .addEventListeners(new WelcomeMessage())
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setActivity(Activity.streaming("mamesosu.net", "https://web.mamesosu.net/leaderboard/mode=std/special=none"))
                 .build();
