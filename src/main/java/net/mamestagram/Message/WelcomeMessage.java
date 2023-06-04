@@ -15,7 +15,7 @@ public class WelcomeMessage extends ListenerAdapter {
 
         EmbedBuilder eb = new EmbedBuilder();
 
-        eb.setTitle(e.getMember().getUser().getName() + "**さん、Mamestagramへようこそ！以下はサーバーのガイドです。**");
+        eb.setTitle("**" + e.getMember().getUser().getName() + "**さん、Mamestagramへようこそ！以下はサーバーのガイドです。**");
         eb.addField("**サーバーのルール**", "ルールは" + e.getGuild().getTextChannelById(1012666778003976243L).getAsMention() + "にて閲覧できます", false);
         eb.addField("**お知らせロール**", "このサーバーは" + e.getGuild().getRoleById(1083976804680863744L).getAsMention() + "にてお知らせを通知します。" + e.getGuild().getTextChannelById(1012691799350988810L).getAsMention() + "にて入手できます。", false);
         eb.addField("**プライベートサーバー**", "**Mamestagram**が運営するプライベートサーバーの情報は" + e.getGuild().getTextChannelById(1073989576462438420L).getAsMention() + "や" + e.getGuild().getTextChannelById(1087987989600280686L).getAsMention() + "、" + e.getGuild().getTextChannelById(1104675564763222016L).getAsMention()+ "、" +

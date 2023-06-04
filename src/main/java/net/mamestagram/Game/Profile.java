@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 import static net.mamestagram.Main.*;
 import static net.mamestagram.Module.DataBase.*;
-import static net.mamestagram.Message.EmbedMessageData.*;
+import static net.mamestagram.Message.EmbedMessage.*;
 import static net.mamestagram.Module.OSU.*;
 
 public class Profile {

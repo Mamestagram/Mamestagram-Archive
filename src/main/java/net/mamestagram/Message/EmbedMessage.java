@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
 import java.awt.*;
 
-public class EmbedMessageData extends ListenerAdapter {
+public class EmbedMessage extends ListenerAdapter {
 
     public static EmbedBuilder helpCommandMessage() {
 

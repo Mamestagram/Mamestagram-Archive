@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import static net.mamestagram.Message.EmbedMessageData.*;
+import static net.mamestagram.Message.EmbedMessage.*;
 
 import static net.mamestagram.Game.Profile.*;
 import static net.mamestagram.Game.Ranking.*;

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static net.mamestagram.Message.EmbedMessageData.*;
+import static net.mamestagram.Message.EmbedMessage.*;
 import static net.mamestagram.Module.Command.*;
 import static net.mamestagram.Main.*;
 import static net.mamestagram.Module.OSU.*;
