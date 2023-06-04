@@ -101,24 +101,6 @@ public class OSU {
         }
     }
 
-    public static String isRanked(int approved) {
-
-        switch (approved) {
-            case 0 -> {
-                return ":skull: Graveyard";
-            }
-            case 2 -> {
-                return ":white_check_mark: Ranked";
-            }
-            case 5 -> {
-                return ":heart: Loved";
-            }
-            default -> {
-                return ":x: Unknown";
-            }
-        }
-    }
-
     public static JsonNode getMapData(String md5) throws IOException {
 
         String inputLine;
@@ -328,8 +310,14 @@ public class OSU {
 
     public static String getMapStatusEmoji(int status) {
         switch (status) {
-            case 1, 2, 3, 4 -> {
+            case 2 -> {
                 return "<:ranked:1100846082998669333> **Ranked**";
+            }
+            case 3 -> {
+                return "<:ranked:1100846082998669333> **Approved**";
+            }
+            case 4 -> {
+                return "<:ranked:1100846082998669333> **Qualified**";
             }
             case 5 -> {
                 return "<:loved:1100846331418914857> **Loved**";
