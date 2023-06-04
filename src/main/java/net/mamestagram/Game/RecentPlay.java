@@ -113,6 +113,10 @@ private static List<String> getUserID(SlashCommandInteractionEvent e, Member mem
         final long channelID = 1081737936401350717L;
         int mode = 0;
 
+        if(isRestarting) {
+            return;
+        }
+
         ps = connection.prepareStatement("select id from scores where not grade = 'F' order by id desc limit 1");
         result = ps.executeQuery();
 

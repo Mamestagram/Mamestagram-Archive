@@ -18,6 +18,10 @@ public class ConvertScore {
         ResultSet result;
         int userMod = 0;
 
+        if(isRestarting) {
+            return;
+        }
+
         bScoreID = nScoreID;
 
         ps = connection.prepareStatement("select id, mods from scores where not grade = 'F' order by id desc limit 1");

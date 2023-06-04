@@ -31,6 +31,7 @@ public class AutoRestarter {
         int nowHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
         if(nowHour == scheduleHour) {
             setLogger("System will be restart", 0);
+            isRestarting = true;
             jda.shutdownNow();
             connection.close();
             System.gc();
@@ -39,6 +40,7 @@ public class AutoRestarter {
             connection = connectToServer();
             scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 5;
             if(scheduleHour >= 24) scheduleHour -= 24;
+            isRestarting = false;
             setLogger("System has restarted", 0);
         }
     }

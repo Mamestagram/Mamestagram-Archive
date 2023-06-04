@@ -26,6 +26,10 @@ public class PPRecord {
         final long guildID = 944248031136587796L;
         final long channelID = 1104675564763222016L;
 
+        if(isRestarting) {
+            return;
+        }
+
         if(isFirstBoot) {
             var lastMessageID = jda.getGuildById(guildID).getTextChannelById(channelID).getLatestMessageId();
             jda.getGuildById(guildID).getTextChannelById(channelID).deleteMessageById(lastMessageID);

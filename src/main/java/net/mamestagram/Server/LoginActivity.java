@@ -16,6 +16,10 @@ public class LoginActivity {
         ResultSet result;
         int count = 0;
 
+        if(isRestarting) {
+            return;
+        }
+
         ps = connection.prepareStatement("select latest_activity from users");
         result = ps.executeQuery();
         while (result.next()) {

@@ -50,6 +50,10 @@ public class LoginStatus {
             return;
         }
 
+        if(isRestarting) {
+            return;
+        }
+
         if (previousLoginID != currentLoginID) {
 
             preparedStatement = connection.prepareStatement("SELECT userid FROM ingame_logins WHERE id = ?");
