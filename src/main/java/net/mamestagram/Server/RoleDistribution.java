@@ -16,7 +16,7 @@ public class RoleDistribution extends ListenerAdapter {
     private static final long OSUTAIKOID = 1115259058816041101L;
     private static final long OSUMANIAID = 1115258910123773992L;
     private static final long OSUSTDID = 1115258608557494333L;
-    private static final long MULTIID = 1115258608557494333L;
+    private static final long MULTIID = 1115260158830985246L;
 
     @Override
     public void onMessageReactionAdd(MessageReactionAddEvent e) {
@@ -28,7 +28,7 @@ public class RoleDistribution extends ListenerAdapter {
         Role taikoRole = guild.getRoleById(OSUTAIKOID);
         Role maniaRole = guild.getRoleById(OSUMANIAID);
         Role stdRole = guild.getRoleById(OSUSTDID);
-        Role mutiRole = guild.getRoleById(MULTIID);
+        Role multiRole = guild.getRoleById(MULTIID);
 
         if(e.getChannel().getIdLong() == CHANNELID) {
 
@@ -43,7 +43,7 @@ public class RoleDistribution extends ListenerAdapter {
             } else if(e.getReaction().getEmoji().equals(Emoji.fromFormatted("<:taiko:1100702510152429588>"))) {
                 guild.addRoleToMember(member, taikoRole).queue();
             } else if(e.getReaction().getEmoji().equals(Emoji.fromUnicode("U+1F525"))) {
-                guild.addRoleToMember(member, mutiRole).queue();
+                guild.addRoleToMember(member, multiRole).queue();
             }
         }
     }
