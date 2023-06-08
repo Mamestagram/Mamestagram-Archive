@@ -337,7 +337,7 @@ public class OSU {
                 return "<:taiko:1100702510152429588>";
             }
             case 2, 6 -> {
-                return "<:catch:992621083985457202>";
+                return "<:fruits:1100702512681599089>";
             }
             case 3 -> {
                 return "<:mania:1100702514501910630>";
