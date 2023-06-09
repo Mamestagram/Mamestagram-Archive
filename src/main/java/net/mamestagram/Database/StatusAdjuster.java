@@ -1,4 +1,4 @@
-package net.mamestagram.DataBase;
+package net.mamestagram.Database;
 
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 
