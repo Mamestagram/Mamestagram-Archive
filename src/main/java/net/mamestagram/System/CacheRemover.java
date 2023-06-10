@@ -7,10 +7,8 @@ import java.time.format.DateTimeFormatter;
 
 import static net.mamestagram.Main.*;
 import static net.mamestagram.System.SystemLogger.*;
-import static net.mamestagram.System.JDABuilder.*;
-import static net.mamestagram.DataBase.SQLConnector.*;
 
-public class AutoRestarter {
+public class CacheRemover {
 
     static int scheduleHour = 0;
     static boolean isFirstBoot = true;
@@ -22,7 +20,7 @@ public class AutoRestarter {
 
         var date = DateTimeFormatter.ofPattern("HH");
         if(isFirstBoot) {
-            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 5;
+            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 1;
             if(scheduleHour >= 24) scheduleHour -= 24;
             isFirstBoot = false;
             return;
@@ -30,26 +28,13 @@ public class AutoRestarter {
 
         int nowHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
         if(nowHour == scheduleHour) {
-            setLogger("System will be restart", 0);
+            setLogger("System's cache will be removed", 0);
             isRestarting = true;
-            jda.shutdownNow();
-            connection.close();
             System.gc();
-            Thread.sleep(5000);
-            connection = connectToServer();
-
-            try {
-                jda = createJDA(TOKEN);
-            } catch (NullPointerException e) {
-                jda.shutdownNow();
-                Thread.sleep(5000);
-                jda = createJDA(TOKEN);
-            }
-
-            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 3;
+            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 1;
             if(scheduleHour >= 24) scheduleHour -= 24;
             isRestarting = false;
-            setLogger("System has restarted", 0);
+            setLogger("System's cache has been removed", 0);
         }
     }
 }
