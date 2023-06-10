@@ -100,7 +100,8 @@ public class StatusBoard {
                             "<:ranked:1100846082998669333> **" + "[" + result.getString("title") + " - " + result.getString("artist") + " [" + result.getString("version") + "] " + "](" + getWebsiteLink(i, result.getInt("set_id"), result.getInt("id")) + ")" +
                             "+" + getModsName(mods) + "** [:star2:" + "**" + roundNumber(result.getDouble("diff"), 2) + "**] with **" + roundNumber(acc, 2) + "%**\n" +
                             (getUserRankEmoji(grade) + " ▸ **" + maxCombo + "x** / " + result.getInt("max_combo") + "x [<:hit300k:1100843483549409280>**" + ngeki + "** / " + "<:hit300:1100843418260873286>**" + n300 + "** / " +
-                            "<:hit100k:1100843460157779969>**" + nkatu + "** / " + "<:hit100:1100843408530096188>**" + n100 + "** / " + "<:hit50:1100843399675912223>**" + n50 + "** / " + "<:hit0:1100843386996543519>**" + nmiss + "**]") + "\n", false);
+                            "<:hit100k:1100843460157779969>**" + nkatu + "** / " + "<:hit100:1100843408530096188>**" + n100 + "** / " + "<:hit50:1100843399675912223>**" + n50 + "** / " + "<:hit0:1100843386996543519>**" + nmiss + "**]") + "\n" +
+                            "__[[Download!]](https://web.mamesosu.net/direct/" + result.getInt("set_id") + ")__", false);
                 }
             }
         }

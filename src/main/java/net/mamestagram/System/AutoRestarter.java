@@ -8,7 +8,7 @@ import java.time.format.DateTimeFormatter;
 import static net.mamestagram.Main.*;
 import static net.mamestagram.System.SystemLogger.*;
 import static net.mamestagram.System.JDABuilder.*;
-import static net.mamestagram.Database.SQLConnector.*;
+import static net.mamestagram.DataBase.SQLConnector.*;
 
 public class AutoRestarter {
 
