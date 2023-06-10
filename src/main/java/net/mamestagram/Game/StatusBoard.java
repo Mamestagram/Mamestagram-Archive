@@ -105,7 +105,7 @@ public class StatusBoard {
                 }
             }
         }
-        eb.setColor(Color.RED);
+        eb.setColor(Color.ORANGE);
         eb.setFooter("Last updated at " + date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo"))));
         return eb;
     }
