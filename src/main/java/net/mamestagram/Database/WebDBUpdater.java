@@ -1,4 +1,4 @@
-package net.mamestagram.DataBase;
+package net.mamestagram.Database;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
