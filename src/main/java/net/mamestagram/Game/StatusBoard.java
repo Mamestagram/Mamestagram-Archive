@@ -1,6 +1,9 @@
 package net.mamestagram.Game;
 
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageHistory;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 import java.awt.*;
 import java.sql.PreparedStatement;
@@ -9,15 +12,13 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static net.mamestagram.Main.*;
 import static net.mamestagram.Module.DataBase.*;
 import static net.mamestagram.Module.OSU.*;
 
-public class PPRecord {
+public class StatusBoard {
 
     static boolean isFirstBoot = true;
 
@@ -31,13 +32,18 @@ public class PPRecord {
         }
 
         if(isFirstBoot) {
-            var lastMessageID = jda.getGuildById(guildID).getTextChannelById(channelID).getLatestMessageId();
-            jda.getGuildById(guildID).getTextChannelById(channelID).deleteMessageById(lastMessageID);
+            //過去のメッセージすべてを削除
+
+            TextChannel channel = jda.getGuildById(944248031136587796L).getTextChannelById(1104675564763222016L);
+            MessageHistory history = MessageHistory.getHistoryFromBeginning(channel).complete();
+            List<Message> message = history.getRetrievedHistory();
+            for(Message m : message) {
+                m.delete().queue();
+            }
             jda.getGuildById(guildID).getTextChannelById(channelID).sendMessageEmbeds(getPPRecordMessage().build()).queue();
             isFirstBoot = false;
             return;
         }
-
         long forUpdateMessageID = Long.parseLong(jda.getGuildById(guildID).getTextChannelById(channelID).getLatestMessageId());
         jda.getGuildById(guildID).getTextChannelById(channelID).editMessageEmbedsById(forUpdateMessageID, getPPRecordMessage().build()).queue();
     }
@@ -52,7 +58,8 @@ public class PPRecord {
         String grade = null, md5Data = "", userName = null, country = null;
         var date = DateTimeFormatter.ofPattern("HH:mm");
 
-        eb.setTitle("**Mamestagram PP Record**");
+        eb.setTitle("**Mamestagram PP Record**", "https://web.mamesosu.net/home");
+        eb.appendDescription("Showing PP Record of Mamestagram!");
 
         for(int i = 0; i <= 8; i++) {
             if(i != 5 && i != 6 && i != 7) {
@@ -90,11 +97,10 @@ public class PPRecord {
                 result = ps.executeQuery();
                 if (result.next()) {
                     eb.addField(getModeNameFromNumber(i) + " (**" + (int)pp + "pp**)", "**" + userName + "** (:flag_" + country + ":** #" + getCountryRank(userID, i) + "**) | " +
-                            "<:ranked:1100846082998669333> **" + result.getString("title") + " - " + result.getString("artist") + " [" + result.getString("version") + "] " +
+                            "<:ranked:1100846082998669333> **" + "[" + result.getString("title") + " - " + result.getString("artist") + " [" + result.getString("version") + "] " + "](" + getWebsiteLink(i, result.getInt("set_id"), result.getInt("id")) + ")" +
                             "+" + getModsName(mods) + "** [:star2:" + "**" + roundNumber(result.getDouble("diff"), 2) + "**] with **" + roundNumber(acc, 2) + "%**\n" +
                             (getUserRankEmoji(grade) + " ▸ **" + maxCombo + "x** / " + result.getInt("max_combo") + "x [<:hit300k:1100843483549409280>**" + ngeki + "** / " + "<:hit300:1100843418260873286>**" + n300 + "** / " +
-                            "<:hit100k:1100843460157779969>**" + nkatu + "** / " + "<:hit100:1100843408530096188>**" + n100 + "** / " + "<:hit50:1100843399675912223>**" + n50 + "** / " + "<:hit0:1100843386996543519>**" + nmiss + "**]") + "\n" +
-                            "<:download:1104222730863263777> " + "__" + getWebsiteLink(i, result.getInt("set_id"), result.getInt("id")) + "__", false);
+                            "<:hit100k:1100843460157779969>**" + nkatu + "** / " + "<:hit100:1100843408530096188>**" + n100 + "** / " + "<:hit50:1100843399675912223>**" + n50 + "** / " + "<:hit0:1100843386996543519>**" + nmiss + "**]") + "\n", false);
                 }
             }
         }

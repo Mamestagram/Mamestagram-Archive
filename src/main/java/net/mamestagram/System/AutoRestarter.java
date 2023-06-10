@@ -36,9 +36,17 @@ public class AutoRestarter {
             connection.close();
             System.gc();
             Thread.sleep(5000);
-            jda = createJDA(TOKEN);
             connection = connectToServer();
-            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 5;
+
+            try {
+                jda = createJDA(TOKEN);
+            } catch (NullPointerException e) {
+                jda.shutdownNow();
+                Thread.sleep(5000);
+                jda = createJDA(TOKEN);
+            }
+
+            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 3;
             if(scheduleHour >= 24) scheduleHour -= 24;
             isRestarting = false;
             setLogger("System has restarted", 0);
