@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter;
 
 import static net.mamestagram.Main.*;
 import static net.mamestagram.System.SystemLogger.*;
+import static net.mamestagram.System.JDABuilder.*;
 
 public class CacheRemover {
 
@@ -20,7 +21,7 @@ public class CacheRemover {
 
         var date = DateTimeFormatter.ofPattern("HH");
         if(isFirstBoot) {
-            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 1;
+            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 3;
             if(scheduleHour >= 24) scheduleHour -= 24;
             isFirstBoot = false;
             return;
@@ -31,7 +32,10 @@ public class CacheRemover {
             setLogger("System's cache will be removed", 0);
             isRestarting = true;
             System.gc();
-            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 1;
+            jda.shutdownNow();
+            Thread.sleep(3000L);
+            jda = createJDA(TOKEN);
+            scheduleHour = Integer.parseInt(date.format(LocalDateTime.now(ZoneId.of("Asia/Tokyo")))) + 3;
             if(scheduleHour >= 24) scheduleHour -= 24;
             isRestarting = false;
             setLogger("System's cache has been removed", 0);
