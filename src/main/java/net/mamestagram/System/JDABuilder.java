@@ -30,24 +30,16 @@ public class JDABuilder {
                 .disableCache(CacheFlag.VOICE_STATE,
                         CacheFlag.STICKER,
                         CacheFlag.SCHEDULED_EVENTS)
+                .disableCache(CacheFlag.FORUM_TAGS)
                 .setRawEventsEnabled(true)
-                .addEventListeners(new SlashCommand())
                 .addEventListeners(new PatchAnnounce())
                 .addEventListeners(new RoleDistribution())
                 .addEventListeners(new ReportScore())
                 .addEventListeners(new MapStatus())
-                .addEventListeners(new RecentPlay())
                 .addEventListeners(new WelcomeMessage())
                 .setMemberCachePolicy(MemberCachePolicy.ALL)
                 .setActivity(Activity.streaming("mamesosu.net", "https://web.mamesosu.net/leaderboard/mode=std/special=none"))
                 .build();
-
-        jda.updateCommands().queue();
-        jda.upsertCommand("help", "Help command for Mamestagram Bot").queue();
-        jda.upsertCommand("osuprofile", "View mamesosu.net's Profile").addOption(OptionType.STRING, "mode", "Enter the game mode you want to acquire", true, true).addOption(OptionType.STRING, "user", "Enter a value if you want to get any user").queue();
-        jda.upsertCommand("result", "Submit your play at mamesosu.net").addOption(OptionType.STRING, "mode", "Enter the game mode you want to acquire", true, true).addOption(OptionType.STRING, "user", "Enter a value if you want to get any user").queue();
-        jda.upsertCommand("ranking", "View mamesosu.net's ranking").addOption(OptionType.STRING, "mode", "Enter the game mode you want to acquire", true, true).queue();
-
 
         return jda;
     }
